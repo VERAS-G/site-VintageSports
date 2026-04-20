@@ -1,0 +1,69 @@
+/* =========================
+FOOTER CENTRALIZADO
+========================= */
+footer {
+background: #111;
+color: #fff;
+margin-top: 0;
+text-align: center;
+}
+
+/* GRID */
+.footer-grid {
+display: flex;
+justify-content: center;
+gap: 100px;
+padding: 40px 20px 20px;
+flex-wrap: wrap;
+}
+
+/* COLUNAS */
+.footer-grid div {
+text-align: center;
+min-width: 150px;
+}
+
+/* TÍTULOS */
+.footer-grid h4 {
+margin-bottom: 12px;
+font-size: 14px;
+font-weight: 600;
+}
+
+/* LISTA */
+.footer-grid ul {
+list-style: none;
+}
+
+/* LINKS */
+.footer-grid a {
+color: #ccc;
+text-decoration: none;
+font-size: 13px;
+display: block;
+margin-bottom: 8px;
+transition: 0.3s;
+}
+
+/* HOVER */
+.footer-grid a:hover {
+color: #f6d221;
+}
+
+/* TEXTO FINAL */
+footer p {
+margin-top: 25px;
+padding-bottom: 20px;
+font-size: 13px;
+color: #aaa;
+}
+
+/* =========================
+RESPONSIVO
+========================= */
+@media (max-width: 900px) {
+.footer-grid {
+flex-direction: column;
+gap: 25px;
+}
+}

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/produtos.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/ofertas.css">
+    <link rel="stylesheet" href="/css/modal_produto.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <title>Ofertas VintageSports</title>
+</head>
+<body>
+
+<div id="overlay"></div>
+
+<header>
+  <div class="logo">
+      <img src="/assets/img/logo.png" alt="">
+      <h1>Vintage<span style="color:#f6d221;">Sports</span></h1>
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/pages/masculino.html">Masculino</a></li>
+      <li><a href="/pages/femenino.html">Feminino</a></li>
+      <li><a href="/pages/ofertas.html" class="active">Ofertas</a></li>
+    </ul>
+  </nav>
+
+  <div class="icons">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar...">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    </div>
+    <button id="cart-btn">
+      <i class="fa-solid fa-bag-shopping"></i>
+      <span id="cart-count">0</span>
+    </button>
+  </div>
+</header>
+
+<section class="promo">
+  <div class="promo-overlay"></div>
+
+  <div class="promo-content">
+    <span class="tag">Promoção Exclusiva</span>
+
+    <h2>
+      Compre e viva o futebol de verdade
+    </h2>
+
+    <p>
+      Em compras acima de R$ 299, você concorre a uma viagem para conhecer
+      o jogador da camisa escolhida ou ganhar uma peça autografada.
+    </p>
+
+    <a href="#" class="btn-hero">
+      Participe!
+    </a>
+  </div>
+
+</section>
+
+<section class="products animar">
+  <h2>Ofertas de Produtos</h2>
+  <div class="grid" id="product-list"></div>
+</section>
+
+<!-- 🔥 CARRINHO -->
+<div id="cart" class="cart">
+  <h2>Seu Carrinho</h2>
+
+  <ul id="cart-items"></ul>
+
+  <div class="cart-footer">
+    <p>Total: R$ <span id="total">0.00</span></p>
+
+    <button class="vercart-btn" onclick="VerCarrinho()">
+      Ver carrinho completo
+    </button>
+
+    <button class="conti-btn" onclick="ContinuarCompra()">
+      Continuar Comprando
+    </button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid animar">
+
+    <div>
+      <h4>Sobre</h4>
+      <ul>
+        <li><a href="#">Quem somos</a></li>
+        <li><a href="#">Carreiras</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Ajuda</h4>
+      <ul>
+        <li><a href="#">Frete</a></li>
+        <li><a href="#">Trocas</a></li>
+        <li><a href="#">Contato</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Redes</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <p>© 2026 VintageSports - Todos os direitos reservados</p>
+</footer>
+
+<script src="/js/produtos.js"></script>
+<script src="src/javascript/produtos-ofertas.js"></script>
+<script src="/js/modal_produto.js"></script>
+<script src="/js/script.js" defer></script>
+
+<div id="custom-confirm" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Remover item?</h3>
+    <p>Tem certeza que deseja remover este item do carrinho?</p>
+
+    <div class="modal-buttons">
+      <button id="confirm-yes" class="btn-confirm">Remover</button>
+      <button id="confirm-no" class="btn-cancel">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL DE SELEÇÃO DE PRODUTO (VINTAGE SPORTS) -->
+<div id="modal-selecao" class="modal-container">
+  <div class="modal-content product-layout">
+    <button class="close-x" onclick="fecharModal()">✕</button>
+
+    <!-- COLUNA ESQUERDA: IMAGEM -->
+    <div class="product-left">
+      <img id="modal-img" src="" alt="Produto">
+    </div>
+
+    <!-- COLUNA DIREITA: INFORMAÇÕES -->
+    <div class="product-right">
+      <h2 id="modal-titulo"></h2>
+      
+      <!-- ⭐ FEEDBACK E VENDAS -->
+      <div class="product-rating-row">
+        <div class="stars">
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star-half-stroke"></i>
+          <span>(128 avaliações)</span>
+        </div>
+        <span class="sold-count">| 452 vendidos</span>
+      </div>
+
+      <p class="product-category">VintageSports Retro Collection</p>
+      
+      <div class="product-price-section">
+        <span class="price-current" id="modal-preco"></span>
+        <span class="price-method">no Pix</span>
+      </div>
+
+      <!-- BOX DE PROMOÇÃO -->
+      <div class="product-info-box">
+        <p>Baixe o App e ganhe <strong>5% de desconto</strong> com o cupom <strong>VINTAGE10</strong></p>
+      </div>
+
+      <!-- CABEÇALHO DE TAMANHOS -->
+      <div class="size-header">
+        <span>Tamanho e numeração</span>
+        <a href="#" class="size-guide">Tabela de medidas</a>
+      </div>
+
+      <!-- GRADE DE TAMANHOS -->
+      <div class="tamanhos-grid">
+        <button type="button" onclick="selecionarTamanho('P', this)">P</button>
+        <button type="button" onclick="selecionarTamanho('M', this)">M</button>
+        <button type="button" onclick="selecionarTamanho('G', this)">G</button>
+        <button type="button" onclick="selecionarTamanho('GG', this)">GG</button>
+      </div>
+
+      <!-- AÇÕES FINAIS (Botão Confirmar e Cancelar Centralizado) -->
+      <div class="modal-footer-actions">
+        <button id="btn-confirmar" class="btn-confirmar" style="display:none;" onclick="finalizarSelecao()">Confirmar</button>
+        <button type="button" class="btn-cancelar-link" onclick="fecharModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</body>
+</html>

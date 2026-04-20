@@ -1,0 +1,971 @@
+/* ==========================================================================
+   RESET & BASE
+   ========================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+body {
+  background: #fff;
+  color: #111;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased; /* Deixa a fonte mais nítida */
+}
+
+/* ==========================================================================
+   NAVBAR AJUSTADA (ESTILO ORIGINAL MANTIDO)
+   ========================================================================== */
+.checkout-header {
+  width: 100%;
+  padding: 20px 40px;
+  background: #000000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(49, 48, 48, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.nav-left {
+  font-size: 24px;
+  font-weight: bold;
+  width: 40px;
+  height: 40px;
+  position: relative;
+}
+
+.nav-left img {
+  width: 100%;
+  height: auto;
+  margin-left: 10px;
+}
+
+.nav-left h1 {
+  font-size: 20px;
+  margin-left: 50px;
+  margin-top: -47px;
+  color: white;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.nav-left h1 span {
+  color: #f6d221;
+}
+
+.nav-right {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+}
+
+.nav-right a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.nav-right a:hover {
+  color: #f6d221;
+}
+
+
+/* ==========================================================================
+   STEPS (BREADCRUMBS) - VOLTANDO AO ORIGINAL COM CLIP-PATH
+   ========================================================================== */
+.steps-container {
+  display: flex;
+  max-width: 1100px;
+  margin: 20px auto;
+  background: #e5e5e5;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.step {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 0;
+  font-size: 13px;
+  font-weight: bold;
+  color: #757575;
+  position: relative;
+  /* O efeito de flecha que você tinha */
+  clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%, 5% 50%);
+  transition: 0.3s;
+}
+
+.step:first-child {
+  clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%);
+}
+
+.step:last-child {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 5% 50%);
+}
+
+.step.active {
+  background: #f7f7f7; /* Cor de destaque da etapa atual */
+  color: #111;
+}
+
+.step .number {
+  background: #757575;
+  color: #fff;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  font-size: 11px;
+}
+
+.step.active .number {
+  background: #000;
+}
+
+
+/* ==========================================================================
+   ALERTA & CONTAINER PRINCIPAL
+   ========================================================================== */
+.alert {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto 30px;
+  padding: 12px 20px;
+  background-color: #fcf8e3; /* Amarelo sutil de aviso */
+  border-radius: 4px;
+}
+
+.alert p {
+  color: #111;
+  font-size: 13px;
+}
+
+.close-alert {
+  background: none;
+  border: none;
+  font-size: 18px; /* Tamanho do ícone */
+  color: #8d8d8e;  /* Cinza sutil para não berrar no layout */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 5px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-alert:hover {
+  color: #111;      /* Escurece para preto no hover */
+  transform: scale(1.1); /* Dá um leve zoom sutil */
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 50px;
+    max-width: 1100px;
+    margin: 80px auto 100px;
+    padding: 0 20px;
+}
+
+/* ==========================================================================
+   CARRINHO & PRODUTOS
+   ========================================================================== */
+.left h3 {
+  font-size: 18px; /* Título menor para elegância */
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+.checkout-product {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.checkout-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.checkout-info h4 {
+  font-size: 14px; /* Nome do produto menor */
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.checkout-category {
+  font-size: 12px;
+  color: #707072;
+  margin-bottom: 10px;
+}
+
+.checkout-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.qtd {
+  display: flex;
+  align-items: center;
+  background: #f7f7f7;
+  border-radius: 20px;
+  padding: 3px 6px;
+  gap: 10px;
+}
+
+.qtd button {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.qtd button:hover {
+  border-color: #000;
+  background: #000;
+  color: #fff;
+}
+
+
+/* ==========================================================================
+   AÇÕES E PREÇOS (PRODUTOS)
+   ========================================================================== */
+.remove {
+  background: none;
+  border: none;
+  color: #bcbcbc; /* Cinza mais claro para não poluir */
+  cursor: pointer;
+  font-size: 16px;
+  padding: 5px;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.remove:hover {
+  color: #ff4d4d;
+  transform: scale(1.1);
+}
+
+.checkout-price {
+  font-weight: 600;
+  font-size: 15px; /* Reduzi levemente */
+}
+
+/* ==========================================================================
+   COLUNA DIREITA (RESUMO, CEP, CUPOM)
+   ========================================================================== */
+.right {
+  position: sticky;
+  top: 100px; /* Ajustado para não colar no header */
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Inputs e Grupos */
+.input-group {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus {
+  border-color: #111;
+}
+
+.input-group button {
+  padding: 0 20px;
+  height: 45px;
+  background: #fff;
+  border: 1px solid #111;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.input-group button:hover {
+  background: #111;
+  color: #fff;
+}
+
+/* Animação de Giro */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.fa-spinner {
+  animation: spin 1s linear infinite;
+  margin-right: 5px;
+}
+
+/* Estado de desabilitado para o botão durante o carregamento */
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Container que cria a linha e coloca os itens lado a lado */
+.cep-acoes {
+    display: flex;
+    justify-content: space-between; /* Mensagem à esquerda, Link à direita */
+    align-items: baseline;          /* Alinha ambos pela base do texto */
+    padding-bottom: 8px;            /* Espaço entre o texto e a linha cinza */
+    margin-top: 10px;
+    min-height: 28px;               /* Mantém a linha visível mesmo sem mensagem */
+}
+
+/* Remove margens que podem desalinhá-los */
+#mensagem-cep,
+.feedback-container {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.find-zip-link {
+    font-size: 11px;
+    color: #757575;
+    text-decoration: underline;
+    white-space: nowrap;
+    line-height: 1; /* Garante que o link encoste na base horizontal */
+}
+
+/* Espaço para o card de frete não colar na linha */
+.frete-card {
+    margin-top: 15px;
+}
+
+/* Container das mensagens embaixo dos campos */
+.feedback-container {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.text-error { color: #a94442; }
+.text-success { color: #007d4b; }
+
+/* Borda vermelha no input */
+.input-error {
+    border: 1px solid #a94442 !important;
+}
+
+/* Ícone de fechar (X) */
+.fa-xmark {
+    cursor: pointer;
+    color: #ccc;
+    margin-left: 5px;
+    transition: 0.2s;
+}
+.fa-xmark:hover { color: #000; }
+
+
+/* Card de Frete Calculado */
+.frete-card {
+    background-color: #f7f7f7; /* Cinza bem clarinho da foto */
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.frete-linha-superior {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.frete-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.frete-info i {
+    font-size: 16px;
+    color: #000;
+}
+
+.frete-metodo {
+    font-size: 14px;
+    font-weight: 700; /* Negrito igual à foto */
+    color: #000;
+}
+
+.frete-valor {
+    font-size: 14px;
+    font-weight: 700;
+    color: #000;
+}
+
+.frete-prazo {
+    font-size: 13px;
+    color: #707072; /* Cinza médio da foto */
+    margin: 0;
+    padding-left: 24px; /* Alinha com o texto acima, ignorando o ícone */
+}
+
+
+/* --- RESUMO FINAL --- */
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.total-section {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-label {
+    font-size: 16px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.total-values { text-align: right; }
+
+.pix-total {
+    font-size: 16px;
+    font-weight: 700;
+    display: block;
+}
+
+.cartao-total {
+    font-size: 12px;
+    color: #999;
+    display: block;
+    margin-top: 2px;
+}
+
+button.finalizar {
+  width: 100%;
+  padding: 18px;
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: 0.2s;
+}
+
+button.finalizar:hover { background: #333; }
+
+
+/* ==========================================================================
+   FEEDBACKS VISUAIS (ERRO E SUCESSO)
+   ========================================================================== */
+
+/* Borda vermelha para erro nos inputs */
+.input-error {
+  border: 1px solid #a94442 !important;
+}
+
+/* Container das mensagens embaixo dos inputs */
+.cupom-feedback, .feedback-container {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #a94442; /* Vermelho padrão de erro */
+}
+
+.text-error { color: #a94442; }
+.text-success { color: #007d4b; }
+
+/* Ícone 'X' de remover cupom */
+.fa-xmark {
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.2s;
+}
+
+.fa-xmark:hover {
+  color: #000;
+}
+
+/* ==========================================================================
+   CARD DE FRETE (ESTILO NIKE)
+   ========================================================================== */
+.frete-card {
+  background-color: #f7f7f7; /* Cinza claro da imagem */
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+  animation: fadeIn 0.3s ease;
+}
+
+.frete-linha-superior {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.frete-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.frete-metodo {
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+}
+
+.frete-valor {
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+}
+
+.frete-prazo {
+  font-size: 13px;
+  color: #707072;
+  margin: 0;
+  padding-left: 24px; /* Alinha ignorando o ícone */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   NOTIFICAÇÕES (TOASTS DINÂMICOS)
+   ========================================================================== */
+.toast-container {
+  position: fixed;
+  top: 100px; /* Abaixo da Navbar */
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast-nike {
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  min-width: 250px;
+
+  /* Estado inicial (fora da tela) */
+  transform: translateX(120%);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toast-nike.show {
+  transform: translateX(0);
+}
+
+.toast-nike i { font-size: 18px; color: #2d8a61; } /* Verde Sucesso */
+.toast-nike.warning i { color: #f6d221; } /* Amarelo Erro */
+
+/* ==========================================================================
+   MODAL DE ALERTA (COM DESFOQUE)
+   ========================================================================== */
+
+.modal-overlay {
+    background: rgba(0, 0, 0, 0.4); /* Fundo escuro mais suave */
+    backdrop-filter: blur(8px);    /* Desfoque moderno no fundo */
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.modal-content {
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: 20px; /* Bordas mais arredondadas e amigáveis */
+    max-width: 380px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    border: none;
+}
+
+/* Ícone de Exclamação */
+.modal-content i.fa-circle-exclamation {
+    font-size: 48px !important;
+    color: #ff0000;
+    margin-bottom: 20px;
+}
+
+.modal-content h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+
+.modal-content p {
+    font-size: 15px;
+    color: #707072; /* Cinza médio mais elegante */
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* Botão "Entendido" Estilo Pílula */
+.modal-buttons .btn-confirm {
+    background: #111;
+    color: #fff;
+    width: 100%; /* Botão largo para facilitar o clique */
+    padding: 16px;
+    border-radius: 40px;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.modal-buttons .btn-confirm:hover {
+    background: #333;
+}
+
+
+@keyframes modalPop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.btn-confirm {
+  background: #000;
+  color: #fff;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.2s;
+}
+
+.btn-confirm:hover {
+  background: #333;
+}
+
+
+/* ==========================================================================
+   MODAIS E TOASTS
+   ========================================================================== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(6px); /* Efeito moderno de desfoque */
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  max-width: 380px;
+  width: 90%;
+  text-align: center;
+  animation: modalShow 0.3s ease;
+}
+
+@keyframes modalShow {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.btn-confirm, .btn-cancel {
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-confirm { background: #000; color: #fff; }
+.btn-cancel { background: #f5f5f5; color: #111; }
+
+.toast {
+  position: fixed;
+  top: 90px;
+  right: -450px;
+  background: #fff;
+  color: #111;
+  padding: 12px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 2000;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border: 1px solid #eee;
+}
+
+.toast.show {
+  visibility: visible;
+  animation: moveToast 4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Responsividade Básica */
+@media (max-width: 900px) {
+  .container { grid-template-columns: 1fr; gap: 40px; }
+  .right { position: static; }
+}
+
+/* Layout em Linha */
+.checkout-product {
+  display: flex;
+  justify-content: space-between; /* Empurra preço para a direita */
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.product-main-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Estilo do Checkbox */
+.cart-check {
+  width: 18px;
+  height: 18px;
+  accent-color: #000;
+  cursor: pointer;
+}
+
+/* Efeito de ITEM MORTO */
+.item-morto {
+  opacity: 0.4;
+  filter: grayscale(1);
+  transition: 0.3s;
+}
+
+.checkout-price {
+  font-weight: 700;
+  font-size: 15px;
+  min-width: 100px;
+  text-align: right;
+}
+
+
+/* Container Principal */
+.checkout-vazio-container {
+    /* REMOVI O DISPLAY: NONE DAQUI */
+    text-align: center;
+    padding: 80px 20px;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    width: 100%; /* Unificando com a regra de baixo */
+}
+
+.checkout-vazio-container h1 {
+    font-size: 28px;
+    color: #000;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.checkout-vazio-container p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* Botão "Voltar para o site" */
+.btn-voltar {
+    display: inline-block;
+    padding: 12px 60px;
+    border: 1px solid #d1d1d1;
+    border-radius: 50px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-voltar:hover {
+    background-color: #f5f5f5;
+    border-color: #999;
+}
+
+/* ESTA É A ÚNICA REGRA QUE DEVE ESCONDER OS ITENS */
+.hidden {
+    display: none !important;
+}
+
+
+/* =============================================================
+   NOTIFICAÇÃO MODERNIZADA (ENTRADA/SAÍDA SUAVE)
+   ============================================================= */
+
+/* =============================================================
+   NOTIFICAÇÃO PROPORÇÃO REAL (ESTILO NIKE STORE)
+   ============================================================= */
+
+.toast-container {
+    position: fixed !important;
+    bottom: 40px !important; /* Distância exata da base */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 2147483647 !important;
+    display: flex !important;
+    flex-direction: column-reverse !important;
+    gap: 12px !important;
+    pointer-events: none;
+}
+
+.nike-toast {
+    pointer-events: auto;
+    background: #111 !important; /* Preto sólido igual à foto */
+    color: #fff !important;
+    
+    /* 🔥 LARGURA E ALTURA EXATAS DA IMAGEM */
+    padding: 18px 25px !important;    /* Preenchimento mais generoso */
+    width: 450px;                     /* Largura maior conforme a foto */
+    max-width: 90vw;                  /* Segurança para telas pequenas */
+    border-radius: 2px !important;    /* Bordas quase retas como na Nike */
+    
+    font-family: 'Inter', sans-serif !important;
+    font-size: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    
+    /* ANIMAÇÃO MODERNA */
+    opacity: 0;
+    transform: translateY(20px);
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
+}
+
+.nike-toast.show {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* Símbolo Amarelo */
+.toast-icon {
+    font-size: 16px;
+    color: #ffcc00;
+    margin-right: 12px;
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
+/* 🔥 LINHA DE CARREGAMENTO AMARELA NEON */
+.toast-progress {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    height: 3px !important;
+    background: #ffcc00 !important; 
+    width: 100%;
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.6);
+}
+
+.nike-toast.show .toast-progress {
+    animation: toastProgressAnimation 3s linear forwards;
+}
+
+@keyframes toastProgressAnimation {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
+/* Botão Fechar (X) igual à imagem */
+.toast-close {
+    background: none !important;
+    border: none !important;
+    color: #fff !important;
+    font-size: 18px !important;
+    cursor: pointer !important;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    margin-left: 20px;
+}
+
+.toast-close:hover { opacity: 1; }

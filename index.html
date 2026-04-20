@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/produtos.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/modal_produto.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+    <title>VintageSports</title>
+</head>
+
+<body>
+
+<div id="overlay"></div>
+
+<header>
+  <div class="logo">
+      <img src="/assets/img/logo.png" alt="">
+      <h1>Vintage<span style="color:#f6d221;">Sports</span></h1>
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="/index.html"class="active">Home</a></li>
+      <li><a href="/pages/masculino.html">Masculino</a></li>
+      <li><a href="/pages/femenino.html">Feminino</a></li>
+      <li><a href="/pages/ofertas.html">Ofertas</a></li>
+    </ul>
+  </nav>
+
+  <div class="icons">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar...">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    </div>
+    <button id="cart-btn">
+      <i class="fa-solid fa-bag-shopping"></i>
+      <span id="cart-count">0</span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <span class="tag">Nova Coleção</span>
+
+    <h1>
+      Vista a história. Viva o jogo.
+    </h1>
+
+    <p>
+      Camisas oficiais, momentos inesquecíveis e experiências únicas para quem vive o futebol de verdade.
+    </p>
+
+    <a href="/pages/ofertas.html" class="btn-hero">
+      Comprar agora!
+    </a>
+  </div>
+</section>
+
+<section class="products animar">
+  <h2>Destaques</h2>
+  <div class="grid" id="produtos-home"></div>
+</section>
+
+<!-- 🔥 CARRINHO -->
+<div id="cart" class="cart">
+  <h2>Seu Carrinho</h2>
+
+  <ul id="cart-items"></ul>
+
+  <div class="cart-footer">
+    <p>Total: R$ <span id="total">0.00</span></p>
+
+    <button class="vercart-btn" onclick="VerCarrinho()">
+      Ver Carrinho completo
+    </button>
+
+    <button class="conti-btn" onclick="closeCart()">
+      Continuar Comprando
+    </button>
+  </div>
+</div>
+
+
+<section class="quem-somos animar">
+  <div class="container">
+
+    <h2 class="animar">Quem somos</h2>
+
+    <p class="descricao animar">
+      A Vintagesports é uma empresa especializada na comercialização de camisas de clubes e seleções nacionais, oferecendo produtos 100% originais, com garantia de procedência e alta qualidade.
+    </p>
+
+    <p class="descricao animar">
+      Nosso propósito vai além da venda: buscamos conectar torcedores à história, à emoção e à identidade do esporte por meio de peças que representam momentos marcantes do futebol mundial.
+    </p>
+
+    <div class="destaques">
+      <div class="card-s animar">
+        <h3>✔ Produtos Originais</h3>
+        <p>Garantia de autenticidade em todas as peças.</p>
+      </div>
+
+      <div class="card-s animar">
+        <h3>✔ Alta Qualidade</h3>
+        <p>Conforto, durabilidade e acabamento premium.</p>
+      </div>
+
+      <div class="card-s animar">
+        <h3>✔ Experiências Exclusivas</h3>
+        <p>Promoções com camisas autografadas e encontros com jogadores.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="contato animar">
+  <h2 class="titulo-contato animar">Fale conosco</h2>
+  <p class="subtitulo-contato animar">Estamos aqui para ajudar você</p>
+
+  <div class="contato-container">
+
+    <!-- EMAIL -->
+    <div class="card-contato copiavel animar" onclick="copiarTexto('email', this)">
+      <h3>Email</h3>
+      <p id="email">Vintagesports.contato@gmail.com</p>
+      <span class="status">Clique para copiar</span>
+    </div>
+
+    <!-- TELEFONE -->
+    <div class="card-contato copiavel animar" onclick="copiarTexto('telefone', this)">
+      <h3>Telefone</h3>
+      <p id="telefone">(11) 99999-9999</p>
+      <span class="status">Clique para copiar</span>
+    </div>
+
+    <!-- INSTAGRAM -->
+    <div class="card-contato animar">
+      <h3>Instagram</h3>
+      <p>
+        <a href="https://instagram.com/seuusuario" target="_blank">
+          @VintageSports
+        </a>
+      </p>
+      <span class="status">Abrir perfil</span>
+    </div>
+
+  </div>
+</section>
+
+<footer class="">
+  <div class="footer-grid">
+
+    <div class="animar">
+      <h4>Sobre</h4>
+      <ul>
+        <li><a href="#">Quem somos</a></li>
+        <li><a href="#">Carreiras</a></li>
+      </ul>
+    </div>
+
+    <div class="animar">
+      <h4>Ajuda</h4>
+      <ul>
+        <li><a href="#">Frete</a></li>
+        <li><a href="#">Trocas</a></li>
+        <li><a href="#">Contato</a></li>
+      </ul>
+    </div>
+
+    <div class="animar">
+      <h4>Redes</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <p>© 2026 VintageSports - Todos os direitos reservados</p>
+</footer>
+
+<script src="/js/produtos.js"></script>
+<script src="/js/modal_produto.js"></script>
+<script src="/js/script.js" defer></script>
+
+<div id="custom-confirm" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Remover item?</h3>
+    <p>Tem certeza que deseja remover este item do carrinho?</p>
+
+    <div class="modal-buttons">
+      <button id="confirm-yes" class="btn-confirm">Remover</button>
+      <button id="confirm-no" class="btn-cancel">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE SELEÇÃO DE PRODUTO (VINTAGE SPORTS) -->
+<div id="modal-selecao" class="modal-container">
+  <div class="modal-content product-layout">
+    <button class="close-x" onclick="fecharModal()">✕</button>
+
+    <!-- COLUNA ESQUERDA: IMAGEM -->
+    <div class="product-left">
+      <img id="modal-img" src="" alt="Produto">
+    </div>
+
+    <!-- COLUNA DIREITA: INFORMAÇÕES -->
+    <div class="product-right">
+      <h2 id="modal-titulo"></h2>
+      
+      <!-- ⭐ FEEDBACK E VENDAS -->
+      <div class="product-rating-row">
+        <div class="stars">
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star-half-stroke"></i>
+          <span>(128 avaliações)</span>
+        </div>
+        <span class="sold-count">| 452 vendidos</span>
+      </div>
+
+      <p class="product-category">VintageSports Retro Collection</p>
+      
+      <div class="product-price-section">
+        <span class="price-current" id="modal-preco"></span>
+        <span class="price-method">no Pix</span>
+      </div>
+
+      <!-- BOX DE PROMOÇÃO -->
+      <div class="product-info-box">
+        <p>Baixe o App e ganhe <strong>5% de desconto</strong> com o cupom <strong>VINTAGE10</strong></p>
+      </div>
+
+      <!-- CABEÇALHO DE TAMANHOS -->
+      <div class="size-header">
+        <span>Tamanho e numeração</span>
+        <a href="#" class="size-guide">Tabela de medidas</a>
+      </div>
+
+      <!-- GRADE DE TAMANHOS -->
+      <div class="tamanhos-grid">
+        <button type="button" onclick="selecionarTamanho('P', this)">P</button>
+        <button type="button" onclick="selecionarTamanho('M', this)">M</button>
+        <button type="button" onclick="selecionarTamanho('G', this)">G</button>
+        <button type="button" onclick="selecionarTamanho('GG', this)">GG</button>
+      </div>
+
+      <!-- AÇÕES FINAIS (Botão Confirmar e Cancelar Centralizado) -->
+      <div class="modal-footer-actions">
+        <button id="btn-confirmar" class="btn-confirmar" style="display:none;" onclick="finalizarSelecao()">Confirmar</button>
+        <button type="button" class="btn-cancelar-link" onclick="fecharModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+</body>
+</html>
