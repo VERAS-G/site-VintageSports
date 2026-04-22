@@ -1,17 +1,27 @@
-
-
-header{
-  width:100%;
-  padding:20px 40px;
-  background:#000000;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  box-shadow:0 2px 10px rgba(49, 48, 48, 0.1);
-  position:sticky;
-  top:0;
-  z-index:100;
+header {
+  width: 100%;
+  padding: 20px 40px; /* Padding fixo */
+  background-color: rgb(0, 0, 0); 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  
+  /* 🔥 TRANSIÇÃO RÁPIDA: 0.3s para um efeito mais responsivo */
+  transition: background-color 0.3s ease, backdrop-filter 0.3s ease; 
 }
+
+header.scrolled {
+  /* 🔥 Mantemos o mesmo padding (20px 40px) para não mudar o tamanho */
+  padding: 20px 40px; 
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(12px); 
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
 
 .logo{
   font-size:24px;

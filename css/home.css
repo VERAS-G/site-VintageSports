@@ -11,6 +11,14 @@
   overflow: hidden;
 }
 
+/* Ajuste no container do Banner/Hero logo após o header */
+.hero, .banner { /* substitua pelo nome da sua classe de banner */
+    margin-top: -85px; /* Valor aproximado da altura da sua navbar */
+    padding-top: 85px; /* Compensa o espaço para o texto não ficar escondido */
+}
+
+
+
 /* OVERLAY COM DEGRADÊ */
 .hero-overlay {
   position: absolute;

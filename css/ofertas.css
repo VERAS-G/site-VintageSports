@@ -11,6 +11,12 @@
   overflow: hidden;
 }
 
+/* Ajuste no container do Banner/Hero logo após o header */
+.promo, .banner-oferta { /* substitua pelo nome da sua classe de banner */
+    margin-top: -85px; /* Valor aproximado da altura da sua navbar */
+    padding-top: 85px; /* Compensa o espaço para o texto não ficar escondido */
+}
+
 /* 🔥 OVERLAY ESCURO */
 .promo-overlay {
   position: absolute;

@@ -223,7 +223,10 @@ function updateCart() {
     let total = 0, totalItens = 0;
 
     cart.forEach((item, index) => {
+        // Soma valor apenas se estiver selecionado
         if (item.selected) total += item.price * item.quantity;
+        
+        // Soma quantidade total de itens para o contador da Navbar
         totalItens += item.quantity;
 
         const li = document.createElement("li");
@@ -246,11 +249,22 @@ function updateCart() {
         cartItems.appendChild(li);
     });
 
+    // Atualiza o valor total no rodapé do carrinho
     if (totalElement) totalElement.textContent = total.toFixed(2).replace(".", ",");
-    if (countElement) countElement.textContent = totalItens;
+
+    // 🔥 LÓGICA DO CONTADOR DINÂMICO
+    if (countElement) {
+        if (totalItens > 0) {
+            countElement.textContent = totalItens;
+            countElement.style.display = "flex"; // Mostra o círculo amarelo se houver itens
+        } else {
+            countElement.style.display = "none"; // Esconde se estiver vazio
+        }
+    }
 
     localStorage.setItem("cart", JSON.stringify(cart));
 }
+
 
 function toggleItem(index) {
     cart[index].selected = !cart[index].selected;
@@ -433,4 +447,12 @@ function VerCarrinho() {
 // Inicialização Final
 document.addEventListener("DOMContentLoaded", renderizarLoja);
 
-
+window.addEventListener('scroll', function() {
+    const header = document.querySelector('header');
+    // Adiciona a classe assim que rolar apenas 10px
+    if (window.scrollY > 10) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+});
