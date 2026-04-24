@@ -168,8 +168,6 @@
   width: 250px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   transition: 0.3s;
-  cursor: pointer;
-
 }
 
 .card-s h3 {
@@ -182,8 +180,28 @@
   color: #666;
 }
 
+.card-s::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 1px;
+  background: linear-gradient(120deg, transparent, #f6d221, transparent);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: 0.3s;
+}
+
 .card-s:hover{
   transform: translateY(-5px);
+}
+
+.card-s:hover::before {
+  opacity: 1;
 }
 
 /* SEÇÃO */
@@ -218,9 +236,10 @@
 .card-contato {
   background: #111;
   padding: 25px;
-  width: 260px;
+  width: 250px;
   border-radius: 12px;
   transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(105, 105, 105, 0.1);
   text-align: left;
   position: relative;
   overflow: hidden;

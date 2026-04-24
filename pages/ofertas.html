@@ -68,8 +68,42 @@
 
 <section class="products">
   <h2>Ofertas de Produtos</h2>
-  <div class="grid" id="product-list"></div>
+  
+  <!-- LINHA 1 -->
+  <div class="carrossel-container">
+    <!-- Seta Esquerda -->
+    <button class="nav-arrow left" onclick="rolarLinha('linha-1', -320)" aria-label="Anterior">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    
+    <div class="linha-wrapper" id="linha-1">
+        <!-- O JS injetará os cards aqui -->
+    </div>
+
+    <!-- Seta Direita -->
+    <button class="nav-arrow right" onclick="rolarLinha('linha-1', 320)" aria-label="Próximo">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- LINHA 2 -->
+  <div class="carrossel-container">
+    <!-- Seta Esquerda -->
+    <button class="nav-arrow left" onclick="rolarLinha('linha-2', -320)" aria-label="Anterior">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    
+    <div class="linha-wrapper" id="linha-2">
+        <!-- O JS injetará os cards aqui -->
+    </div>
+
+    <!-- Seta Direita -->
+    <button class="nav-arrow right" onclick="rolarLinha('linha-2', 320)" aria-label="Próximo">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
 </section>
+
 
 <section class=" animar">
   <h2>comcorra</h2>
@@ -128,8 +162,7 @@
   <p>© 2026 VintageSports - Todos os direitos reservados</p>
 </footer>
 
-<script src="/js/produtos.js"></script>
-<script src="src/javascript/produtos-ofertas.js"></script>
+<script src="/js/produtos_ofertas.js"></script>
 <script src="/js/modal_produto.js"></script>
 <script src="/js/script.js" defer></script>
 
@@ -206,7 +239,7 @@
       </div>
     </div>
   </div>
-</div>
+</div>ks
 
 
 

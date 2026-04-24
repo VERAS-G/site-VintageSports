@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/css/produtos.css">
     <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/modal_produto.css">
+    <link rel="stylesheet" href="/css/carrossel.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 
     <title>VintageSports</title>
@@ -66,6 +67,179 @@
     </a>
   </div>
 </section>
+
+<!-- Certifique-se de ter o link do FontAwesome no seu <head> para as setas aparecerem -->
+<section class="carrossel-manto">
+    <h2>Encontre seu Manto »</h2>
+    
+    <div class="carrossel-container">
+        <!-- Seta Esquerda -->
+        <button class="seta-nav esquerda" onclick="rolarCarrossel(-1)" aria-label="Anterior">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <!-- O ID 'carrossel-lista' é o que o JS vai usar para rolar -->
+        <div class="carrossel-wrapper" id="carrossel-lista">
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/ALEMANHA/alemanha.png" alt="Pelé">
+                </div>
+                <span>Alemanha</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/ARABIA SAUDITA/arabia.png" alt="Pelé">
+                </div>
+                <span>Arabia saudita</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/ARGENTINA/argentina.png" alt="Pelé">
+                </div>
+                <span>Argentina</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/AUSTRALIA/australia.png" alt="Pelé">
+                </div>
+                <span>Australia</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/BELGICA/belgica.png" alt="Pelé">
+                </div>
+                <span>Belgica</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/BRASIL/brasil.png" alt="Pelé">
+                </div>
+                <span>Brasil</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/CANADA/canada.png" alt="Pelé">
+                </div>
+                <span>Canada</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/COREIA DO SUL/coreia do sul.png" alt="Pelé">
+                </div>
+                <span>Coreia Do Sul</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/CROACIA/croacia.png" alt="Pelé">
+                </div>
+                <span>Croacia</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/EGITO/egito.png" alt="Pelé">
+                </div>
+                <span>Egito</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/ESPANHA/espanha.png" alt="Pelé">
+                </div>
+                <span>Espanha</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/USA/usa.png" alt="Pelé">
+                </div>
+                <span>USA</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/FRANCA/frança.png" alt="Pelé">
+                </div>
+                <span>França</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/HOLANDA/holanda.png" alt="São Paulo">
+                </div>
+                <span>Holanda</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/INGLATERRA/inglaterra.png" alt="Santos">
+                </div>
+                <span>Inglaterra</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/JAPAO/japao.png" alt="Santos">
+                </div>
+                <span>Japão</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/MARROCOS/marrocos.png" alt="Santos">
+                </div>
+                <span>Marrocos</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/MEXICO/mexico.png" alt="Santos">
+                </div>
+                <span>Mexico</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/PORTUGAL/portugal.png" alt="Santos">
+                </div>
+                <span>Portugal</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/URUGUAY/uruguai.png" alt="Santos">
+                </div>
+                <span>Uruguay</span>
+            </div>
+
+            <!-- Adicione mais itens aqui conforme sua necessidade -->
+
+        </div>
+
+        <!-- Seta Direita -->
+        <button class="seta-nav direita" onclick="rolarCarrossel(1)" aria-label="Próximo">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Bolinhas de Navegação (Opcional, o JS pode controlar depois) -->
+    <div class="carrossel-dots" id="carrossel-dots">
+        <span class="ponto ativo"></span>
+        <span class="ponto"></span>
+        <span class="ponto"></span>
+        <span class="ponto"></span>
+    </div>
+</section>
+
 
 <section class="products">
   <h2>Destaques</h2>
@@ -192,6 +366,7 @@
   <p>© 2026 VintageSports - Todos os direitos reservados</p>
 </footer>
 
+<script src="/js/carrossel.js" defer></script>
 <script src="/js/produtos.js"></script>
 <script src="/js/modal_produto.js"></script>
 <script src="/js/script.js" defer></script>

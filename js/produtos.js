@@ -53,7 +53,7 @@ function renderProdutos() {
             🛒 Adicionar
           </button>
           <button class="buy-btn" onclick="abrirModal('${produto.nome}', ${produto.preco}, '${produto.imagem}', true)">
-            ⚡ Comprar
+            Comprar
           </button>
         </div>
       </div>

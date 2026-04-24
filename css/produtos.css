@@ -94,7 +94,7 @@
   flex: 1;
   padding: 12px 5px;
   border: none;
-  border-radius: 8px;
+  border-radius: 3px;
   cursor: pointer;
   font-size: 12px;
   font-weight: 700;
@@ -104,34 +104,30 @@
 
 /* ADICIONAR */
 .buttons button:first-child {
-  background: #6a5cff;
+  background: #ffffff;
+  color: rgb(0, 0, 0);
+  border: 1px solid black;
+}
+
+.buttons button:first-child:hover{
+  background: black;
   color: white;
 }
 
+
 /* COMPRAR (Amarelo Nike) */
 .buy-btn {
-  background: #ffcc00;
-  color: #000;
+  background: #000000;
+  color: #ffffff;
+  transition: 0.3s;
+}
+
+.buy-btn:hover{
+  background: #707072;
+  color: white;
 }
 
 .buttons button:hover {
   filter: brightness(0.9);
   transform: scale(1.02);
-}
-
-/* ===================================== */
-/* 🔥 ANIMAÇÃO PRODUTO → CARRINHO */
-/* ===================================== */
-
-.fly-img {
-  position: fixed;
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-  pointer-events: none;
-  z-index: 9999;
-  background: #fff;
-  border-radius: 50%;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
 }

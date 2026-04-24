@@ -75,23 +75,7 @@ function closeCart() {
 }
 
 function addToCart(name, price, image, btn, abrirImediato = false) {
-    // 1. ANIMAÇÃO: Captura a imagem do card e dispara o "Fly to Cart"
-    if (btn) {
-        try {
-            const card = btn.closest('.card'); // Acha o container do produto
-            if (card) {
-                const imgParaAnimar = card.querySelector('img');
-                // 🔥 Ajustado para chamar o nome exato da sua função: animateToCart
-                if (imgParaAnimar && typeof animateToCart === "function") {
-                    animateToCart(imgParaAnimar);
-                }
-            }
-        } catch (err) {
-            console.error("Erro na animação:", err);
-        }
-    }
-
-    // 2. LÓGICA DO CARRINHO
+    // 1. LÓGICA DO CARRINHO
     if (typeof cart === 'undefined') cart = [];
 
     const itemExistente = cart.find(item => item.name === name);
@@ -108,19 +92,19 @@ function addToCart(name, price, image, btn, abrirImediato = false) {
         });
     }
 
-    // 3. ATUALIZAÇÃO DA INTERFACE E NOTIFICAÇÕES
+    // 2. ATUALIZAÇÃO DA INTERFACE E NOTIFICAÇÕES
     if (typeof updateCart === "function") updateCart();
     
     if (typeof showToast === "function") {
-        // Removido emojis para manter o padrão limpo da notificação preta
         showToast(abrirImediato ? "Pronto para comprar!" : "Adicionado ao carrinho");
     }
 
-    // 4. ABERTURA DO CARRINHO (COMPRA IMEDIATA)
+    // 3. ABERTURA DO CARRINHO (COMPRA IMEDIATA)
     if (abrirImediato && typeof openCart === "function") {
         setTimeout(openCart, 100);
     }
 }
+
 
 
 
@@ -399,7 +383,7 @@ function desenharCards(container, lista) {
         <p class="price">R$ ${p.preco.toFixed(2).replace(".", ",")}</p>
         <div class="buttons">
           <button onclick="abrirModal('${p.nome}', ${p.preco}, '${p.imagem}', false)">🛒 Adicionar</button>
-          <button class="buy-btn" onclick="abrirModal('${p.nome}', ${p.preco}, '${p.imagem}', true)">⚡ Comprar</button>
+          <button class="buy-btn" onclick="abrirModal('${p.nome}', ${p.preco}, '${p.imagem}', true)">Comprar</button>
         </div>
       </div>`).join('');
 }
