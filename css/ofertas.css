@@ -1,232 +1,544 @@
-/* 🔥 SEÇÃO */
+/* =============================================================
+   1. BANNER PROMOCIONAL - REFINAMENTO DE TIPOGRAFIA
+   ============================================================= */
+
 .promo {
-  position: relative;
-  height: 80vh;
-  background: url('/assets/img/banner-oferta.webp') center/cover no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-  overflow: hidden;
+    position: relative;
+    height: 90vh; 
+    background: url('/assets/img/banner-oferta.webp') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+    margin-top: -85px; 
+    padding-top: 85px; 
 }
 
-/* Ajuste no container do Banner/Hero logo após o header */
-.promo, .banner-oferta { /* substitua pelo nome da sua classe de banner */
-    margin-top: -85px; /* Valor aproximado da altura da sua navbar */
-    padding-top: 85px; /* Compensa o espaço para o texto não ficar escondido */
-}
-
-/* 🔥 OVERLAY ESCURO */
 .promo-overlay {
-  position: absolute;
-  inset: 0;
-
-  background:
-    linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 20%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.7) 100%);
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.8) 100%),
+                linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 50%, rgba(0,0,0,0.8) 100%);
+    z-index: 1;
 }
 
-/* 🔥 CONTEÚDO */
 .promo-content {
-  position: relative;
-  max-width: 700px;
-  padding: 20px;
-  z-index: 2;
+    position: relative;
+    max-width: 1000px; /* Aumentado levemente para o título respirar */
+    padding: 0 20px;
+    z-index: 2;
 }
 
-/* TAG */
+/* TAG: Menor, mais negrito e com muito espaçamento (Estilo Nike Editorial) */
 .tag {
-  font-size: 0.8rem;
-  letter-spacing: 2px;
-  color: #f6d221;
-  text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 5px; 
+    color: #f6d221;
+    text-transform: uppercase;
+    font-weight: 900;
+    margin-bottom: 15px;
+    display: block;
 }
 
-/* TÍTULO */
+/* TÍTULO: Mais denso, itálico agressivo e espaçamento de linha ultra-curto */
 .promo h2 {
-  font-size: 3rem;
-  margin: 15px 0;
-  font-weight: 700;
+    font-size: clamp(2.5rem, 8vw, 5.2rem); /* Mais impacto em telas grandes */
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic; 
+    letter-spacing: -4px; /* Letras mais "coladas" para visual de peso */
+    line-height: 0.85; /* Título bem blocado */
+    margin-bottom: 20px;
+    color: #fff;
+    text-shadow: 0 15px 40px rgba(0,0,0,0.4);
 }
 
-/* TEXTO */
+/* PARÁGRAFO: Limpo, com cor levemente suavizada para não brigar com o título */
 .promo p {
-  color: #ddd;
-  margin-bottom: 25px;
-  line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 auto 40px;
+    line-height: 1.5;
+    font-size: 1.1rem;
+    max-width: 550px; /* Parágrafo mais estreito melhora a estética */
+    font-weight: 400;
+    letter-spacing: 0.2px;
 }
 
-/* BOTÃO */
+/* BOTÃO: Design reto, sem bordas, focado no contraste total */
 .btn-promo {
-  background: #f6d221;
-  color: black;
-  border: none;
-  padding: 14px 30px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
+    display: inline-block;
+    background: #f6d221;
+    color: #000;
+    text-decoration: none;
+    padding: 16px 45px;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: 1px;
+    border-radius: 2px; /* Quase totalmente reto */
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-promo:hover {
-  background: white;
+    background: #fff;
+    transform: scale(1.05); /* Zoom sutil em vez de "pulo" */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
+/* Ajuste Responsivo */
+@media (max-width: 768px) {
+    .promo h2 { 
+        font-size: 3.2rem; 
+        letter-spacing: -2px; 
+        line-height: 0.9;
+    }
+    .promo p { 
+        font-size: 1rem; 
+        max-width: 100%;
+    }
+    .btn-promo { 
+        padding: 14px 30px; 
+        font-size: 0.85rem;
+    }
+}
+
+
 /* =============================================================
-   GRID DE OFERTAS - AJUSTE FINO (ESTILO FOTO)
+   2. CARROSSEL DE OFERTAS (PADRÃO VISUAL DE DESTAQUES)
    ============================================================= */
 
 .products {
-  padding: 40px 10px; /* Margem externa da seção */
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-  overflow: hidden;
+    padding: 40px;
+    width: 100%;
+    overflow: hidden;
+    background: #f9f9f9;
 }
 
 .products h2 {
-  font-size: 18px;
-  font-weight: 800;
-  margin-bottom: 25px;
-  padding-left: 15px;
-  color: #000;
+    margin-bottom: 20px;
 }
 
-/* Container relativo para as setas sobreporem os cards */
 .carrossel-container {
-  display: flex;
-  align-items: center;
-  position: relative;
-  padding: 0;
+    display: flex;
+    align-items: center;
+    position: relative;
 }
 
-/* 🔥 TRILHO DE PRODUTOS */
 .linha-wrapper {
-  display: flex;
-  gap: 12px; /* Espaçamento exato entre cards da foto */
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding: 15px 5px; /* Padding para a sombra aparecer */
-  scrollbar-width: none;
+    display: flex;
+    gap: 20px; /* Gap idêntico ao padrão Destaques */
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 20px 5px;
+    scrollbar-width: none;
 }
 
-.linha-wrapper::-webkit-scrollbar {
-  display: none;
-}
+.linha-wrapper::-webkit-scrollbar { display: none; }
 
-/* 🔥 CARD (PROPORÇÕES EXATAS DA IMAGEM) */
+/* 🔥 CARD PADRONIZADO (IDÊNTICO AOS DESTAQUES) */
 .card {
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  
-  /* Cálculo para travar 4 itens por tela */
-  min-width: calc(25% - 10px); 
-  flex-shrink: 0;
-  transition: transform 0.3s ease;
+    background: #fff;
+    padding: 20px; /* Padding original dos destaques */
+    border-radius: 12px;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+    /* Trava 4 itens por linha no desktop */
+    min-width: calc(25% - 15px); 
+    flex-shrink: 0;
+    height: 100%; /* Permite que o conteúdo defina a altura ou use min-height */
+    min-height: 480px; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
 }
 
 .card img {
-  width: 100%;
-  height: 250px;
-  object-fit: contain; /* Não corta a camisa */
-  margin-bottom: 15px;
+    width: 100%;
+    height: 250px; /* Altura original da imagem nos destaques */
+    object-fit: contain;
+    margin-bottom: 15px;
 }
 
 .card h3 {
-  font-size: 15px;
-  font-weight: 600;
-  margin: 10px 0;
-  min-height: 40px; /* Garante que os botões fiquem alinhados */
-  line-height: 1.4;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111;
+    line-height: 1.4;
+    min-height: 40px;
+    margin: 10px 0;
 }
 
 .stars {
-  color: #ffbc00; /* Amarelo Nike/Vintage */
-  font-size: 14px;
-  margin-bottom: 8px;
+    color: #ffbc00; /* Amarelo Nike/Vintage */
+    font-size: 14px;
+    margin-bottom: 8px;
 }
 
 .price {
-  font-size: 18px;
-  font-weight: 800;
-  margin-bottom: 15px;
-  color: #111;
+    font-size: 18px;
+    font-weight: 800;
+    color: #111;
+    margin-bottom: 15px;
 }
 
-/* 🔥 BOTÕES (MARGIN E PADDING DA FOTO) */
+/* 🔥 BOTÕES COM EFEITO DE BRILHO E ESTILO ORIGINAL */
 .buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: auto;
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
 }
 
 .buttons button {
-  flex: 1;
-  padding: 12px 5px;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  transition: 0.2s;
+    position: relative;
+    overflow: hidden;
+    flex: 1;
+    padding: 12px 5px;
+    border: none;
+    border-radius: 3px; /* Raio original dos botões */
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
 }
 
-.btn-adicionar {
-  background: #fff;
-  color: #000;
+/* Animação de escala e brilho */
+.buttons button:hover {
+    transform: translateY(-3px) scale(1.02);
 }
 
+.buttons button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: 0.5s;
+}
+
+.buttons button:hover::after { left: 100%; }
+
+/* Botão Adicionar (Branco) */
+.buttons button:first-child {
+    background: #ffffff;
+    color: #000;
+    border: 1px solid black;
+}
+
+.buttons button:first-child:hover {
+    background: black;
+    color: white;
+}
+
+/* Botão Comprar (Preto) */
 .buy-btn {
-  background: #000 !important;
-  color: #fff !important;
+    background: #000000;
+    color: #ffffff;
 }
 
-/* 🔥 SETAS SOBREPOSTAS (TRANSLÚCIDAS) */
+.buy-btn:hover {
+    background: #333;
+}
+
+/* 🔥 SETAS (CRESCEM E FICAM AMARELAS) */
 .nav-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.6) !important;
-  backdrop-filter: blur(8px);
-  color: #000;
-  border: 1px solid rgba(0,0,0,0.1);
-  border-radius: 50%;
-  width: 44px;
-  height: 44px;
-  font-size: 18px;
-  cursor: pointer;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(8px);
+    color: #000;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 46px;
+    height: 46px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
-.nav-arrow.left { left: 10px; } 
-.nav-arrow.right { right: 10px; }
 
 .nav-arrow:hover {
-  background: rgba(255, 255, 255, 1) !important;
-  transform: translateY(-50%) scale(1.1);
+    background: #f6d221 !important; 
+    transform: translateY(-50%) scale(1.2); 
+    border-color: #f6d221;
 }
 
-/* Mobile */
+.nav-arrow.left { left: 15px; } 
+.nav-arrow.right { right: 15px; }
+
+/* Responsivo */
+@media (max-width: 1024px) {
+    .card { min-width: calc(50% - 10px); }
+}
+
 @media (max-width: 768px) {
-  .card { min-width: calc(50% - 10px); }
-  .nav-arrow { display: none; }
+    .nav-arrow { display: none; }
+    .card { min-width: 300px !important; }
+}
+
+
+.price-container {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espaço entre os elementos */
+  margin: 10px 0;
+  flex-wrap: wrap; /* Garante que não quebre em telas pequenas */
+}
+
+.price-main {
+  font-weight: 800;
+  font-size: 17px;
+  color: #000;
+}
+
+.price-main small {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.price-old {
+  color: #888;
+  text-decoration: line-through; /* Preço riscado */
+  font-size: 13px;
+}
+
+.discount-percent {
+  color: #28a745; /* O verde da sua foto */
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* =============================================================
+   SEÇÃO PROMOÇÃO (ESTILO NIKE PERFORMANCE - PARTE 1)
+   ============================================================= */
+
+.secao-promo {
+  background: #ffffff;
+  padding: 80px 20px; /* Reduzido de 120px para melhor encaixe na tela */
+  text-align: center;
+}
+
+/* TAG SUPERIOR */
+.tag-promo {
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  color: #ffbc00;
+  margin-bottom: 12px;
+  display: block;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* TÍTULOS IMPACTANTES */
+.secao-promo h2 {
+  font-size: clamp(2rem, 4.5vw, 3.2rem); /* Ajuste dinâmico de tamanho */
+  font-weight: 900;
+  text-transform: uppercase;
+  font-style: italic;
+  letter-spacing: -2px;
+  margin-bottom: 15px;
+  color: #000;
+  line-height: 1;
+}
+
+.subtitulo-promo {
+  max-width: 650px;
+  margin: 0 auto 50px; /* Reduzido de 80px para aproximar dos cards */
+  color: #666;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+/* GRID DE CARDS */
+.cards-promo {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px; /* Gap levemente menor para visual mais "unido" */
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+/* CARD - CONFIGURAÇÃO BASE */
+.cards-promo .card {
+  position: relative;
+  height: 420px; /* Reduzido de 550px para o texto final aparecer na tela */
+  border-radius: 0px; /* Cantos retos padrão Nike */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 35px;
+  cursor: pointer;
+  background-color: #111;
+  
+  /* Imagem inteira e centralizada */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* Transição ultra suave para o zoom e movimento do card */
+  transition: transform 0.6s cubic-bezier(0.2, 1, 0.3, 1), 
+              background-size 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+}
+/* =============================================================
+   SEÇÃO PROMOÇÃO (ESTILO NIKE PERFORMANCE - PARTE 2)
+   ============================================================= */
+
+/* NÚMERO DO PASSO - Ajustado para o novo tamanho de card */
+.step-number {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 4rem; /* Reduzido para proporcionalidade */
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.12);
+  font-style: italic;
+  line-height: 0.8;
+  z-index: 2;
+  transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1), color 0.4s ease;
+}
+
+/* OVERLAY DEGRADÊ - Focado na leitura do texto inferior */
+.cards-promo .card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.9) 0%,
+    rgba(0,0,0,0.3) 60%,
+    transparent 100%
+  );
+  z-index: 1;
+  transition: opacity 0.7s ease;
+}
+
+/* BARRA AMARELA NIKE - Detalhe de acabamento */
+.cards-promo .card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 5px;
+  background: #f6d221;
+  transition: width 0.7s cubic-bezier(0.2, 1, 0.3, 1);
+  z-index: 4;
+}
+
+/* TEXTO DO CARD - Hierarquia e Movimento */
+.cards-promo .card h3 {
+  position: relative;
+  z-index: 3;
+  font-size: 1.5rem; /* Ajustado para a nova altura do card */
+  font-weight: 900;
+  text-transform: uppercase;
+  font-style: italic;
+  color: white;
+  margin-bottom: 8px;
+  text-align: left;
+  transform: translateY(15px);
+  transition: transform 0.7s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.cards-promo .card p {
+  position: relative;
+  z-index: 3;
+  font-size: 0.95rem;
+  color: #ccc;
+  margin: 0;
+  text-align: left;
+  line-height: 1.3;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: transform 0.7s cubic-bezier(0.2, 1, 0.3, 1), opacity 0.7s ease;
+}
+
+/* =============================================================
+   EFEITOS DE HOVER REFINADOS
+   ============================================================= */
+
+.cards-promo .card:hover {
+  background-size: 108%; /* Zoom sutil sem distorcer */
+  transform: scale(0.98); /* Efeito de profundidade para dentro */
+}
+
+.cards-promo .card:hover .step-number {
+  color: rgba(246, 210, 33, 0.25);
+  transform: scale(1.05) rotate(-3deg);
+}
+
+.cards-promo .card:hover::after {
+  width: 100%;
+}
+
+.cards-promo .card:hover h3 {
+  transform: translateY(0);
+}
+
+.cards-promo .card:hover p {
+  transform: translateY(0);
+  opacity: 1;
+  transition-delay: 0.1s; /* Efeito de cascata */
+}
+
+/* TÍTULO FINAL - 🔥 RESOLVE O PROBLEMA DE VISIBILIDADE */
+.titulo-produtos {
+  margin-top: 50px !important; /* Puxado para cima para aparecer na tela */
+  font-size: clamp(1.8rem, 3vw, 2.5rem) !important;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+  color: #000;
+  letter-spacing: -1px;
+}
+
+/* =============================================================
+   PARTE 3: IMAGENS DE FUNDO DOS CARDS
+   ============================================================= */
+
+.card-1 { 
+    background-image: url('/assets/img/card1.jpg'); 
+}
+
+.card-2 { 
+    background-image: url('/assets/img/card2.jpg'); 
+}
+
+.card-3 { 
+    background-image: url('/assets/img/card3.jpg'); 
+}
+
+
+/* RESPONSIVIDADE */
+@media (max-width: 1024px) {
+  .cards-promo { grid-template-columns: repeat(2, 1fr); }
+  .card-3 { grid-column: span 2; }
+}
+
+@media (max-width: 768px) {
+  .secao-promo { padding: 50px 15px; }
+  .cards-promo { grid-template-columns: 1fr; }
+  .card-3 { grid-column: span 1; }
+  .cards-promo .card { height: 380px; padding: 25px; }
+  .step-number { font-size: 3.5rem; }
 }

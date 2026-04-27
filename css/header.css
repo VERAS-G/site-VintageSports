@@ -1,100 +1,156 @@
+/* =============================================================
+   0. RESET E FOOTER FIX (Garante que o footer fique no fundo)
+   ============================================================= */
+html {
+  height: 100%;
+}
+
+#promo {
+  scroll-margin-top: 100px; /* Ajuste esse valor conforme a altura do seu header */
+}
+
+#quem-somos{
+  scroll-margin-top: 100px;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Força o corpo a ter no mínimo a altura da tela */
+}
+
+/* Faz o conteúdo principal (como a section products) ocupar o espaço e empurrar o footer */
+main, .products, .promo {
+  flex: 1 0 auto;
+}
+
+footer {
+  flex-shrink: 0;
+}
+
+/* =============================================================
+   1. HEADER (ESTRUTURA)
+   ============================================================= */
 header {
   width: 100%;
-  padding: 20px 40px; /* Padding fixo */
-  background-color: rgb(0, 0, 0); 
+  padding: 20px 40px;
+  background-color: rgb(0, 0, 0);
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
   top: 0;
   z-index: 1000;
-  
-  /* 🔥 TRANSIÇÃO RÁPIDA: 0.3s para um efeito mais responsivo */
-  transition: background-color 0.3s ease, backdrop-filter 0.3s ease; 
+  transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
 }
 
 header.scrolled {
-  /* 🔥 Mantemos o mesmo padding (20px 40px) para não mudar o tamanho */
-  padding: 20px 40px; 
   background-color: rgba(0, 0, 0, 0.6) !important;
-  backdrop-filter: blur(12px); 
+  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
+/* =============================================================
+   2. LOGO (ALINHAMENTO LIMPO)
+   ============================================================= */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  z-index: 10; /* Garante que o logo fique visível */
+}
 
-.logo{
-  font-size:24px;
-  font-weight:bold;
+.logo img {
   width: 40px;
   height: 40px;
+  object-fit: contain;
 }
 
-.logo img{
-    width: 100%;
-    height: auto;
-    margin-left: 10px;
-
+.logo h1 {
+  font-size: 20px;
+  color: white;
+  margin: 0; /* Remove as margens negativas antigas */
+  font-weight: bold;
 }
 
-.logo h1{
-    font-size: 20px;
-    margin-left:50px ;
-    margin-top: -39px;
-    color: white;
+/* =============================================================
+   3. NAV (CENTRO ABSOLUTO DO MONITOR)
+   ============================================================= */
+nav {
+  /* O segredo para o centro perfeito: ignora o tamanho do logo e ícones */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-nav ul{
-  display:flex;
-  list-style:none;
-  gap:30px;
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
 }
 
-nav a{
-  text-decoration:none;
-  color:#ffffff;
-  font-weight:500;
+nav a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
   transition: 0.3s;
 }
 
-nav a:hover{
-    color: #f6d221;
-    }
-
-nav a.active{
-    color: #ffffff;
-    font-weight: 600;
-    padding: 2px;
-    border-bottom:3px solid #f6d221;
+nav a:hover {
+  color: #f6d221;
 }
 
-.icons{
-  display:flex;
-  gap:20px;
-  font-size:20px;
-  cursor:pointer;
+nav a.active {
+  color: #ffffff;
+  font-weight: 600;
+  border-bottom: 3px solid #f6d221;
+  padding-bottom: 2px;
 }
 
-.search-box{
+/* =============================================================
+   4. ÍCONES E BUSCA (DIREITA)
+   ============================================================= */
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  z-index: 10;
+}
+
+.search-box {
   display: flex;
   align-items: center;
   position: relative;
 }
 
-.search-box input{
+.search-box input {
   width: 0;
   opacity: 0;
-  padding: 8px;
-  border: 1px solid #ccc;
+  padding: 8px 0;
+  border: 1px solid transparent;
   border-radius: 20px;
-  transition: 0.4s;
+  transition: all 0.4s ease;
+  background: #222;
+  color: white;
 }
 
+.search-box.active input {
+  width: 180px;
+  opacity: 1;
+  padding: 8px 15px;
+  margin-right: 10px;
+  border: 1px solid #444;
+}
 
-.search-icon{
+.search-icon {
   cursor: pointer;
   font-size: 18px;
-  color: rgb(255, 255, 255);
+  color: white;
   transition: transform 0.2s ease;
 }
 
@@ -102,15 +158,16 @@ nav a.active{
   transform: translateY(-3px);
 }
 
-
-.search-box.active input{
-  width: 180px;
-  opacity: 1;
-  margin-right: 10px;
+.search-box input:focus {
+  border: 1px solid #f6d221;
+  box-shadow: 0 0 5px #f6d221;
+  outline: none;
 }
 
-.search-box input:focus{
-  border: 1px solid rgb(255, 255, 255);
-  box-shadow: 0 0 5px #f6d221 ;
-  outline: none;
+#cart-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
 }

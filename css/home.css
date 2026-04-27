@@ -1,85 +1,114 @@
-/* HERO */
+/* =============================================================
+   HERO PRINCIPAL (ESTILO NIKE PERFORMANCE)
+   ============================================================= */
+
 .hero {
-  position: relative;
-  height: 90vh;
-  background: url('/assets/img/banner.jpg') center/cover no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-  overflow: hidden;
+    position: relative;
+    height: 90vh;
+    background: url('/assets/img/banner.jpg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+    /* Alinhamento com a Navbar Transparente */
+    margin-top: -85px; 
+    padding-top: 85px; 
 }
 
-/* Ajuste no container do Banner/Hero logo após o header */
-.hero, .banner { /* substitua pelo nome da sua classe de banner */
-    margin-top: -85px; /* Valor aproximado da altura da sua navbar */
-    padding-top: 85px; /* Compensa o espaço para o texto não ficar escondido */
-}
-
-
-
-/* OVERLAY COM DEGRADÊ */
+/* Overlay Cinematográfico: Foco central com extremidades escuras */
 .hero-overlay {
-  position: absolute;
-  inset: 0;
-
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(0,0,0,1) 0%,
-      rgba(0,0,0,0.7) 25%,
-      rgba(0,0,0,0.2) 55%,
-      rgba(0,0,0,0.85) 100%
-    );
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%),
+                linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 50%, rgba(0,0,0,0.8) 100%);
+    z-index: 1;
 }
 
-/* CONTEÚDO */
 .hero-content {
-  position: relative;
-  max-width: 700px;
-  padding: 20px;
-  z-index: 2;
+    position: relative;
+    max-width: 1000px; /* Mais espaço para o título respirar */
+    padding: 0 20px;
+    z-index: 2;
 }
 
-/* TAG */
+/* TAG SUPERIOR: Menor, mais densa e bem espaçada */
 .hero .tag {
-  font-size: 0.8rem;
-  letter-spacing: 2px;
-  color: #f6d221;
-  text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 5px; 
+    color: #f6d221;
+    text-transform: uppercase;
+    font-weight: 900;
+    margin-bottom: 20px;
+    display: block;
 }
 
-/* TÍTULO */
+/* TÍTULO IMPACTANTE: O coração do design Nike */
 .hero h1 {
-  font-size: 3.2rem;
-  margin: 15px 0;
-  font-weight: 700;
+    font-size: clamp(2.5rem, 8vw, 5.2rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic; 
+    letter-spacing: -4px; /* Letras "coladas" para visual de peso */
+    line-height: 0.85; /* Título blocado verticalmente */
+    margin-bottom: 25px;
+    color: #fff;
+    text-shadow: 0 15px 40px rgba(0,0,0,0.4);
 }
 
-/* TEXTO */
+/* PARÁGRAFO: Limpo e elegante */
 .hero p {
-  color: #ddd;
-  margin-bottom: 25px;
-  line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0 auto 40px;
+    line-height: 1.5;
+    font-size: 1.15rem;
+    max-width: 550px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
 }
 
+/* BOTÃO HERO: Reto e com alto contraste */
 .btn-hero {
-  display: inline-block;
-  background: #f6d221;
-  color: black;
-  padding: 14px 30px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: inline-block;
+    background: #f6d221;
+    color: #000;
+    text-decoration: none;
+    padding: 18px 50px;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: 1px;
+    border-radius: 2px; /* Cantos quase retos */
+    cursor: pointer;
+    border: none;
+    transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
-/* 🔥 EFEITO ZOOM */
 .btn-hero:hover {
-  background: white;
-  transform: scale(1.05);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    background: #fff;
+    transform: scale(1.05); /* Zoom sutil */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
+
+/* Ajuste Responsivo */
+@media (max-width: 768px) {
+    .hero { height: 80vh; }
+    .hero h1 { 
+        font-size: 3.2rem; 
+        letter-spacing: -2px; 
+        line-height: 0.9;
+    }
+    .hero p { 
+        font-size: 1rem; 
+        max-width: 100%;
+    }
+    .btn-hero { 
+        padding: 15px 40px; 
+        font-size: 0.85rem;
+    }
+}
+
 
 .content{
     display: flex;

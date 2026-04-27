@@ -48,23 +48,25 @@
   <div class="promo-overlay"></div>
 
   <div class="promo-content">
+    <!-- 1. Use a classe "tag" conforme o CSS -->
     <span class="tag">Promoção Exclusiva</span>
 
+    <!-- 2. Envolva os emojis em um <span> para o CSS controlar o itálico deles -->
     <h2>
-      Compre e viva o futebol de verdade
+      SUA COMPRA PODE TE LEVAR ATÉ O SEU ÍDOLO <span>⚽🔥</span>
     </h2>
 
     <p>
-      Em compras acima de R$ 299, você concorre a uma viagem para conhecer
-      o jogador da camisa escolhida ou ganhar uma peça autografada.
+      Em compras acima de R$299, você concorre a uma camisa oficial autografada ou até mesmo à chance de conhecer um jogador do seu time.
     </p>
 
-    <a href="#" class="btn-hero">
+    <!-- 3. Use a classe "btn-promo" que estilizamos -->
+    <a href="#promo" class="btn-promo">
       Participe!
     </a>
   </div>
-
 </section>
+
 
 <section class="products">
   <h2>Ofertas de Produtos</h2>
@@ -104,11 +106,52 @@
   </div>
 </section>
 
+<section id="promo" class="secao-promo animar">
+  <span class="tag-promo">Sua chance de ouro</span>
 
-<section class=" animar">
-  <h2>comcorra</h2>
-  <div class="grid" id="product-list"></div>
+  <h2>COMO GARANTIR SUA EXPERIÊNCIA?</h2>
+
+  <p class="subtitulo-promo">
+    Transforme sua compra em uma memória inesquecível. Siga os passos e entre no jogo.
+  </p>
+
+  <div class="cards-promo">
+
+    <!-- PASSO 1 -->
+    <div class="card card-1">
+      <div class="step-number">01</div>
+      <h3>ESCOLHA SEU MANTO</h3>
+      <p>Selecione a camisa do seu time do coração e adicione ao carrinho.</p>
+    </div>
+
+    <!-- PASSO 2 -->
+    <div class="card card-2">
+      <div class="step-number">02</div>
+      <h3>ALCANCE O OBJETIVO</h3>
+      <p>Ao atingir <strong>R$ 299</strong> em compras, sua participação é confirmada na hora.</p>
+    </div>
+
+    <!-- PASSO 3 -->
+    <div class="card card-3">
+      <div class="step-number">03</div>
+      <h3>CONCORRA AO ÉPICO</h3>
+      <p>Ganhe o manto autografado ou a chance única de conhecer um jogador do time escolhido.</p>
+    </div>
+
+  </div>
+
+  <h2 class="titulo-produtos">ESCOLHA O SEU TIME E PARTICIPE</h2>
+  <p class="subtitulo-promo">
+    produtos participantes:
+  </p>
+  
+  <!-- AQUI ENTRA O SEU CARROSSEL DE PRODUTOS -->
+  <div class="produtos">
+      <!-- Injetar cards via JS aqui -->
+  </div>
 </section>
+
+
 
 <!-- 🔥 CARRINHO -->
 <div id="cart" class="cart">
@@ -239,8 +282,7 @@
       </div>
     </div>
   </div>
-</div>ks
-
+</div>
 
 
 </body>

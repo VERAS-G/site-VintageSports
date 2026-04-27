@@ -5,6 +5,11 @@
   font-family:Arial, Helvetica, sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+
 body{
   background:#f5f5f5;
 }
@@ -68,7 +73,7 @@ body.no-scroll {
 
   display: flex;
   flex-direction: column;
-  z-index: 10;
+  z-index: 2000 !important;
 }
 
 .cart.active {
@@ -232,7 +237,7 @@ body.no-scroll {
   pointer-events: none;
   transition: 0.3s;
 
-  z-index: 5;
+  z-index: 1500 !important;
 }
 
 #overlay.active {

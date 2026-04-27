@@ -9,7 +9,7 @@ let toastTimeout;
 
 
 /* ==========================================================================
-   RENDERIZAÇÃO DO CARRINHO (COMPLETA E AJUSTADA)
+   RENDERIZAÇÃO DO CARRINHO (COM PREÇO DE OFERTA LADO A LADO)
    ========================================================================== */
 function render() {
   const container = document.getElementById("cart-items");
@@ -20,13 +20,29 @@ function render() {
 
   cart.forEach((item, i) => {
     const totalItem = item.price * item.quantity;
+    
     if (item.selected !== false) {
       subtotal += totalItem;
     }
 
-    const div = document.createElement("div");
+    // 🔥 LÓGICA DE PREÇO: Calcula o valor antigo se for promoção
+    let htmlPreco = "";
+    if (item.isPromo) {
+      const precoAntigoTotal = (item.price * 1.15) * item.quantity;
+      htmlPreco = `
+        <div class="checkout-price-row">
+          <span class="price-old">R$ ${precoAntigoTotal.toFixed(2).replace(".", ",")}</span>
+          <span class="price-new">R$ ${totalItem.toFixed(2).replace(".", ",")}</span>
+        </div>
+      `;
+    } else {
+      htmlPreco = `<div class="checkout-price">R$ ${totalItem.toFixed(2).replace(".", ",")}</div>`;
+    }
+
     const statusClasse = item.selected === false ? "item-morto" : "";
+    const div = document.createElement("div");
     div.className = `checkout-product ${statusClasse}`;
+    
     div.innerHTML = `
       <div class="product-main-info">
         <input type="checkbox" ${item.selected !== false ? "checked" : ""} 
@@ -47,38 +63,34 @@ function render() {
           </div>
         </div>
       </div>
-      <div class="checkout-price">R$ ${totalItem.toFixed(2).replace(".", ",")}</div>
+      <!-- Injeta o HTML do preço (Normal ou Oferta) -->
+      ${htmlPreco}
     `;
     container.appendChild(div);
   });
 
-  // 2. Lógica de Desconto
+  // 2. Lógica de Desconto (Mantida conforme seu original)
   let valorDesconto = 0;
   if (typeof descontoPercentual !== 'undefined' && descontoPercentual > 0) {
       valorDesconto = subtotal * (descontoPercentual / 100);
-      // Salva a porcentagem atual para o F5
       localStorage.setItem("desconto_percentual", descontoPercentual);
   } else {
-      // Se for 0, garante que o storage limpe
       localStorage.removeItem("desconto_percentual");
       localStorage.removeItem("cupom_ativo");
   }
 
-  // 3. Lógica de Frete
+  // 3. Lógica de Frete (Mantida conforme seu original)
   const vFrete = (typeof frete !== 'undefined' && frete > 0) ? frete : 0;
-  if (vFrete > 0) {
-      localStorage.setItem("frete_valor", vFrete);
-  }
+  if (vFrete > 0) localStorage.setItem("frete_valor", vFrete);
 
   let totalFinal = subtotal - valorDesconto + vFrete;
 
-  // 4. Atualiza Interface
+  // 4. Atualiza Interface e Salva
   atualizarResumoInterface(subtotal, valorDesconto, totalFinal);
-  
-  // 5. Salva Carrinho e Verifica Estado
   localStorage.setItem("cart", JSON.stringify(cart));
-  verificarEstadoCarrinho();
+  if (typeof verificarEstadoCarrinho === "function") verificarEstadoCarrinho();
 }
+
 
 
 

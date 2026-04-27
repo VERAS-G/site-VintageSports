@@ -1,11 +1,68 @@
 /* ==========================================================================
-   VARIÁVEIS GLOBAIS
+   VARIÁVEIS GLOBAIS E FUNÇÃO MESTRA
    ========================================================================== */
+
+// 🔥 FUNÇÃO MESTRA: Unifica o visual de todos os produtos do site
+function criarHTMLCard(produto) {
+    // 1. Configurações de exibição de desconto (Valores fictícios conforme sua foto)
+    const precoOriginal = produto.preco * 1.15; // Gera preço riscado 15% maior
+    const descontoPercentual = 15;
+
+    // 2. Detecção Inteligente de Oferta
+    // Checa se a pasta da imagem contém "ofertas" (sem importar se é Maiúsculo ou Minúsculo)
+    // OU se o produto tem a propriedade isPromo: true no banco de dados
+    const imagemCaminho = produto.imagem.toLowerCase();
+    const mostrarOferta = imagemCaminho.includes('ofertas') || produto.isPromo === true;
+
+    // 3. Define o Bloco de Preço baseado no status de oferta
+    let blocoPreco = "";
+
+    if (mostrarOferta) {
+        blocoPreco = `
+            <div class="price-container">
+                <span class="price-main">R$ ${produto.preco.toFixed(2).replace(".", ",")} <small>no Pix</small></span>
+                <span class="price-old">R$ ${precoOriginal.toFixed(2).replace(".", ",")}</span>
+                <span class="discount-percent">${descontoPercentual}% off</span>
+            </div>`;
+    } else {
+        // Preço padrão para produtos que não são oferta
+        blocoPreco = `<p class="price">R$ ${produto.preco.toFixed(2).replace(".", ",")}</p>`;
+    }
+
+    // 4. Retorno do HTML do Card Padronizado
+    return `
+      <div class="card" data-nome="${produto.nome}">
+        ${mostrarOferta ? '<span class="badge-oferta">OFERTA</span>' : ''}
+        <img src="${produto.imagem}" alt="${produto.nome}">
+        <h3>${produto.nome}</h3>
+        <div class="stars">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+        </div>
+        
+        ${blocoPreco}
+
+        <div class="buttons">
+          <button class="btn-adicionar" onclick="abrirModal('${produto.nome}', ${produto.preco}, '${produto.imagem}', false, this)">
+            🛒 Adicionar
+          </button>
+          <button class="buy-btn" onclick="abrirModal('${produto.nome}', ${produto.preco}, '${produto.imagem}', true, this)">
+            Comprar
+          </button>
+        </div>
+      </div>
+    `;
+}
+
+
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let overlay, cartPanel;
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Seletores Principais
+    // Seletores Principais (com verificação de existência)
     overlay = document.getElementById("overlay");
     cartPanel = document.getElementById("cart");
     const input = document.getElementById("searchInput");
@@ -14,60 +71,70 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchBox = document.querySelector(".search-box");
 
     // Inicializa o carrinho com dados salvos
-    updateCart();
+    if (typeof updateCart === "function") updateCart();
 
-    // 🔥 ACORDEÃO DE FILTROS (Simplicado)
+    // 🔥 ACORDEÃO DE FILTROS
     document.querySelectorAll(".filtro button").forEach(btn => {
         btn.onclick = () => {
             const conteudo = btn.nextElementSibling;
-            conteudo.style.display = conteudo.style.display === "block" ? "none" : "block";
+            if (conteudo) {
+                conteudo.style.display = conteudo.style.display === "block" ? "none" : "block";
+            }
         };
     });
 
     // 🔥 BUSCA EM TEMPO REAL
-    if (searchIcon) {
+    if (searchIcon && searchBox) {
         searchIcon.onclick = () => {
             searchBox.classList.toggle("active");
-            input.focus();
+            if (input) input.focus();
         };
     }
 
-    input.oninput = () => {
-        const val = input.value.toLowerCase();
-        document.querySelectorAll(".card").forEach(card => {
-            const title = card.querySelector("h3").innerText.toLowerCase();
-            card.style.display = title.includes(val) ? "block" : "none";
-        });
-    };
+    if (input) {
+        input.oninput = () => {
+            const val = input.value.toLowerCase();
+            document.querySelectorAll(".card").forEach(card => {
+                const title = card.querySelector("h3").innerText.toLowerCase();
+                card.style.display = title.includes(val) ? "block" : "none";
+            });
+        };
+    }
 
     // 🔥 CONTROLE DO CARRINHO (Abrir/Fechar)
-    cartBtn.onclick = (e) => {
-        e.stopPropagation();
-        cartPanel.classList.contains("active") ? closeCart() : openCart();
-    };
+    if (cartBtn && cartPanel) {
+        cartBtn.onclick = (e) => {
+            e.stopPropagation();
+            cartPanel.classList.contains("active") ? closeCart() : openCart();
+        };
 
-    overlay.onclick = closeCart;
-    cartPanel.onclick = (e) => e.stopPropagation();
+        overlay.onclick = closeCart;
+        cartPanel.onclick = (e) => e.stopPropagation();
 
-    document.onclick = (e) => {
-        if (!cartPanel.contains(e.target) && !cartBtn.contains(e.target)) closeCart();
-    };
-
+        document.onclick = (e) => {
+            if (!cartPanel.contains(e.target) && !cartBtn.contains(e.target)) {
+                if (typeof closeCart === "function") closeCart();
+            }
+        };
+    }
 });
-
 /* ==========================================================================
-   FUNÇÕES DE AÇÃO
+   FUNÇÕES DE AÇÃO (CARRINHO E INTERAÇÃO)
    ========================================================================== */
 
 function openCart() {
+    if (!cartPanel || !overlay) return;
     cartPanel.classList.add("active");
     overlay.classList.add("active");
-    const sw = window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.paddingRight = `${sw}px`;
+    
+    // Evita que a página "pule" ao esconder a barra de rolagem
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
     document.body.classList.add("no-scroll");
 }
 
 function closeCart() {
+    if (!cartPanel || !overlay) return;
     cartPanel.classList.remove("active");
     overlay.classList.remove("active");
     document.body.classList.remove("no-scroll");
@@ -75,7 +142,7 @@ function closeCart() {
 }
 
 function addToCart(name, price, image, btn, abrirImediato = false) {
-    // 1. LÓGICA DO CARRINHO
+    // 1. LÓGICA DO CARRINHO (Garante que o array exista)
     if (typeof cart === 'undefined') cart = [];
 
     const itemExistente = cart.find(item => item.name === name);
@@ -92,71 +159,31 @@ function addToCart(name, price, image, btn, abrirImediato = false) {
         });
     }
 
-    // 2. ATUALIZAÇÃO DA INTERFACE E NOTIFICAÇÕES
-    if (typeof updateCart === "function") updateCart();
+    // 2. ATUALIZAÇÃO DA INTERFACE
+    if (typeof updateCart === "function") {
+        updateCart();
+    }
     
+    // 3. NOTIFICAÇÃO (Toast)
     if (typeof showToast === "function") {
         showToast(abrirImediato ? "Pronto para comprar!" : "Adicionado ao carrinho");
     }
 
-    // 3. ABERTURA DO CARRINHO (COMPRA IMEDIATA)
-    if (abrirImediato && typeof openCart === "function") {
+    // 4. ABERTURA OU EFEITO VISUAL NO BOTÃO
+    if (abrirImediato) {
         setTimeout(openCart, 100);
+    } else if (btn) {
+        // Pequeno efeito de feedback no botão clicado (escala leve)
+        btn.style.transform = "scale(0.95)";
+        setTimeout(() => btn.style.transform = "scale(1)", 100);
     }
+
+    // Salva no LocalStorage para não perder ao atualizar a página
+    localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-
-
-
-function animateToCart(img) {
-    const cartBtn = document.getElementById("cart-btn");
-    
-    // Verificação de erro no console
-    if (!cartBtn) return console.error("ERRO: O botão com ID 'cart-btn' não existe!");
-    if (!img) return console.error("ERRO: A imagem do produto não foi encontrada!");
-
-    console.log("🚀 Voo iniciado!");
-
-    const rect = img.getBoundingClientRect();
-    const cartRect = cartBtn.getBoundingClientRect();
-    const clone = img.cloneNode(true);
-
-    // Estilo inicial do clone (exatamente sobre a imagem real)
-    Object.assign(clone.style, {
-        position: "fixed",
-        top: `${rect.top}px`,
-        left: `${rect.left}px`,
-        width: `${rect.width}px`,
-        height: `${rect.height}px`,
-        zIndex: "999999",
-        transition: "all 0.8s cubic-bezier(0.65, 0, 0.35, 1)",
-        pointerEvents: "none",
-        borderRadius: "10px",
-        opacity: "0.8"
-    });
-
-    document.body.appendChild(clone);
-
-    // Inicia o movimento para o carrinho
-    setTimeout(() => {
-        Object.assign(clone.style, {
-            top: `${cartRect.top}px`,
-            left: `${cartRect.left}px`,
-            width: "30px",
-            height: "30px",
-            opacity: "0",
-            transform: "rotate(360deg)"
-        });
-    }, 50);
-
-    // Remove do HTML e dá efeito de "pulso" no carrinho
-    setTimeout(() => {
-        clone.remove();
-        cartBtn.style.transform = "scale(1.2)";
-        setTimeout(() => cartBtn.style.transform = "scale(1)", 200);
-    }, 850);
-}
-
+// Nota: A função animateToCart foi removida para manter o código limpo,
+// conforme solicitado anteriormente.
 /* ==========================================================================
    SISTEMA DE NOTIFICAÇÃO (TOAST)
    ========================================================================== */
@@ -171,7 +198,6 @@ function showToast(message) {
     const toast = document.createElement("div");
     toast.className = "nike-toast";
 
-    // Aqui fixamos apenas o ícone de CHECK (símbolo de certo)
     toast.innerHTML = `
         <div class="toast-main-content">
             <i class="fa-solid fa-circle-check toast-icon"></i>
@@ -182,16 +208,18 @@ function showToast(message) {
     `;
 
     container.appendChild(toast);
+    
+    // Pequeno delay para a animação de entrada funcionar
     setTimeout(() => toast.classList.add("show"), 10);
 
+    // Auto-remove após 3 segundos
     setTimeout(() => {
-        if (toast) {
+        if (toast && toast.parentNode) {
             toast.classList.remove("show");
             setTimeout(() => { if (toast.parentNode) toast.remove(); }, 600);
         }
     }, 3000);
 }
-
 
 /* ==========================================================================
    LÓGICA DO CARRINHO (ATUALIZAÇÃO E INTERFACE)
@@ -210,14 +238,14 @@ function updateCart() {
         // Soma valor apenas se estiver selecionado
         if (item.selected) total += item.price * item.quantity;
         
-        // Soma quantidade total de itens para o contador da Navbar
+        // Quantidade total para o ícone da Navbar
         totalItens += item.quantity;
 
         const li = document.createElement("li");
         li.className = "cart-item";
         li.innerHTML = `
             <input type="checkbox" ${item.selected ? "checked" : ""} onchange="toggleItem(${index})">
-            <img src="${item.image}" class="cart-img">
+            <img src="${item.image}" class="cart-img" onerror="this.src='/assets/img/logo.png'">
             <div class="cart-info">
                 <p class="cart-name">${item.name}</p>
                 <div class="qtd-control">
@@ -233,36 +261,39 @@ function updateCart() {
         cartItems.appendChild(li);
     });
 
-    // Atualiza o valor total no rodapé do carrinho
     if (totalElement) totalElement.textContent = total.toFixed(2).replace(".", ",");
 
-    // 🔥 LÓGICA DO CONTADOR DINÂMICO
+    // Contador dinâmico da Navbar (Amarelo)
     if (countElement) {
         if (totalItens > 0) {
             countElement.textContent = totalItens;
-            countElement.style.display = "flex"; // Mostra o círculo amarelo se houver itens
+            countElement.style.display = "flex";
         } else {
-            countElement.style.display = "none"; // Esconde se estiver vazio
+            countElement.style.display = "none";
         }
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-
 function toggleItem(index) {
-    cart[index].selected = !cart[index].selected;
-    updateCart();
+    if (cart[index]) {
+        cart[index].selected = !cart[index].selected;
+        updateCart();
+    }
 }
 
 function aumentarQtd(index) {
-    cart[index].quantity++;
-    updateCart();
+    if (cart[index]) {
+        cart[index].quantity++;
+        cart[index].selected = true; // Seleciona automaticamente ao aumentar
+        updateCart();
+    }
 }
 
 /* ==========================================================================
-   FILTROS E BUSCA
-   ========================================================================== */
+   FILTROS E BUSCA (INTEGRADOS COM A FUNÇÃO MESTRA)
+   ========================================================================= */
 function filtrarProdutos() {
     const input = document.getElementById('searchInput');
     if (!input) return;
@@ -271,14 +302,18 @@ function filtrarProdutos() {
     const timesMarcados = Array.from(document.querySelectorAll('.filtro-conteudo[data-tipo="time"] input:checked')).map(i => i.value);
     const precosMarcados = Array.from(document.querySelectorAll('.filtro-conteudo[data-tipo="preco"] input:checked')).map(i => i.value);
 
-    const filtrados = produtos.filter(p => {
+    // Usa a lista global de produtos disponível na página
+    const listaOriginal = (typeof produtos !== 'undefined') ? produtos : [];
+
+    const filtrados = listaOriginal.filter(p => {
         const bateNome = p.nome.toLowerCase().includes(termoBusca);
         const bateTime = timesMarcados.length === 0 || timesMarcados.includes(p.time);
 
         let batePreco = precosMarcados.length === 0;
         precosMarcados.forEach(faixa => {
             const [min, max] = faixa.split('-').map(Number);
-            if (p.price >= min && (max ? p.price <= max : true)) batePreco = true;
+            // Ajustado para p.preco (padronizado com a Função Mestra)
+            if (p.preco >= min && (max ? p.preco <= max : true)) batePreco = true;
         });
 
         return bateNome && bateTime && batePreco;
@@ -287,36 +322,28 @@ function filtrarProdutos() {
     renderizarListaFiltrada(filtrados);
 }
 
-
 function renderizarListaFiltrada(lista) {
     const container = document.getElementById("product-list");
     if (!container) return;
 
-    // Dentro da sua função renderizar...
-    container.innerHTML += `
-      <div class="card">
-        <!-- ... imagem e titulo ... -->
-        <div class="buttons">
-          <!-- Botão Adicionar: PASSA FALSE NO FINAL -->
-          <button onclick="abrirModal('${p.nome}', ${p.preco}, '${p.imagem}', false)">
-            Adicionar
-          </button>
+    container.innerHTML = ""; // Limpa a lista atual
 
-          <!-- Botão Comprar: PASSA TRUE NO FINAL -->
-          <button class="buy-btn" onclick="abrirModal('${p.nome}', ${p.preco}, '${p.imagem}', true)">
-            Comprar
-          </button>
-        </div>
-      </div>
-    `;
+    if (lista.length === 0) {
+        container.innerHTML = `<p class="aviso-vazio">Nenhum produto encontrado com esses filtros.</p>`;
+        return;
+    }
 
+    lista.forEach(p => {
+        // 🔥 AQUI ESTÁ O SEGREDO: Usamos a Função Mestra da Parte 1
+        container.innerHTML += criarHTMLCard(p);
+    });
 }
 
 /* ==========================================================================
-   CONTROLE DE QUANTIDADE E REMOÇÃO
+   CONTROLE DE QUANTIDADE E REMOÇÃO (MODAL CUSTOM)
    ========================================================================== */
 function diminuirQtd(index) {
-    if (cart[index].quantity > 1) {
+    if (cart[index] && cart[index].quantity > 1) {
         cart[index].quantity--;
         updateCart();
     } else {
@@ -326,11 +353,15 @@ function diminuirQtd(index) {
 
 function removeItem(index) {
     const modal = document.getElementById("custom-confirm");
-    if (!modal) return;
+    if (!modal) {
+        // Se não houver modal customizado, remove direto (segurança)
+        cart.splice(index, 1);
+        updateCart();
+        return;
+    }
 
     modal.style.display = "flex";
 
-    // Configura botões do modal
     document.getElementById("confirm-yes").onclick = (e) => {
         e.stopPropagation();
         cart.splice(index, 1);
@@ -345,98 +376,125 @@ function removeItem(index) {
     };
 }
 
-// Fechar modal de remoção ao clicar fora (sem fechar o carrinho)
-window.addEventListener("click", (e) => {
-    const modal = document.getElementById("custom-confirm");
-    if (e.target === modal) {
-        e.stopPropagation();
-        modal.style.display = "none";
-    }
-});
-
 /* ==========================================================================
    RENDERIZAÇÃO DINÂMICA (HOME / LOJA)
    ========================================================================== */
+function desenharCards(container, lista) {
+    if (!container) return;
+    container.innerHTML = "";
+    lista.forEach(p => {
+        container.innerHTML += criarHTMLCard(p);
+    });
+}
+
 function renderizarLoja() {
     const container = document.getElementById("product-list");
     const containerHome = document.getElementById("produtos-home");
     if (!container && !containerHome) return;
 
-    // Decide qual lista usar
-    let lista = (typeof produtosFemininos !== 'undefined') ? produtosFemininos : (typeof produtos !== 'undefined' ? produtos : []);
+    // Detecta automaticamente qual lista usar baseada no que está carregado
+    let lista = [];
+    if (typeof produtosFemininos !== 'undefined') {
+        lista = produtosFemininos;
+    } else if (typeof produtos !== 'undefined') {
+        lista = produtos;
+    }
 
-    // Se for a Home, pega apenas os 4 primeiros
     if (containerHome) {
-        lista = lista.slice(0, 4);
-        desenharCards(containerHome, lista);
+        // Na Home, mostra apenas os primeiros 4 produtos
+        desenharCards(containerHome, lista.slice(0, 4));
     } else {
+        // Na página da Loja, mostra tudo
         desenharCards(container, lista);
     }
 }
 
+// Inicializa a loja ao carregar
+document.addEventListener("DOMContentLoaded", renderizarLoja);
+
+/* ==========================================================================
+   RENDERIZAÇÃO UNIFICADA (HOME / LOJA)
+   ========================================================================== */
+
 function desenharCards(container, lista) {
-    container.innerHTML = lista.map(p => `
-      <div class="card" data-nome="${p.nome}" data-preco="${p.preco}" data-time="${p.time}">
-        <img src="${p.imagem}" alt="${p.nome}">
-        <h3>${p.nome}</h3>
-        <div class="stars">★★★★★</div>
-        <p class="price">R$ ${p.preco.toFixed(2).replace(".", ",")}</p>
-        <div class="buttons">
-          <button onclick="abrirModal('${p.nome}', ${p.preco}, '${p.imagem}', false)">🛒 Adicionar</button>
-          <button class="buy-btn" onclick="abrirModal('${p.nome}', ${p.preco}, '${p.imagem}', true)">Comprar</button>
-        </div>
-      </div>`).join('');
+    if (!container) return;
+    
+    // 🔥 AGORA CONECTADO: Usa a Função Mestra para garantir o visual padrão e ofertas
+    container.innerHTML = lista.map(p => criarHTMLCard(p)).join('');
 }
 
 /* ==========================================================================
    UTILITÁRIOS (COPIAR, SCROLL, NAVEGAÇÃO)
    ========================================================================== */
+
+// Função para copiar código PIX ou Cupom
 function copiarTexto(id, elemento) {
-    const texto = document.getElementById(id).innerText;
+    const elTexto = document.getElementById(id);
+    if (!elTexto) return;
+    
+    const texto = elTexto.innerText;
     navigator.clipboard.writeText(texto);
 
     const status = elemento.querySelector(".status");
-    elemento.classList.add("copiado");
-    status.innerText = "Copiado ✔";
+    if (status) {
+        elemento.classList.add("copiado");
+        status.innerText = "Copiado ✔";
 
-    setTimeout(() => {
-        elemento.classList.remove("copiado");
-        status.innerText = "Clique para copiar";
-    }, 2000);
+        setTimeout(() => {
+            elemento.classList.remove("copiado");
+            status.innerText = "Clique para copiar";
+        }, 2000);
+    }
 }
 
-// Animação de Scroll
+// 🔥 ANIMAÇÃO DE SCROLL (Intersection Observer)
+const observerOptions = { threshold: 0.2 };
 const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add("ativo");
+        if (entry.isIntersecting) {
+            entry.target.classList.add("ativo");
+        }
     });
-}, { threshold: 0.2 });
+}, observerOptions);
 
+// Aplica o observer em todos os elementos com a classe .animar
 document.querySelectorAll(".animar").forEach(el => observer.observe(el));
 
+// 🔥 REDIRECIONAMENTO INTELIGENTE DO CARRINHO
 function VerCarrinho() {
     localStorage.setItem("cart", JSON.stringify(cart));
     
-    // Verifica se você já está dentro da pasta pages
-    if (window.location.pathname.includes("/pages/")) {
-        // Se já está em pages, vai direto para o arquivo
+    // Ajusta o caminho dinamicamente conforme a pasta atual
+    const path = window.location.pathname;
+    if (path.includes("/pages/")) {
         window.location.href = "carrinho.html";
     } else {
-        // Se está na raiz (index.html), entra na pasta pages
         window.location.href = "pages/carrinho.html";
     }
 }
 
+function ContinuarCompra() {
+    // Apenas fecha o painel lateral para o usuário continuar navegando
+    if (typeof closeCart === "function") closeCart();
+}
 
-// Inicialização Final
-document.addEventListener("DOMContentLoaded", renderizarLoja);
+/* ==========================================================================
+   EFEITOS DE INTERFACE (HEADER E DOM)
+   ========================================================================== */
 
+// Efeito de sombra/cor no Header ao rolar a página
 window.addEventListener('scroll', function() {
     const header = document.querySelector('header');
-    // Adiciona a classe assim que rolar apenas 10px
-    if (window.scrollY > 10) {
-        header.classList.add('scrolled');
-    } else {
-        header.classList.remove('scrolled');
+    if (header) {
+        if (window.scrollY > 10) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
     }
+});
+
+// Inicialização Final quando tudo carregar
+document.addEventListener("DOMContentLoaded", () => {
+    if (typeof renderizarLoja === "function") renderizarLoja();
 });
