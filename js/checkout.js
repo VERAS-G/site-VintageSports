@@ -227,14 +227,10 @@ function atualizarResumoInterface(subtotal) {
 }
 
 /* ==========================================================================
-   FUNÇÕES DE AÇÃO
-   ========================================================================== */
-
-
-/* ==========================================================================
    NOTIFICAÇÕES (TOAST & ALERTA)
    ========================================================================== */
 /* 🔥 NOTIFICAÇÃO ESTILO NIKE DINÂMICA */
+
 function showToast(message, type = "success") {
     let container = document.querySelector(".toast-container");
     if (!container) {
@@ -498,21 +494,12 @@ async function calcularFrete(event) {
   btn.disabled = true;
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
-  const API_URL = (window.API_URL || "http://localhost:3000").replace(/\/$/, "");
+  const API_URL = (
+    window.API_URL || "https://backend-loja-de-camisas.onrender.com"
+  ).replace(/\/$/, "");
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 15000);
-
-  // 🔥 FUNÇÃO SEGURA DE PREÇO
-  const parsePreco = (valor) => {
-    const num = Number(
-      String(valor)
-        .replace(/[^\d,.-]/g, "")
-        .replace(",", ".")
-    );
-
-    return isNaN(num) ? null : num;
-  };
 
   try {
     const response = await fetch(`${API_URL}/frete`, {
@@ -531,17 +518,12 @@ async function calcularFrete(event) {
       })
     });
 
-    const resultText = await response.text();
+    clearTimeout(timeoutId);
 
-    let result;
-    try {
-      result = JSON.parse(resultText);
-    } catch {
-      throw new Error("Resposta inválida do servidor");
-    }
+    const result = await response.json();
 
-    if (result?.ok === false) {
-      throw new Error(result.error || "Erro ao calcular frete");
+    if (!response.ok) {
+      throw new Error(result?.erro || "Erro ao calcular frete");
     }
 
     const rawData = result?.data || result;
@@ -550,6 +532,7 @@ async function calcularFrete(event) {
       throw new Error("Formato inválido de frete");
     }
 
+    // 🔥 FUNÇÃO SEGURA DE PREÇO (APENAS UMA VEZ)
     const parsePreco = (valor) => {
       const num = Number(
         String(valor)
@@ -560,50 +543,41 @@ async function calcularFrete(event) {
       return isNaN(num) ? null : num;
     };
 
-    // 🔥 FILTRO DEFINITIVO (remove lixo e zero)
+    // FILTRO
     const data = rawData
       .map(frete => {
         const price = parsePreco(frete.price);
-
         if (price === null || price <= 0) return null;
 
-        return {
-          ...frete,
-          price
-        };
+        return { ...frete, price };
       })
-      .filter(frete => frete !== null);
+      .filter(Boolean);
 
     if (data.length === 0) {
       throw new Error("Nenhuma opção de frete válida");
     }
 
-    // frete padrão seguro
     window.frete = data[0].price;
 
-    // RESULTADO
+    // RENDER UI
     if (resultadoFrete) {
       resultadoFrete.style.display = "block";
 
       let expanded = false;
 
-      const renderList = (list) => {
-        return list.map(op => `
+      const renderList = (list) =>
+        list.map(op => `
           <div class="frete-item" data-price="${op.price}">
             <div class="frete-info">
               <i class="fa-solid fa-truck-fast"></i>
-              <span class="frete-metodo">${op.name}</span>
+              <span>${op.name}</span>
             </div>
-
-            <div class="frete-right">
-              <span class="frete-valor">
-                R$ ${op.price.toFixed(2).replace(".", ",")}
-              </span>
-              <small class="frete-prazo">${op.delivery_time || "--"} dias úteis</small>
+            <div>
+              <strong>R$ ${op.price.toFixed(2).replace(".", ",")}</strong>
+              <small>${op.delivery_time || "--"} dias</small>
             </div>
           </div>
         `).join("");
-      };
 
       const visiveis = data.slice(0, 2);
       const restantes = data.length - visiveis.length;
@@ -611,24 +585,21 @@ async function calcularFrete(event) {
       const renderUI = () => {
         resultadoFrete.innerHTML = `
           <div class="frete-box">
-            <div class="frete-lista" id="lista-frete">
+            <div>
               ${renderList(expanded ? data : visiveis)}
             </div>
 
-            <div class="frete-actions">
-              ${restantes > 0 ? `
-                <button id="toggle-frete" class="btn-ver-mais-frete">
-                  ${expanded ? "Fechar opções" : `Ver mais ${restantes} opções`}
-                </button>
-              ` : ""}
-            </div>
+            ${restantes > 0 ? `
+              <button id="toggle-frete">
+                ${expanded ? "Fechar" : `Ver mais ${restantes}`}
+              </button>
+            ` : ""}
           </div>
         `;
       };
 
       renderUI();
 
-      // EVENT DELEGATION
       resultadoFrete.onclick = (e) => {
         const item = e.target.closest(".frete-item");
         const toggle = e.target.closest("#toggle-frete");
@@ -646,13 +617,8 @@ async function calcularFrete(event) {
 
         item.classList.add("active");
 
-        const price = Number(item.dataset.price);
-
-        if (isNaN(price)) return;
-
-        window.frete = price;
-
-        localStorage.setItem("frete_valor", String(price));
+        window.frete = Number(item.dataset.price);
+        localStorage.setItem("frete_valor", String(window.frete));
 
         if (typeof render === "function") render();
       };
