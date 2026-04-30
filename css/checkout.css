@@ -1000,3 +1000,118 @@ button.finalizar:hover { background: #333; }
     font-weight: 800;
     text-align: right;
 }
+
+.frete-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  margin-top: 10px;
+
+  max-height: 180px;
+  overflow-y: auto;
+
+  padding-right: 6px;
+  scroll-behavior: smooth;
+}
+
+/* SCROLL BAR */
+.frete-lista::-webkit-scrollbar {
+  width: 4px;
+}
+
+.frete-lista::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+/* CARD DO FRETE */
+.frete-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 14px 16px;
+  border-radius: 12px;
+
+  background: #fff;
+  border: 1px solid #eaeaea;
+
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+/* HOVER PREMIUM */
+.frete-item:hover {
+  border-color: #111;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+/* ITEM SELECIONADO */
+.frete-item.active {
+  border-color: #111;
+  background: #f5f5f5;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* LADO ESQUERDO */
+.frete-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: #111;
+}
+
+/* ÍCONE */
+.frete-info i {
+  color: #111;
+  font-size: 16px;
+}
+
+/* LADO DIREITO */
+.frete-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.frete-valor {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+}
+
+.frete-prazo {
+  font-size: 12px;
+  color: #777;
+}
+
+/* BOTÃO VER MAIS / FECHAR */
+.btn-ver-mais-frete {
+  margin-top: 12px;
+  width: 100%;
+
+  background: #fff;
+  border: 1px solid #ddd;
+
+  padding: 12px;
+  border-radius: 10px;
+
+  font-size: 13px;
+  font-weight: 500;
+  color: #111;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-ver-mais-frete:hover {
+  border-color: #111;
+  background: #111;
+  color: #fff;
+}

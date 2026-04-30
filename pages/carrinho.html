@@ -76,7 +76,7 @@
             inputmode="numeric"
             oninput="mascaraCEP(this)"
           >
-          <button class="btn-secondary" onclick="calcularFrete()">Calcular</button>
+          <button onclick="calcularFrete(event)">Calcular</button>
         </div>
 
         <div class="cep-acoes">
@@ -86,16 +86,7 @@
           </a>
         </div>
               <!-- Abaixo do link "Não sei meu CEP" -->
-        <div id="resultado-frete" class="frete-card" style="display: none;">
-          <div class="frete-linha-superior">
-            <div class="frete-info">
-              <i class="fa-solid fa-truck-fast"></i>
-              <span class="frete-metodo">Normal</span>
-            </div>
-            <span class="frete-valor">R$ 9,99</span>
-          </div>
-          <p class="frete-prazo">3 dias úteis</p>
-        </div>
+        <div id="resultado-frete" class="frete-card" style="display: none;"></div>
 
       </div>
 

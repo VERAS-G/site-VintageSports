@@ -7,6 +7,16 @@ let frete = parseFloat(localStorage.getItem("frete_valor")) || 0;
 let descontoPercentual = parseFloat(localStorage.getItem("desconto_percentual")) || 0;
 let toastTimeout;
 
+function limparCheckoutStorage() {
+  localStorage.removeItem("frete_valor");
+  localStorage.removeItem("cep_salvo");
+  localStorage.removeItem("cupom_ativo");
+  localStorage.removeItem("desconto_percentual");
+
+  frete = 0;
+  descontoPercentual = 0;
+}
+
 
 /* ==========================================================================
    RENDERIZAÇÃO DO CARRINHO (COM PREÇO DE OFERTA LADO A LADO)
@@ -20,12 +30,11 @@ function render() {
 
   cart.forEach((item, i) => {
     const totalItem = item.price * item.quantity;
-    
+
     if (item.selected !== false) {
       subtotal += totalItem;
     }
 
-    // 🔥 LÓGICA DE PREÇO: Calcula o valor antigo se for promoção
     let htmlPreco = "";
     if (item.isPromo) {
       const precoAntigoTotal = (item.price * 1.15) * item.quantity;
@@ -42,15 +51,18 @@ function render() {
     const statusClasse = item.selected === false ? "item-morto" : "";
     const div = document.createElement("div");
     div.className = `checkout-product ${statusClasse}`;
-    
+
     div.innerHTML = `
       <div class="product-main-info">
         <input type="checkbox" ${item.selected !== false ? "checked" : ""} 
                onchange="alternarSelecao(${i})" class="cart-check">
+
         <img src="${item.image}" class="checkout-img">
+
         <div class="checkout-details">
           <h4>${item.name}</h4>
           <p class="checkout-category">Camisa retrô</p>
+
           <div class="checkout-actions">
             <div class="qtd">
               <button onclick="menos(${i})">−</button>
@@ -63,34 +75,51 @@ function render() {
           </div>
         </div>
       </div>
-      <!-- Injeta o HTML do preço (Normal ou Oferta) -->
+
       ${htmlPreco}
     `;
+
     container.appendChild(div);
   });
 
-  // 2. Lógica de Desconto (Mantida conforme seu original)
+  // 🔥 DESCONTO
   let valorDesconto = 0;
   if (typeof descontoPercentual !== 'undefined' && descontoPercentual > 0) {
-      valorDesconto = subtotal * (descontoPercentual / 100);
-      localStorage.setItem("desconto_percentual", descontoPercentual);
+    valorDesconto = subtotal * (descontoPercentual / 100);
+    localStorage.setItem("desconto_percentual", descontoPercentual);
   } else {
-      localStorage.removeItem("desconto_percentual");
-      localStorage.removeItem("cupom_ativo");
+    localStorage.removeItem("desconto_percentual");
+    localStorage.removeItem("cupom_ativo");
   }
 
-  // 3. Lógica de Frete (Mantida conforme seu original)
-  const vFrete = (typeof frete !== 'undefined' && frete > 0) ? frete : 0;
-  if (vFrete > 0) localStorage.setItem("frete_valor", vFrete);
+  // 🔥 FRETE (CORRIGIDO AQUI)
+  const vFrete = Number(window.frete || localStorage.getItem("frete_valor") || 0);
 
-  let totalFinal = subtotal - valorDesconto + vFrete;
+  if (vFrete > 0) {
+    localStorage.setItem("frete_valor", vFrete);
+  }
 
-  // 4. Atualiza Interface e Salva
+  const totalFinal = subtotal - valorDesconto + vFrete;
+
   atualizarResumoInterface(subtotal, valorDesconto, totalFinal);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  if (typeof verificarEstadoCarrinho === "function") verificarEstadoCarrinho();
-}
 
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  if (typeof verificarEstadoCarrinho === "function") {
+    verificarEstadoCarrinho();
+  }
+
+  // LIMPA SE VAZIO
+  if (cart.length === 0) {
+    limparCheckoutStorage();
+
+    const cepInput = document.getElementById("cep-input");
+    const cupomInput = document.getElementById("cupom");
+
+    if (cepInput) cepInput.value = "";
+    if (cupomInput) cupomInput.value = "";
+  }
+}
 
 
 
@@ -155,24 +184,46 @@ function atualizarResumoInterface(subtotal) {
   const descontoEl = document.getElementById("desconto");
   const totalEl = document.getElementById("total");
 
-  // 1. Pega o valor do frete (se não existir, usa 0)
-  const vFrete = typeof frete !== 'undefined' ? frete : 0;
+  // 🔥 FUNÇÃO SEGURA DE NÚMERO
+  const safeNumber = (value) => {
+    const num = Number(value);
+    return isNaN(num) ? 0 : num;
+  };
 
-  // 2. Lógica de Desconto por Porcentagem (VINTAGE10 = 5%)
-  let vDesconto = 0;
-  if (typeof descontoPercentual !== 'undefined' && descontoPercentual > 0) {
-      // Calcula quanto é X% do subtotal
-      vDesconto = subtotal * (descontoPercentual / 100);
+  // 🔥 FRETE SEMPRE LIMPO
+  const freteSalvo = localStorage.getItem("frete_valor");
+
+  let vFrete = safeNumber(window.frete);
+
+  if (isNaN(vFrete) || vFrete <= 0) {
+    vFrete = safeNumber(freteSalvo);
   }
 
-  // 3. Cálculo do Total Final
-  const vTotal = subtotal + vFrete - vDesconto;
+  if (isNaN(vFrete) || vFrete < 0) {
+    vFrete = 0;
+  }
 
-  // 4. Injeta os valores formatados no HTML
-  if (subtotalEl) subtotalEl.innerText = subtotal.toFixed(2).replace(".", ",");
-  if (freteEl)    freteEl.innerText    = vFrete.toFixed(2).replace(".", ",");
-  if (descontoEl) descontoEl.innerText = vDesconto.toFixed(2).replace(".", ",");
-  if (totalEl)    totalEl.innerText    = vTotal.toFixed(2).replace(".", ",");
+  // 🔥 DESCONTO
+  let vDesconto = 0;
+  if (typeof descontoPercentual !== "undefined" && descontoPercentual > 0) {
+    vDesconto = subtotal * (descontoPercentual / 100);
+  }
+
+  // 🔥 TOTAL SEM RISCO DE NaN
+  const vTotal = safeNumber(subtotal) + vFrete - vDesconto;
+
+  // 🔥 UI SEGURA
+  if (subtotalEl)
+    subtotalEl.innerText = safeNumber(subtotal).toFixed(2).replace(".", ",");
+
+  if (freteEl)
+    freteEl.innerText = vFrete.toFixed(2).replace(".", ",");
+
+  if (descontoEl)
+    descontoEl.innerText = vDesconto.toFixed(2).replace(".", ",");
+
+  if (totalEl)
+    totalEl.innerText = vTotal.toFixed(2).replace(".", ",");
 }
 
 /* ==========================================================================
@@ -418,55 +469,281 @@ function mascaraCEP(input) {
   }
 }
 
-function calcularFrete() {
+async function calcularFrete(event) {
   const btn = event.target;
   const cepInput = document.getElementById("cep-input");
-  const msgCep = document.getElementById("mensagem-cep"); // Onde a mensagem de texto aparece
+  const msgCep = document.getElementById("mensagem-cep");
   const resultadoFrete = document.getElementById("resultado-frete");
+
   const cepNumeros = cepInput.value.replace(/\D/g, "");
 
-  // 1. LIMPAR ESTADOS ANTERIORES
+  // RESET UI
   cepInput.classList.remove("input-error");
   if (msgCep) msgCep.innerHTML = "";
 
-  // 2. VALIDAÇÃO: Se estiver vazio ou incompleto
+  // VALIDAÇÃO
   if (cepNumeros.length !== 8) {
-    // Efeito visual igual ao do cupom
     cepInput.classList.add("input-error");
     if (msgCep) {
-      msgCep.innerHTML = `<div class="cupom-feedback text-error">
-        <i class="fa-solid fa-circle-exclamation"></i> Verifique os dados inseridos
-      </div>`;
-    }
-
-    // Mostra também o Modal de Alerta que você já tem
-    if (typeof mostrarAlerta === "function") {
-      mostrarAlerta("Por favor, digite um CEP válido.");
+      msgCep.innerHTML = `
+        <div class="cupom-feedback text-error">
+          <i class="fa-solid fa-circle-exclamation"></i> CEP inválido
+        </div>`;
     }
     return;
   }
 
-  // 3. SE ESTIVER TUDO CERTO, SEGUE O LOADING...
+  // LOADING
   const originalText = btn.innerHTML;
   btn.disabled = true;
   btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
-  setTimeout(() => {
-    btn.disabled = false;
-    btn.innerHTML = originalText;
+  const API_URL = (window.API_URL || "http://localhost:3000").replace(/\/$/, "");
 
-    frete = 9.99;
-    if (resultadoFrete) resultadoFrete.style.display = "block";
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-    // Notificação de sucesso
-    if (typeof mostrarToastSucesso === "function") {
-      mostrarToastSucesso("Frete calculado com sucesso! 🚚");
+  // 🔥 FUNÇÃO SEGURA DE PREÇO
+  const parsePreco = (valor) => {
+    const num = Number(
+      String(valor)
+        .replace(/[^\d,.-]/g, "")
+        .replace(",", ".")
+    );
+
+    return isNaN(num) ? null : num;
+  };
+
+  try {
+    const response = await fetch(`${API_URL}/frete`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      signal: controller.signal,
+      body: JSON.stringify({
+        from: { postal_code: "58030-000" },
+        to: { postal_code: cepNumeros },
+        package: {
+          height: 5,
+          width: 20,
+          length: 30,
+          weight: 0.3
+        }
+      })
+    });
+
+    const resultText = await response.text();
+
+    let result;
+    try {
+      result = JSON.parse(resultText);
+    } catch {
+      throw new Error("Resposta inválida do servidor");
     }
 
-    localStorage.setItem("frete_valor", frete);
+    if (result?.ok === false) {
+      throw new Error(result.error || "Erro ao calcular frete");
+    }
+
+    const rawData = result?.data || result;
+
+    if (!Array.isArray(rawData)) {
+      throw new Error("Formato inválido de frete");
+    }
+
+    const parsePreco = (valor) => {
+      const num = Number(
+        String(valor)
+          .replace(/[^\d,.-]/g, "")
+          .replace(",", ".")
+      );
+
+      return isNaN(num) ? null : num;
+    };
+
+    // 🔥 FILTRO DEFINITIVO (remove lixo e zero)
+    const data = rawData
+      .map(frete => {
+        const price = parsePreco(frete.price);
+
+        if (price === null || price <= 0) return null;
+
+        return {
+          ...frete,
+          price
+        };
+      })
+      .filter(frete => frete !== null);
+
+    if (data.length === 0) {
+      throw new Error("Nenhuma opção de frete válida");
+    }
+
+    // frete padrão seguro
+    window.frete = data[0].price;
+
+    // RESULTADO
+    if (resultadoFrete) {
+      resultadoFrete.style.display = "block";
+
+      let expanded = false;
+
+      const renderList = (list) => {
+        return list.map(op => `
+          <div class="frete-item" data-price="${op.price}">
+            <div class="frete-info">
+              <i class="fa-solid fa-truck-fast"></i>
+              <span class="frete-metodo">${op.name}</span>
+            </div>
+
+            <div class="frete-right">
+              <span class="frete-valor">
+                R$ ${op.price.toFixed(2).replace(".", ",")}
+              </span>
+              <small class="frete-prazo">${op.delivery_time || "--"} dias úteis</small>
+            </div>
+          </div>
+        `).join("");
+      };
+
+      const visiveis = data.slice(0, 2);
+      const restantes = data.length - visiveis.length;
+
+      const renderUI = () => {
+        resultadoFrete.innerHTML = `
+          <div class="frete-box">
+            <div class="frete-lista" id="lista-frete">
+              ${renderList(expanded ? data : visiveis)}
+            </div>
+
+            <div class="frete-actions">
+              ${restantes > 0 ? `
+                <button id="toggle-frete" class="btn-ver-mais-frete">
+                  ${expanded ? "Fechar opções" : `Ver mais ${restantes} opções`}
+                </button>
+              ` : ""}
+            </div>
+          </div>
+        `;
+      };
+
+      renderUI();
+
+      // EVENT DELEGATION
+      resultadoFrete.onclick = (e) => {
+        const item = e.target.closest(".frete-item");
+        const toggle = e.target.closest("#toggle-frete");
+
+        if (toggle) {
+          expanded = !expanded;
+          renderUI();
+          return;
+        }
+
+        if (!item) return;
+
+        document.querySelectorAll(".frete-item")
+          .forEach(i => i.classList.remove("active"));
+
+        item.classList.add("active");
+
+        const price = Number(item.dataset.price);
+
+        if (isNaN(price)) return;
+
+        window.frete = price;
+
+        localStorage.setItem("frete_valor", String(price));
+
+        if (typeof render === "function") render();
+      };
+    }
+
+    if (typeof showToast === "function") {
+      showToast("Frete calculado com sucesso!");
+    }
+
+    localStorage.setItem("frete_valor", String(window.frete));
     localStorage.setItem("cep_salvo", cepInput.value);
-    render();
-  }, 1200);
+
+    if (typeof render === "function") render();
+
+  } catch (error) {
+    console.error("❌ ERRO FRETE:", error);
+
+    const msg = error.name === "AbortError"
+      ? "Tempo esgotado ao calcular frete"
+      : error.message;
+
+    if (msgCep) {
+      msgCep.innerHTML = `
+        <div class="cupom-feedback text-error">
+          <i class="fa-solid fa-circle-exclamation"></i> ${msg}
+        </div>`;
+    }
+
+  } finally {
+    clearTimeout(timeoutId);
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  }
+}
+
+
+function rebuildFreteUI(data) {
+  const resultadoFrete = document.getElementById("resultado-frete");
+  if (!resultadoFrete || !Array.isArray(data)) return;
+
+  const savedNome = localStorage.getItem("frete_nome");
+
+  let expanded = false;
+
+  const visiveis = data.slice(0, 2);
+  const restantes = data.length - visiveis.length;
+
+  const renderList = (list) => {
+    return list.map(op => `
+      <div class="frete-item ${op.name === savedNome ? "active" : ""}" data-price="${op.price}">
+        <div class="frete-info">
+          <i class="fa-solid fa-truck-fast"></i>
+          <span class="frete-metodo">${op.name}</span>
+        </div>
+
+        <div class="frete-right">
+          <span class="frete-valor">R$ ${op.price.toFixed(2).replace(".", ",")}</span>
+          <small class="frete-prazo">${op.delivery_time || "--"} dias úteis</small>
+        </div>
+      </div>
+    `).join("");
+  };
+
+  const renderUI = () => {
+    resultadoFrete.innerHTML = `
+      <div class="frete-box">
+        <div class="frete-lista">
+          ${renderList(expanded ? data : visiveis)}
+        </div>
+
+        <div class="frete-actions">
+          ${restantes > 0 ? `
+            <button id="toggle-frete">
+              ${expanded ? "Fechar opções" : `Ver mais ${restantes} opções`}
+            </button>
+          ` : ""}
+        </div>
+      </div>
+    `;
+  };
+
+  renderUI();
+
+  // reativa seleção visual
+  document.querySelectorAll(".frete-item").forEach(item => {
+    const nome = item.querySelector(".frete-metodo")?.innerText;
+
+    if (nome === savedNome) {
+      item.classList.add("active");
+    }
+  });
 }
 
 
@@ -476,18 +753,29 @@ function calcularFrete() {
 document.addEventListener("DOMContentLoaded", () => {
   const cepSalvo = localStorage.getItem("cep_salvo");
   const freteSalvo = localStorage.getItem("frete_valor");
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
   const cepInput = document.getElementById("cep-input");
   const resultadoFrete = document.getElementById("resultado-frete");
 
-  // Se existia um CEP, coloca de volta no input
-  if (cepSalvo && cepInput) {
-    cepInput.value = cepSalvo;
-  }
+  // 🔥 SÓ RESTAURA SE TIVER PRODUTO NO CARRINHO
+  if (cart.length > 0) {
 
-  // Se existia um frete, mostra o card e define o valor
-  if (freteSalvo) {
-    frete = parseFloat(freteSalvo);
-    if (resultadoFrete) resultadoFrete.style.display = "block";
+    if (cepSalvo && cepInput) {
+      cepInput.value = cepSalvo;
+    }
+
+    if (freteSalvo) {
+      frete = parseFloat(freteSalvo);
+      if (resultadoFrete) resultadoFrete.style.display = "block";
+    }
+
+  } else {
+    // 🔥 SE NÃO TEM CARRINHO → LIMPA TUDO
+    localStorage.removeItem("frete_valor");
+    localStorage.removeItem("cep_salvo");
+    localStorage.removeItem("cupom_ativo");
+    localStorage.removeItem("desconto_percentual");
   }
 });
 
@@ -522,3 +810,13 @@ window.onclick = function(e) {
   if (e.target.id === "custom-alert") e.target.style.display = "none";
   if (e.target.id === "custom-confirm") e.target.style.display = "none";
 };
+
+
+window.addEventListener("beforeunload", () => {
+  const nav = performance.getEntriesByType("navigation")[0];
+
+  // 🔥 Só limpa se NÃO for reload
+  if (nav && nav.type !== "reload") {
+    limparCheckoutStorage();
+  }
+});
