@@ -119,26 +119,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 /* ==========================================================================
-   FUNÇÕES DE AÇÃO (CARRINHO E INTERAÇÃO)
-   ========================================================================== */
+   FUNÇÕES DO CARRINHO
+========================================================================== */
 
 function openCart() {
+
     if (!cartPanel || !overlay) return;
+
+    /* trava scroll */
+    document.body.classList.add("no-scroll");
+
+    /* abre carrinho */
     cartPanel.classList.add("active");
     overlay.classList.add("active");
-    
-    // Evita que a página "pule" ao esconder a barra de rolagem
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    document.body.style.paddingRight = `${scrollbarWidth}px`;
-    document.body.classList.add("no-scroll");
 }
 
+/* ========================================================================== */
+
 function closeCart() {
+
     if (!cartPanel || !overlay) return;
+
+    /* libera scroll */
+    document.body.classList.remove("no-scroll");
+
+    /* fecha carrinho */
     cartPanel.classList.remove("active");
     overlay.classList.remove("active");
-    document.body.classList.remove("no-scroll");
-    document.body.style.paddingRight = "0px";
 }
 
 function addToCart(name, price, image, btn, abrirImediato = false) {
@@ -290,53 +297,249 @@ function aumentarQtd(index) {
         updateCart();
     }
 }
+/* ==========================================================================
+   FILTROS MODERNOS
+========================================================================== */
+
+/* ==========================================================
+   ABRIR / FECHAR FILTROS
+========================================================== */
+
+const filtroBtns = document.querySelectorAll(".filtro-btn");
+
+filtroBtns.forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+        const content = btn.nextElementSibling;
+
+        btn.classList.toggle("active");
+
+        content.classList.toggle("active");
+    });
+});
 
 /* ==========================================================================
-   FILTROS E BUSCA (INTEGRADOS COM A FUNÇÃO MESTRA)
-   ========================================================================= */
+   FILTRAR PRODUTOS
+========================================================================== */
+
 function filtrarProdutos() {
-    const input = document.getElementById('searchInput');
-    if (!input) return;
 
-    const termoBusca = input.value.toLowerCase();
-    const timesMarcados = Array.from(document.querySelectorAll('.filtro-conteudo[data-tipo="time"] input:checked')).map(i => i.value);
-    const precosMarcados = Array.from(document.querySelectorAll('.filtro-conteudo[data-tipo="preco"] input:checked')).map(i => i.value);
+    const input = document.getElementById("searchInput");
 
-    // Usa a lista global de produtos disponível na página
-    const listaOriginal = (typeof produtos !== 'undefined') ? produtos : [];
+    const termoBusca = input
+        ? input.value.toLowerCase().trim()
+        : "";
+
+    /* ======================================================
+       FILTRO TIME
+    ====================================================== */
+
+    const timesMarcados = Array.from(
+
+        document.querySelectorAll(
+            '.filtro-conteudo[data-tipo="time"] input:checked'
+        )
+
+    ).map(i => i.value);
+
+    /* ======================================================
+       FILTRO PAÍS
+    ====================================================== */
+
+    const paisesMarcados = Array.from(
+
+        document.querySelectorAll(
+            '.filtro-conteudo[data-tipo="pais"] input:checked'
+        )
+
+    ).map(i => i.value);
+
+    /* ======================================================
+       FILTRO PREÇO
+    ====================================================== */
+
+    const precosMarcados = Array.from(
+
+        document.querySelectorAll(
+            '.filtro-conteudo[data-tipo="preco"] input:checked'
+        )
+
+    ).map(i => i.value);
+
+    /* ======================================================
+    IDENTIFICA A LISTA DA PÁGINA
+    ====================================================== */
+
+    let listaOriginal = [];
+
+    if (typeof produtos !== "undefined") {
+
+        listaOriginal = produtos;
+
+    }
+
+    else if (typeof produtosFemininos !== "undefined") {
+
+        listaOriginal = produtosFemininos;
+
+    }
+
+    else if (typeof produtosOferta !== "undefined") {
+
+        listaOriginal = produtosOferta;
+    }
+
+    /* ======================================================
+       FILTRO PRINCIPAL
+    ====================================================== */
 
     const filtrados = listaOriginal.filter(p => {
-        const bateNome = p.nome.toLowerCase().includes(termoBusca);
-        const bateTime = timesMarcados.length === 0 || timesMarcados.includes(p.time);
 
-        let batePreco = precosMarcados.length === 0;
+        /* ==============================================
+           BUSCA NOME
+        ============================================== */
+
+        const bateNome =
+            p.nome.toLowerCase().includes(termoBusca);
+
+        /* ==============================================
+           TIME
+        ============================================== */
+
+        const bateTime =
+
+            timesMarcados.length === 0 ||
+
+            timesMarcados.includes(
+                p.time?.toLowerCase()
+            );
+
+        /* ==============================================
+           PAÍS
+        ============================================== */
+
+        const batePais =
+
+            paisesMarcados.length === 0 ||
+
+            paisesMarcados.includes(
+                p.pais?.toLowerCase()
+            );
+
+        /* ==============================================
+           PREÇO
+        ============================================== */
+
+        let batePreco =
+            precosMarcados.length === 0;
+
         precosMarcados.forEach(faixa => {
-            const [min, max] = faixa.split('-').map(Number);
-            // Ajustado para p.preco (padronizado com a Função Mestra)
-            if (p.preco >= min && (max ? p.preco <= max : true)) batePreco = true;
+
+            if (faixa === "300+") {
+
+                if (p.preco >= 300) {
+                    batePreco = true;
+                }
+
+                return;
+            }
+
+            const [min, max] =
+                faixa.split("-").map(Number);
+
+            if (
+                p.preco >= min &&
+                p.preco <= max
+            ) {
+                batePreco = true;
+            }
         });
 
-        return bateNome && bateTime && batePreco;
+        /* ==============================================
+           RESULTADO FINAL
+        ============================================== */
+
+        return (
+            bateNome &&
+            bateTime &&
+            batePais &&
+            batePreco
+        );
     });
 
     renderizarListaFiltrada(filtrados);
 }
 
+/* ==========================================================================
+   RENDERIZAR PRODUTOS FILTRADOS
+========================================================================== */
+
 function renderizarListaFiltrada(lista) {
-    const container = document.getElementById("product-list");
+
+    const container =
+        document.getElementById("product-list");
+
     if (!container) return;
 
-    container.innerHTML = ""; // Limpa a lista atual
+    /* limpa */
+
+    container.innerHTML = "";
+
+    /* ======================================================
+       VAZIO
+    ====================================================== */
 
     if (lista.length === 0) {
-        container.innerHTML = `<p class="aviso-vazio">Nenhum produto encontrado com esses filtros.</p>`;
+
+        container.innerHTML = `
+            <p class="aviso-vazio">
+                Nenhum produto encontrado com esses filtros.
+            </p>
+        `;
+
         return;
     }
 
+    /* ======================================================
+       RENDERIZA
+    ====================================================== */
+
     lista.forEach(p => {
-        // 🔥 AQUI ESTÁ O SEGREDO: Usamos a Função Mestra da Parte 1
+
         container.innerHTML += criarHTMLCard(p);
     });
+}
+
+/* ==========================================================================
+   EVENTOS DOS FILTROS
+========================================================================== */
+
+document
+    .querySelectorAll(
+        '.filters input[type="checkbox"]'
+    )
+    .forEach(input => {
+
+        input.addEventListener(
+            "change",
+            filtrarProdutos
+        );
+    });
+
+/* ==========================================================================
+   EVENTO DA BUSCA
+========================================================================== */
+
+const searchInput =
+    document.getElementById("searchInput");
+
+if (searchInput) {
+
+    searchInput.addEventListener(
+        "input",
+        filtrarProdutos
+    );
 }
 
 /* ==========================================================================
@@ -478,23 +681,259 @@ function ContinuarCompra() {
     if (typeof closeCart === "function") closeCart();
 }
 
-/* ==========================================================================
-   EFEITOS DE INTERFACE (HEADER E DOM)
-   ========================================================================== */
+/* ==========================================================
+   NAVBAR MODERNA
+========================================================== */
 
-// Efeito de sombra/cor no Header ao rolar a página
-window.addEventListener('scroll', function() {
-    const header = document.querySelector('header');
-    if (header) {
-        if (window.scrollY > 10) {
-            header.classList.add('scrolled');
+const header = document.querySelector("header");
+
+let lastScroll = 0;
+
+/* verifica se é página interna */
+
+const isInternalPage =
+    document.body.classList.contains("internal-page");
+
+window.addEventListener("scroll", () => {
+
+    const currentScroll = window.pageYOffset;
+
+    /* ======================================================
+       EFEITO BACKGROUND
+    ====================================================== */
+
+    if (currentScroll > 20) {
+
+        header.classList.add("scrolled");
+
+    } else {
+
+        header.classList.remove("scrolled");
+    }
+
+    /* ======================================================
+       HOME
+       navbar some descendo
+    ====================================================== */
+
+    if (!isInternalPage) {
+
+        if (
+            currentScroll > lastScroll &&
+            currentScroll > 100
+        ) {
+
+            header.style.transform =
+                "translateY(-100%)";
+
         } else {
-            header.classList.remove('scrolled');
+
+            header.style.transform =
+                "translateY(0)";
         }
     }
+
+    /* ======================================================
+       PÁGINAS INTERNAS
+       navbar sempre visível
+    ====================================================== */
+
+    else {
+
+        header.style.transform = "translateY(0)";
+    }
+
+    lastScroll = currentScroll;
 });
 
-// Inicialização Final quando tudo carregar
-document.addEventListener("DOMContentLoaded", () => {
-    if (typeof renderizarLoja === "function") renderizarLoja();
+/* ==========================================================
+   HERO SLIDER PREMIUM
+========================================================== */
+
+const slides =
+    document.querySelectorAll(".hero-slide");
+
+const dots =
+    document.querySelectorAll(".hero-dot");
+
+const prevBtn =
+    document.querySelector(".hero-prev");
+
+const nextBtn =
+    document.querySelector(".hero-next");
+
+/* ==========================================================
+   CONTEÚDOS
+========================================================== */
+
+const heroContent = [
+
+    {
+        tag: "Nova Coleção",
+
+        title:
+            "Vista a história.<br>Viva o jogo.",
+
+        text:
+            "A nova camisa II da seleção brasileira marca uma nova era: Joga Sinistro.",
+
+        button:
+            "Comprar agora",
+
+        link:
+            "/pages/ofertas.html"
+    },
+
+    {
+        tag: "Nova Coleção",
+
+        title:
+            "Carregue sua nação.<br>Vista a paixão.",
+
+        text:
+            "A nova camisa I da seleção brasileira. Alegria que apavora.",
+
+        button:
+            "Ver coleção",
+
+        link:
+            "/pages/masculino.html"
+    },
+
+    {
+        tag: "Vintage Sports",
+
+        title:
+            "Mais que camisas.<br>Memórias eternas.",
+
+        text:
+            "Camisas que carregam história, estilo e paixão pelo futebol.",
+
+        button:
+            "Explorar",
+
+        link:
+            "/pages/femenino.html"
+    }
+];
+
+/* ==========================================================
+   ELEMENTOS
+========================================================== */
+
+const heroTag =
+    document.getElementById("hero-tag");
+
+const heroTitle =
+    document.getElementById("hero-title");
+
+const heroText =
+    document.getElementById("hero-text");
+
+const heroBtn =
+    document.getElementById("hero-btn");
+
+let currentSlide = 0;
+
+let autoSlide;
+
+/* ==========================================================
+   AUTOPLAY CONTROLADO
+========================================================== */
+
+function startAutoSlide() {
+    autoSlide = setInterval(() => {
+        nextSlide();
+    }, 6000); // mais lento e estável
+}
+
+function resetAutoSlide() {
+    clearInterval(autoSlide);
+    startAutoSlide();
+}
+
+/* ==========================================================
+   TROCAR SLIDE
+========================================================== */
+
+function mostrarSlide(index) {
+
+    slides.forEach(slide =>
+        slide.classList.remove("active")
+    );
+
+    dots.forEach(dot =>
+        dot.classList.remove("active")
+    );
+
+    slides[index].classList.add("active");
+    dots[index].classList.add("active");
+
+    heroTag.innerHTML = heroContent[index].tag;
+    heroTitle.innerHTML = heroContent[index].title;
+    heroText.innerHTML = heroContent[index].text;
+    heroBtn.innerHTML = heroContent[index].button;
+    heroBtn.href = heroContent[index].link;
+
+    currentSlide = index;
+}
+
+/* ==========================================================
+   PRÓXIMO
+========================================================== */
+
+function nextSlide() {
+    let next = currentSlide + 1;
+
+    if (next >= slides.length) {
+        next = 0;
+    }
+
+    mostrarSlide(next);
+}
+
+/* ==========================================================
+   ANTERIOR
+========================================================== */
+
+function prevSlide() {
+    let prev = currentSlide - 1;
+
+    if (prev < 0) {
+        prev = slides.length - 1;
+    }
+
+    mostrarSlide(prev);
+}
+
+/* ==========================================================
+   BOTÕES
+========================================================== */
+
+nextBtn.addEventListener("click", () => {
+    nextSlide();
+    resetAutoSlide(); // 🔥 evita bug de aceleração/pulo
 });
+
+prevBtn.addEventListener("click", () => {
+    prevSlide();
+    resetAutoSlide();
+});
+
+/* ==========================================================
+   DOTS
+========================================================== */
+
+dots.forEach((dot, index) => {
+    dot.addEventListener("click", () => {
+        mostrarSlide(index);
+        resetAutoSlide(); // mantém sincronizado
+    });
+});
+
+/* ==========================================================
+   INICIAR
+========================================================== */
+
+mostrarSlide(0);
+startAutoSlide();

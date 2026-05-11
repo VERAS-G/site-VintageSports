@@ -3,6 +3,7 @@
    ============================================================= */
 html {
   height: 100%;
+  scrollbar-gutter: stable;
 }
 
 #promo {
@@ -30,144 +31,358 @@ footer {
 }
 
 /* =============================================================
-   1. HEADER (ESTRUTURA)
-   ============================================================= */
+   HEADER TRANSPARENTE MODERNO
+============================================================= */
+
 header {
   width: 100%;
-  padding: 20px 40px;
-  background-color: rgb(0, 0, 0);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  transition: background-color 0.3s ease, backdrop-filter 0.3s ease;
-}
 
-header.scrolled {
-  background-color: rgba(0, 0, 0, 0.6) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  height: 70px;
+
+  padding: 0 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  z-index: 1000;
+
+  background: rgba(0, 0, 0, 0.08);
+
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+
+  transition:
+    background 0.35s ease,
+    backdrop-filter 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+
+  border-bottom: 1px solid rgba(255,255,255,0.03);
 }
 
 /* =============================================================
-   2. LOGO (ALINHAMENTO LIMPO)
-   ============================================================= */
+   HEADER AO ROLAR
+============================================================= */
+
+header.scrolled {
+  background: rgba(8, 8, 8, 0.45);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+/* =============================================================
+   LOGO
+============================================================= */
+
 .logo {
   display: flex;
   align-items: center;
+
   gap: 10px;
+
   text-decoration: none;
-  z-index: 10; /* Garante que o logo fique visível */
+
+  z-index: 10;
 }
 
 .logo img {
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
+
   object-fit: contain;
 }
 
 .logo h1 {
-  font-size: 20px;
+  margin: 0;
+
   color: white;
-  margin: 0; /* Remove as margens negativas antigas */
-  font-weight: bold;
+
+  font-size: 1.7rem;
+  font-weight: 700;
+
+  letter-spacing: -0.5px;
+}
+
+.logo span {
+  color: #f6d221;
 }
 
 /* =============================================================
-   3. NAV (CENTRO ABSOLUTO DO MONITOR)
-   ============================================================= */
+   NAV CENTRAL
+============================================================= */
+
 nav {
-  /* O segredo para o centro perfeito: ignora o tamanho do logo e ícones */
   position: absolute;
+
   left: 50%;
+
   transform: translateX(-50%);
 }
 
 nav ul {
   display: flex;
+  align-items: center;
+
   list-style: none;
-  gap: 30px;
+
+  gap: 34px;
+
   margin: 0;
   padding: 0;
 }
 
 nav a {
   text-decoration: none;
-  color: #ffffff;
+
+  color: rgba(255,255,255,0.88);
+
+  font-size: 0.95rem;
   font-weight: 500;
-  transition: 0.3s;
+
+  transition: 0.25s ease;
+
+  position: relative;
 }
+
+/* Hover */
 
 nav a:hover {
-  color: #f6d221;
+  color: white;
 }
 
+/* Linha elegante */
+
+nav a::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  bottom: -5px;
+
+  width: 0%;
+  height: 2px;
+
+  background: #f6d221;
+
+  border-radius: 10px;
+
+  transition: 0.3s ease;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+/* Active */
+
 nav a.active {
-  color: #ffffff;
-  font-weight: 600;
-  border-bottom: 3px solid #f6d221;
-  padding-bottom: 2px;
+  color: white;
+}
+
+nav a.active::after {
+  width: 100%;
 }
 
 /* =============================================================
-   4. ÍCONES E BUSCA (DIREITA)
-   ============================================================= */
+   ÍCONES
+============================================================= */
+
 .icons {
   display: flex;
   align-items: center;
-  gap: 20px;
+
+  gap: 18px;
+
   z-index: 10;
 }
+
+/* =============================================================
+   SEARCH
+============================================================= */
 
 .search-box {
   display: flex;
   align-items: center;
+
   position: relative;
 }
 
 .search-box input {
   width: 0;
+
   opacity: 0;
+
   padding: 8px 0;
-  border: 1px solid transparent;
+
+  border: none;
+
   border-radius: 20px;
-  transition: all 0.4s ease;
-  background: #222;
+
+  transition: all 0.35s ease;
+
+  background: rgba(255,255,255,0.08);
+
   color: white;
+
+  font-size: 14px;
 }
 
 .search-box.active input {
-  width: 180px;
+  width: 170px;
+
   opacity: 1;
-  padding: 8px 15px;
+
+  padding: 8px 14px;
+
   margin-right: 10px;
-  border: 1px solid #444;
-}
-
-.search-icon {
-  cursor: pointer;
-  font-size: 18px;
-  color: white;
-  transition: transform 0.2s ease;
-}
-
-.search-icon:hover {
-  transform: translateY(-3px);
 }
 
 .search-box input:focus {
-  border: 1px solid #f6d221;
-  box-shadow: 0 0 5px #f6d221;
   outline: none;
+
+  box-shadow: 0 0 0 2px rgba(246,210,33,0.4);
 }
 
+/* =============================================================
+   BOTÕES / ÍCONES
+============================================================= */
+
+.search-icon,
 #cart-btn {
   background: none;
+
   border: none;
+
   color: white;
-  font-size: 20px;
+
+  font-size: 18px;
+
   cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+/* Hover */
+
+.search-icon:hover,
+#cart-btn:hover {
+  color: #f6d221;
+
+  transform: translateY(-2px);
+}
+
+/* =============================================================
+   RESPONSIVIDADE
+============================================================= */
+
+@media (max-width: 950px) {
+
+  header {
+    padding: 0 25px;
+  }
+
+  nav ul {
+    gap: 22px;
+  }
+
+  nav a {
+    font-size: 0.9rem;
+  }
+
+  .logo h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* =============================================================
+   TABLET
+============================================================= */
+
+@media (max-width: 768px) {
+
+  header {
+    height: 65px;
+
+    padding: 0 18px;
+  }
+
+  nav {
+    display: none;
+  }
+
+  .logo img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .logo h1 {
+    font-size: 1.3rem;
+  }
+
+  .search-box.active input {
+    width: 120px;
+  }
+}
+
+/* =============================================================
+   MOBILE
+============================================================= */
+
+@media (max-width: 480px) {
+
+  header {
+    height: 60px;
+
+    padding: 0 14px;
+  }
+
+  .logo {
+    gap: 8px;
+  }
+
+  .logo h1 {
+    font-size: 1.1rem;
+  }
+
+  .icons {
+    gap: 14px;
+  }
+
+  .search-icon,
+  #cart-btn {
+    font-size: 16px;
+  }
+
+  .search-box.active input {
+    position: absolute;
+
+    right: 28px;
+
+    width: 110px;
+  }
+}
+
+/* =============================================================
+   NAVBAR MAIS VISÍVEL EM PÁGINAS INTERNAS
+============================================================= */
+
+body.internal-page header {
+
+  background: rgba(8, 8, 8, 0.45);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
 }

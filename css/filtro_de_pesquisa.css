@@ -1,84 +1,303 @@
+/* =============================================================
+   SHOP CONTAINER
+============================================================= */
+
 .shop-container {
   display: flex;
   align-items: flex-start;
+
+  gap: 45px;
+
+  padding:
+    110px 40px 40px;
 }
 
-/* 🔥 FILTRO LATERAL */
+/* =============================================================
+   SIDEBAR FILTROS
+============================================================= */
+
+/* =============================================================
+   FILTROS
+============================================================= */
+
 .filters {
-  width: 250px;
-  background: white;
-  padding: 20px;
+  width: 260px;
+
+  min-width: 260px;
 
   position: sticky;
-  top: 80px;
 
-  height: calc(100vh - 80px);
-  overflow-y: auto;
+  top: 110px;
 
-  border-right: 1px solid #eee;
+  align-self: flex-start;
+
+  height: fit-content;
+
+  background: transparent;
 }
 
-/* 🔥 ITEM DO FILTRO (NOVO PADRÃO) */
+/* =============================================================
+   ITEM FILTRO
+============================================================= */
+
 .filtro-item {
-  border-bottom: 1px solid #eee;
-  margin-bottom: 10px;
+  border-bottom: 1px solid #ececec;
+
+  padding: 18px 0;
 }
 
-/* 🔥 BOTÕES */
-.filtro-item button {
+/* =============================================================
+   BOTÃO FILTRO
+============================================================= */
+
+.filtro-btn {
   width: 100%;
-  padding: 12px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  text-align: left;
-  font-weight: bold;
 
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 
-  border-radius: 6px;
-  transition: 0.2s;
+  background: none;
+
+  border: none;
+
+  padding: 0;
+
+  cursor: pointer;
+
+  text-align: left;
+
+  color: #111;
+
+  font-size: 1rem;
+  font-weight: 600;
+
+  transition: opacity 0.2s ease;
 }
 
-.filtro-item button:hover {
-  background: #f5f5f5;
+/* Hover */
+
+.filtro-btn:hover {
+  opacity: 0.7;
 }
 
-/* 🔥 CONTEÚDO */
+/* =============================================================
+   SETA
+============================================================= */
+
+.arrow {
+  font-size: 0.9rem;
+
+  transition: transform 0.3s ease;
+}
+
+/* Rotação */
+
+.filtro-btn.active .arrow {
+  transform: rotate(180deg);
+}
+
+/* =============================================================
+   CONTEÚDO FILTRO
+============================================================= */
+
 .filtro-conteudo {
-  display: none;
-  padding: 10px 5px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+
+  max-height: 0;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  padding-top: 0;
+
+  transition:
+    max-height 0.35s ease,
+    opacity 0.25s ease,
+    padding 0.3s ease;
 }
+
+/* Aberto */
+
+.filtro-conteudo.active {
+
+  max-height: 240px;
+
+  overflow-y: auto;
+
+  opacity: 1;
+
+  padding-top: 18px;
+}
+
+/* =============================================================
+   SCROLLBAR MODERNA
+============================================================= */
+
+.filtro-conteudo::-webkit-scrollbar {
+  width: 5px;
+}
+
+.filtro-conteudo::-webkit-scrollbar-thumb {
+  background: #d6d6d6;
+
+  border-radius: 20px;
+}
+
+.filtro-conteudo::-webkit-scrollbar-thumb:hover {
+  background: #bcbcbc;
+}
+
+/* =============================================================
+   LABEL
+============================================================= */
 
 .filtro-conteudo label {
-  display: block;
-  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
   cursor: pointer;
-  font-size: 14px;
+
+  color: #222;
+
+  font-size: 0.95rem;
+  font-weight: 400;
+
+  transition: color 0.2s ease;
 }
 
-/* 🔥 PRODUTOS */
-.products {
-  flex: 1;
-  padding: 40px;
+/* Hover */
+
+.filtro-conteudo label:hover {
+  color: black;
 }
 
-/* Ajuste para o conteúdo dos filtros aparecer e sumir */
-.filtro-conteudo {
-  display: none;
-  flex-direction: column;
-  padding: 10px 0;
+/* =============================================================
+   CHECKBOX MODERNO
+============================================================= */
+
+.filtro-conteudo input[type="checkbox"] {
+
+  appearance: none;
+
+  width: 18px;
+  height: 18px;
+
+  min-width: 18px;
+
+  border: 1.5px solid #bdbdbd;
+
+  border-radius: 4px;
+
+  background: white;
+
+  cursor: pointer;
+
+  position: relative;
+
+  transition: 0.2s ease;
 }
 
-.filtro-item button:focus + .filtro-conteudo,
-.filtro-item:hover .filtro-conteudo {
-  display: flex; /* Mostra o filtro ao passar o mouse ou clicar */
+/* Hover */
+
+.filtro-conteudo input[type="checkbox"]:hover {
+  border-color: #111;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+/* Marcado */
+
+.filtro-conteudo input[type="checkbox"]:checked {
+
+  background: #111;
+
+  border-color: #111;
+}
+
+/* Check */
+
+.filtro-conteudo input[type="checkbox"]:checked::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 5px;
+  top: 2px;
+
+  width: 4px;
+  height: 8px;
+
+  border: solid white;
+
+  border-width: 0 2px 2px 0;
+
+  transform: rotate(45deg);
+}
+
+/* =============================================================
+   CONTADOR
+============================================================= */
+
+.filtro-conteudo label span {
+
+  margin-left: auto;
+
+  color: #999;
+
+  font-size: 0.85rem;
+}
+
+/* =============================================================
+   MOBILE
+============================================================= */
+
+@media (max-width: 1024px) {
+
+  .shop-container {
+    flex-direction: column;
+
+    gap: 30px;
+
+    padding:
+      100px 25px 35px;
+  }
+
+  .filters {
+    width: 100%;
+
+    min-width: 100%;
+
+    position: static;
+  }
+}
+
+/* =============================================================
+   MOBILE PEQUENO
+============================================================= */
+
+@media (max-width: 600px) {
+
+  .shop-container {
+    padding:
+      90px 16px 25px;
+  }
+
+  .filters {
+    width: 100%;
+  }
+
+  .filtro-btn {
+    font-size: 0.95rem;
+  }
+
+  .filtro-conteudo label {
+    font-size: 0.9rem;
+  }
 }

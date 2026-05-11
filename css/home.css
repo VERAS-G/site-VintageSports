@@ -1,161 +1,386 @@
 /* =============================================================
-   HERO PRINCIPAL (ESTILO NIKE PERFORMANCE)
-   ============================================================= */
+   HERO PRINCIPAL (SLIDER ESTILO NIKE)
+============================================================= */
 
 .hero {
+
     position: relative;
-    height: 90vh;
-    background: url('/assets/img/banner.jpg') center/cover no-repeat;
+
+    width: 100%;
+
+    height: 100vh;
+
+    overflow: hidden;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     text-align: center;
+
     color: white;
-    overflow: hidden;
-    /* Alinhamento com a Navbar Transparente */
-    margin-top: -85px; 
-    padding-top: 85px; 
+
+    /* HERO FICA ATRÁS DA NAVBAR */
+
+    margin-top: -85px;
+
+    padding-top: 85px;
 }
 
-/* Overlay Cinematográfico: Foco central com extremidades escuras */
-.hero-overlay {
+/* =============================================================
+   SLIDES
+============================================================= */
+
+.hero-slide {
+
     position: absolute;
+
     inset: 0;
-    background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%),
-                linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 50%, rgba(0,0,0,0.8) 100%);
+
+    opacity: 0;
+
+    transition: opacity 1.2s ease;
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
+    transform: scale(1.03);
+}
+
+/* SLIDE ATIVO */
+
+.hero-slide.active {
+    opacity: 1;
+}
+
+/* =============================================================
+   IMAGEM 1
+============================================================= */
+
+.hero-slide:nth-child(1) {
+
+    background-image:
+        url('/assets/img/banner.jpg');
+}
+
+/* =============================================================
+   IMAGEM 2
+============================================================= */
+
+.hero-slide:nth-child(2) {
+
+    background-image:
+        url('/assets/img/banner-selecao2.jpg');
+}
+
+/* =============================================================
+   IMAGEM 3
+============================================================= */
+
+.hero-slide:nth-child(3) {
+
+    background-image:
+        url('/assets/img/banner-3.avif');
+}
+
+/* =============================================================
+   OVERLAY CINEMATOGRÁFICO
+============================================================= */
+
+.hero-overlay {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,0,0,0.1) 0%,
+            rgba(0,0,0,0.7) 100%
+        ),
+
+        linear-gradient(
+            to bottom,
+            rgba(0,0,0,0.35) 0%,
+            transparent 50%,
+            rgba(0,0,0,0.82) 100%
+        );
+
     z-index: 1;
 }
 
+/* =============================================================
+   CONTEÚDO
+============================================================= */
+
 .hero-content {
+
     position: relative;
-    max-width: 1000px; /* Mais espaço para o título respirar */
-    padding: 0 20px;
+
     z-index: 2;
+
+    max-width: 1000px;
+
+    padding: 0 20px;
 }
 
-/* TAG SUPERIOR: Menor, mais densa e bem espaçada */
+/* =============================================================
+   TAG
+============================================================= */
+
 .hero .tag {
-    font-size: 0.7rem;
-    letter-spacing: 5px; 
-    color: #f6d221;
-    text-transform: uppercase;
-    font-weight: 900;
-    margin-bottom: 20px;
+
     display: block;
-}
 
-/* TÍTULO IMPACTANTE: O coração do design Nike */
-.hero h1 {
-    font-size: clamp(2.5rem, 8vw, 5.2rem);
-    font-weight: 900;
+    margin-bottom: 20px;
+
+    font-size: 0.7rem;
+
+    letter-spacing: 5px;
+
+    color: #f6d221;
+
     text-transform: uppercase;
-    font-style: italic; 
-    letter-spacing: -4px; /* Letras "coladas" para visual de peso */
-    line-height: 0.85; /* Título blocado verticalmente */
-    margin-bottom: 25px;
-    color: #fff;
-    text-shadow: 0 15px 40px rgba(0,0,0,0.4);
+
+    font-weight: 900;
 }
 
-/* PARÁGRAFO: Limpo e elegante */
+/* =============================================================
+   TÍTULO
+============================================================= */
+
+.hero h1 {
+
+    font-size: clamp(2.5rem, 8vw, 5.2rem);
+
+    font-weight: 900;
+
+    text-transform: uppercase;
+
+    font-style: italic;
+
+    letter-spacing: -4px;
+
+    line-height: 0.85;
+
+    margin-bottom: 25px;
+
+    color: #fff;
+
+    text-shadow:
+        0 15px 40px rgba(0,0,0,0.4);
+}
+
+/* =============================================================
+   PARÁGRAFO
+============================================================= */
+
 .hero p {
+
     color: rgba(255, 255, 255, 0.85);
+
     margin: 0 auto 40px;
+
     line-height: 1.5;
+
     font-size: 1.15rem;
+
     max-width: 550px;
+
     font-weight: 400;
+
     letter-spacing: 0.2px;
 }
 
-/* BOTÃO HERO: Reto e com alto contraste */
+/* =============================================================
+   BOTÃO HERO
+============================================================= */
+
 .btn-hero {
+
     display: inline-block;
+
     background: #f6d221;
+
     color: #000;
+
     text-decoration: none;
+
     padding: 18px 50px;
+
     font-weight: 900;
+
     text-transform: uppercase;
+
     font-style: italic;
+
     letter-spacing: 1px;
-    border-radius: 2px; /* Cantos quase retos */
+
+    border-radius: 2px;
+
     cursor: pointer;
+
     border: none;
-    transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+
+    transition:
+        all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
 }
+
+/* Hover */
 
 .btn-hero:hover {
+
     background: #fff;
-    transform: scale(1.05); /* Zoom sutil */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+
+    transform: scale(1.05);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.4);
 }
 
-/* Ajuste Responsivo */
+/* =============================================================
+   SETAS
+============================================================= */
+
+.hero-arrow {
+
+    position: absolute;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 52px;
+    height: 52px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,0.08);
+
+    backdrop-filter: blur(8px);
+
+    color: white;
+
+    cursor: pointer;
+
+    z-index: 5;
+
+    transition: 0.3s ease;
+}
+
+/* hover */
+
+.hero-arrow:hover {
+
+    background: rgba(255,255,255,0.2);
+
+    transform:
+        translateY(-50%)
+        scale(1.08);
+}
+
+/* esquerda */
+
+.hero-prev {
+    left: 30px;
+}
+
+/* direita */
+
+.hero-next {
+    right: 30px;
+}
+
+/* =============================================================
+   DOTS
+============================================================= */
+
+.hero-dots {
+
+    position: absolute;
+
+    bottom: 35px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    display: flex;
+
+    gap: 10px;
+
+    z-index: 5;
+}
+
+/* dot */
+
+.hero-dot {
+
+    width: 11px;
+    height: 11px;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,0.35);
+
+    cursor: pointer;
+
+    transition: 0.3s ease;
+}
+
+/* ativo */
+
+.hero-dot.active {
+
+    width: 30px;
+
+    border-radius: 20px;
+
+    background: #f6d221;
+}
+
+/* =============================================================
+   RESPONSIVIDADE
+============================================================= */
+
 @media (max-width: 768px) {
-    .hero { height: 80vh; }
-    .hero h1 { 
-        font-size: 3.2rem; 
-        letter-spacing: -2px; 
+
+    .hero {
+        height: 90vh;
+    }
+
+    .hero h1 {
+
+        font-size: 3.2rem;
+
+        letter-spacing: -2px;
+
         line-height: 0.9;
     }
-    .hero p { 
-        font-size: 1rem; 
+
+    .hero p {
+
+        font-size: 1rem;
+
         max-width: 100%;
     }
-    .btn-hero { 
-        padding: 15px 40px; 
+
+    .btn-hero {
+
+        padding: 15px 40px;
+
         font-size: 0.85rem;
     }
 }
 
-
-.content{
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.content button {
-  position: relative;
-  overflow: hidden;
-
-  background: linear-gradient(135deg, #6a5cff, #8f44fd);
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(106, 92, 255, 0.4);
-}
-
-
-.content button:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(106, 92, 255, 0.6);
-}
-
-
-.content button:active {
-  transform: scale(0.95);
-}
-
-.content button::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
-  transition: 0.5s;
-}
-
-.content button:hover::after {
-  left: 100%;
+.products{
+  margin: 40px;
 }
 
 .quem-somos {
@@ -185,7 +410,6 @@
 .destaques {
   display: flex;
   gap: 20px;
-  margin-top: 40px;
   flex-wrap: wrap;
   justify-content: center;
 }

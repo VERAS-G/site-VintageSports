@@ -320,9 +320,6 @@ function monitorarCupom(input) {
 /* ==========================================================================
    FUNÇÃO: APLICAR CUPOM (VINTAGE SPORTS)
    ========================================================================== */
-/* ==========================================================================
-   FUNÇÃO: APLICAR CUPOM (VINTAGE SPORTS) - AJUSTADA
-   ========================================================================== */
 function aplicarCupom() {
   const input = document.getElementById("cupom");
   const msgCupom = document.getElementById("mensagem-cupom");
@@ -507,7 +504,7 @@ async function calcularFrete(event) {
       headers: { "Content-Type": "application/json" },
       signal: controller.signal,
       body: JSON.stringify({
-        from: { postal_code: "58030-000" },
+        from: { postal_code: "05750-210" },
         to: { postal_code: cepNumeros },
         package: {
           height: 5,

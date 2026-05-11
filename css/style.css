@@ -7,16 +7,25 @@
 
 html {
   scroll-behavior: smooth;
+  height: 100%;
 }
 
 
 body{
   background:#f5f5f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 
 body.no-scroll {
   overflow: hidden;
+}
+
+main {
+
+  flex: 1;
 }
 
 /* 🔥 BOTÃO DO CARRINHO */

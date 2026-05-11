@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <title>Femenino VintageSports</title>
 </head>
-<body>
+<body class="internal-page">
 
 <div id="overlay"></div>
 
@@ -44,43 +44,164 @@
   </div>
 </header>
 
+<main>
 
-<div class="shop-container">
+  <div class="shop-container">
 
-  <!-- 🔥 FILTRO ESTILO NIKE -->
-  <aside class="filters">
+    <!-- ==========================================================
+        FILTROS ESTILO NIKE
+    =========================================================== -->
 
-        <!-- Filtro de Times -->
-    <div class="filtro-item">
-      <button>Times <span>⌄</span></button>
-      <div class="filtro-conteudo" data-tipo="time"> <!-- Adicione isso -->
-        <label><input type="checkbox" value="bayern"> Bayern</label>
-        <label><input type="checkbox" value="boca"> Boca Juniors</label>
-        <!-- ... outros times -->
+    <aside class="filters">
+
+      <!-- ========================================================
+          FILTRO TIMES
+      ========================================================= -->
+
+      <div class="filtro-item">
+
+        <button type="button" class="filtro-btn">
+          <span>Times</span>
+          <span class="arrow">⌄</span>
+        </button>
+
+        <div class="filtro-conteudo active" data-tipo="time">
+
+          <label>
+            <input type="checkbox" value="bayern">
+            Bayern
+          </label>
+
+          <label>
+            <input type="checkbox" value="boca">
+            Boca Juniors
+          </label>
+
+          <label>
+            <input type="checkbox" value="real-madrid">
+            Real Madrid
+          </label>
+
+          <label>
+            <input type="checkbox" value="barcelona">
+            Barcelona
+          </label>
+
+          <label>
+            <input type="checkbox" value="psg">
+            PSG
+          </label>
+
+          <label>
+            <input type="checkbox" value="milan">
+            Milan
+          </label>
+
+        </div>
+
       </div>
-    </div>
 
-    <!-- Filtro de Preço -->
-    <div class="filtro-item">
-      <button>Preço <span>⌄</span></button>
-      <div class="filtro-conteudo" data-tipo="preco"> <!-- Adicione isso -->
-        <label><input type="checkbox" value="0-150"> Até 150</label>
-        <label><input type="checkbox" value="150-200"> R$150 - R$200</label>
-        <!-- ... outros preços -->
+      <!-- ========================================================
+          FILTRO PAÍS
+      ========================================================= -->
+
+      <div class="filtro-item">
+
+        <button type="button" class="filtro-btn">
+          <span>País</span>
+          <span class="arrow">⌄</span>
+        </button>
+
+        <div class="filtro-conteudo" data-tipo="pais">
+
+          <label>
+            <input type="checkbox" value="brasil">
+            Brasil
+          </label>
+
+          <label>
+            <input type="checkbox" value="argentina">
+            Argentina
+          </label>
+
+          <label>
+            <input type="checkbox" value="espanha">
+            Espanha
+          </label>
+
+          <label>
+            <input type="checkbox" value="inglaterra">
+            Inglaterra
+          </label>
+
+          <label>
+            <input type="checkbox" value="italia">
+            Itália
+          </label>
+
+          <label>
+            <input type="checkbox" value="alemanha">
+            Alemanha
+          </label>
+
+          <label>
+            <input type="checkbox" value="franca">
+            França
+          </label>
+
+        </div>
+
       </div>
-    </div>
 
+      <!-- ========================================================
+          FILTRO PREÇO
+      ========================================================= -->
 
-  </aside>
+      <div class="filtro-item">
 
-  <!-- 🔥 PRODUTOS -->
-  <section class="products">
-    <h2>Produtos Femeninos</h2>
-    <div class="grid" id="product-list"></div>
-  </section>
+        <button type="button" class="filtro-btn">
+          <span>Preço</span>
+          <span class="arrow">⌄</span>
+        </button>
 
-</div>
+        <div class="filtro-conteudo" data-tipo="preco">
 
+          <label>
+            <input type="checkbox" value="0-150">
+            Até R$150
+          </label>
+
+          <label>
+            <input type="checkbox" value="150-200">
+            R$150 - R$200
+          </label>
+
+          <label>
+            <input type="checkbox" value="200-300">
+            R$200 - R$300
+          </label>
+
+          <label>
+            <input type="checkbox" value="300+">
+            Acima de R$300
+          </label>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+    <!-- 🔥 PRODUTOS -->
+    <section class="products">
+      <h2>Produtos Femeninos</h2>
+      <div class="grid" id="product-list"></div>
+    </section>
+
+  </div>
+
+</main>
+  
 <!-- 🔥 CARRINHO -->
 <div id="cart" class="cart">
   <h2>Seu Carrinho</h2>
