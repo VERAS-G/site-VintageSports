@@ -1080,7 +1080,8 @@ function confirmarCarrinho(abrirImediato = false) {
         );
     }
 
-    // 🔥 abre carrinho automaticamente
+
+
     if (typeof abrirMiniCarrinho === "function") {
         abrirMiniCarrinho();
     }
