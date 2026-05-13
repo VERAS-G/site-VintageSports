@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/produtos.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/carrossel.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+    <title>VintageSports</title>
+</head>
+
+<body>
+
+<div id="overlay"></div>
+
+<header>
+  <div class="logo">
+      <img src="/assets/img/logo.png" alt="">
+      <h1>Vintage<span style="color:#f6d221;">Sports</span></h1>
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="/index.html"class="active">Home</a></li>
+      <li><a href="/pages/masculino.html">Masculino</a></li>
+      <li><a href="/pages/femenino.html">Feminino</a></li>
+      <li><a href="/pages/ofertas.html">Ofertas</a></li>
+    </ul>
+  </nav>
+
+  <div class="icons">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar...">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    </div>
+    <button id="cart-btn">
+      <i class="fa-solid fa-bag-shopping"></i>
+      <span id="cart-count">0</span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+
+  <!-- ======================================================
+       SLIDES
+  ======================================================= -->
+
+  <div class="hero-slide active"></div>
+  <div class="hero-slide"></div>
+  <div class="hero-slide"></div>
+
+  <!-- ======================================================
+       OVERLAY
+  ======================================================= -->
+
+  <div class="hero-overlay"></div>
+
+  <!-- ======================================================
+       CONTEÚDO
+  ======================================================= -->
+
+  <div class="hero-content">
+
+    <span class="tag" id="hero-tag">
+      Nova Coleção
+    </span>
+
+    <h1 id="hero-title">
+      Vista a história.<br>
+      Viva o jogo.
+    </h1>
+
+    <p id="hero-text">
+      Camisas oficiais, momentos inesquecíveis e experiências únicas para quem vive o futebol de verdade.
+    </p>
+
+    <a
+      href="/pages/ofertas.html"
+      class="btn-hero"
+      id="hero-btn"
+    >
+      Comprar agora
+    </a>
+
+  </div>
+
+  <!-- ======================================================
+       CONTROLES
+  ======================================================= -->
+
+  <button class="hero-arrow hero-prev">
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
+
+  <button class="hero-arrow hero-next">
+    <i class="fa-solid fa-chevron-right"></i>
+  </button>
+
+  <!-- ======================================================
+       INDICADORES
+  ======================================================= -->
+
+  <div class="hero-dots">
+
+    <span class="hero-dot active"></span>
+
+    <span class="hero-dot"></span>
+
+    <span class="hero-dot"></span>
+
+  </div>
+
+</section>
+
+<!-- Certifique-se de ter o link do FontAwesome no seu <head> para as setas aparecerem -->
+<section class="carrossel-manto">
+    <h2>Encontre seu Manto »</h2>
+    
+    <div class="carrossel-container">
+        <!-- Seta Esquerda -->
+        <button class="seta-nav esquerda" onclick="rolarCarrossel(-1)" aria-label="Anterior">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <!-- O ID 'carrossel-lista' é o que o JS vai usar para rolar -->
+        <div class="carrossel-wrapper" id="carrossel-lista">
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/ALEMANHA/alemanha.png" alt="Pelé">
+                </div>
+                <span>Alemanha</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/ARABIA SAUDITA/arabia.png" alt="Pelé">
+                </div>
+                <span>Arabia saudita</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/ARGENTINA/argentina.png" alt="Pelé">
+                </div>
+                <span>Argentina</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/AUSTRALIA/australia.png" alt="Pelé">
+                </div>
+                <span>Australia</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/BELGICA/belgica.png" alt="Pelé">
+                </div>
+                <span>Belgica</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/BRASIL/brasil.png" alt="Pelé">
+                </div>
+                <span>Brasil</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/CANADA/canada.png" alt="Pelé">
+                </div>
+                <span>Canada</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/COREIA DO SUL/coreia do sul.png" alt="Pelé">
+                </div>
+                <span>Coreia Do Sul</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/CROACIA/croacia.png" alt="Pelé">
+                </div>
+                <span>Croacia</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/EGITO/egito.png" alt="Pelé">
+                </div>
+                <span>Egito</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/ESPANHA/espanha.png" alt="Pelé">
+                </div>
+                <span>Espanha</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/USA/usa.png" alt="Pelé">
+                </div>
+                <span>USA</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/FRANCA/frança.png" alt="Pelé">
+                </div>
+                <span>França</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/HOLANDA/holanda.png" alt="São Paulo">
+                </div>
+                <span>Holanda</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/INGLATERRA/inglaterra.png" alt="Santos">
+                </div>
+                <span>Inglaterra</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/JAPAO/japao.png" alt="Santos">
+                </div>
+                <span>Japão</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/MARROCOS/marrocos.png" alt="Santos">
+                </div>
+                <span>Marrocos</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/MEXICO/mexico.png" alt="Santos">
+                </div>
+                <span>Mexico</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/PORTUGAL/portugal.png" alt="Santos">
+                </div>
+                <span>Portugal</span>
+            </div>
+
+            <div class="carrossel-item">
+                <div class="carrossel-circulo">
+                    <img src="/assets/img/URUGUAY/uruguai.png" alt="Santos">
+                </div>
+                <span>Uruguay</span>
+            </div>
+
+            <!-- Adicione mais itens aqui conforme sua necessidade -->
+
+        </div>
+
+        <!-- Seta Direita -->
+        <button class="seta-nav direita" onclick="rolarCarrossel(1)" aria-label="Próximo">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Bolinhas de Navegação (Opcional, o JS pode controlar depois) -->
+    <div class="carrossel-dots" id="carrossel-dots">
+        <span class="ponto ativo"></span>
+        <span class="ponto"></span>
+        <span class="ponto"></span>
+        <span class="ponto"></span>
+    </div>
+</section>
+
+
+<section class="products">
+  <h2>Destaques</h2>
+  <div class="grid animar" id="produtos-home"></div>
+</section>
+
+<!-- 🔥 CARRINHO -->
+<div id="cart" class="cart">
+  <h2>Seu Carrinho</h2>
+
+  <ul id="cart-items"></ul>
+
+  <div class="cart-footer">
+    <p>Total: R$ <span id="total">0.00</span></p>
+
+    <button class="vercart-btn" onclick="VerCarrinho()">
+      Ver Carrinho completo
+    </button>
+
+    <button class="conti-btn" onclick="closeCart()">
+      Continuar Comprando
+    </button>
+  </div>
+</div>
+
+
+<section id="quem-somos" class="quem-somos animar">
+  <div class="container">
+
+    <h2 class="animar">Quem somos</h2>
+
+    <p class="descricao animar">
+      A Vintagesports é uma empresa especializada na comercialização de camisas de clubes e seleções nacionais, oferecendo produtos 100% originais, com garantia de procedência e alta qualidade.
+    </p>
+
+    <p class="descricao animar">
+      Nosso propósito vai além da venda: buscamos conectar torcedores à história, à emoção e à identidade do esporte por meio de peças que representam momentos marcantes do futebol mundial.
+    </p>
+
+    <div class="destaques">
+      <div class="card-s animar">
+        <h3>✔ Produtos Originais</h3>
+        <p>Garantia de autenticidade em todas as peças.</p>
+      </div>
+
+      <div class="card-s animar">
+        <h3>✔ Alta Qualidade</h3>
+        <p>Conforto, durabilidade e acabamento premium.</p>
+      </div>
+
+      <div class="card-s animar">
+        <h3>✔ Experiências Exclusivas</h3>
+        <p>Promoções com camisas autografadas e encontros com jogadores.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="contato" class="contato animar">
+  <h2 class="titulo-contato animar">Fale conosco</h2>
+  <p class="subtitulo-contato animar">Estamos aqui para ajudar você</p>
+
+  <div class="contato-container">
+
+    <!-- EMAIL -->
+    <div class="card-contato copiavel animar" onclick="copiarTexto('email', this)">
+      <h3>Email</h3>
+      <p id="email">Vintagesports.contato@gmail.com</p>
+      <span class="status">Clique para copiar</span>
+    </div>
+
+    <!-- TELEFONE -->
+    <div class="card-contato copiavel animar" onclick="copiarTexto('telefone', this)">
+      <h3>Telefone</h3>
+      <p id="telefone">(11) 98299-9999</p>
+      <span class="status">Clique para copiar</span>
+    </div>
+
+    <!-- INSTAGRAM -->
+    <div class="card-contato animar">
+      <h3>Instagram</h3>
+      <p>
+        <a href="https://instagram.com/seuusuario" target="_blank">
+          @VintageSports
+        </a>
+      </p>
+      <span class="status">Abrir perfil</span>
+    </div>
+
+  </div>
+</section>
+
+<footer class="">
+  <div class="footer-grid">
+
+    <div class="animar">
+      <h4>Sobre</h4>
+      <ul>
+        <li><a href="#quem-somos">Quem somos</a></li>
+        <li><a href="#">Carreiras</a></li>
+      </ul>
+    </div>
+
+    <div class="animar">
+      <h4>Ajuda</h4>
+      <ul>
+        <li><a href="#">Frete</a></li>
+        <li><a href="#">Trocas</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+    </div>
+
+    <div class="animar">
+      <h4>Redes</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <p>© 2026 VintageSports - Todos os direitos reservados</p>
+</footer>
+
+<script src="/js/carrossel.js" defer></script>
+<script src="/js/produtos.js"></script>
+<script src="/js/script.js" defer></script>
+
+<div id="custom-confirm" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Remover item?</h3>
+    <p>Tem certeza que deseja remover este item do carrinho?</p>
+
+    <div class="modal-buttons">
+      <button id="confirm-yes" class="btn-confirm">Remover</button>
+      <button id="confirm-no" class="btn-cancel">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div id="cart-notification" class="cart-notification hidden">
+
+    <div class="cart-box">
+
+        <div class="cart-info">
+
+            <h3 id="cart-title">Produto</h3>
+
+            <p id="cart-desc">Descrição do produto</p>
+
+        </div>
+
+        <div class="cart-buttons">
+
+            <button class="btn-add" onclick="confirmarCarrinho()">
+                Adicionar
+            </button>
+
+            <button class="btn-later" onclick="verDepois()">
+                Ver mais tarde
+            </button>
+
+            <button class="btn-cancel" onclick="fecharCarrinho()">
+                ×
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="toast-added" class="toast-added hidden">
+    Produto adicionado ao carrinho ✓
+</div>
+
+</body>
+</html>

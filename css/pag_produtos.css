@@ -1,0 +1,455 @@
+/* =============================================================
+   PÁGINA DE PRODUTO - VINTAGE SPORTS
+============================================================= */
+
+main {
+
+    flex: 1;
+
+    width: 100%;
+}
+
+/* =============================================================
+   LAYOUT PRINCIPAL
+============================================================= */
+
+.produto-page {
+
+    width: 100%;
+
+    max-width: 1600px;
+
+    margin: 0 auto;
+
+    padding: 140px 40px 80px;
+
+    display: flex;
+
+    gap: 80px;
+
+    align-items: flex-start;
+
+    justify-content: center;
+}
+
+/* =============================================================
+   LADO ESQUERDO
+============================================================= */
+
+.produto-esquerda {
+
+    flex: 1.1;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+}
+
+.produto-imagem-container {
+
+    width: 100%;
+
+    background: #f5f5f5;
+
+    border-radius: 24px;
+
+    padding: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+#produto-imagem {
+
+    width: 100%;
+
+    max-width: 700px;
+
+    object-fit: contain;
+
+    transition: 0.3s ease;
+}
+
+#produto-imagem:hover {
+
+    transform: scale(1.03);
+}
+
+/* =============================================================
+   LADO DIREITO
+============================================================= */
+
+.produto-direita {
+
+    flex: 1;
+
+    max-width: 550px;
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+/* =============================================================
+   TIME
+============================================================= */
+
+.produto-time {
+
+    font-size: 0.9rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 2px;
+
+    color: #f6d221;
+
+    margin-bottom: 12px;
+}
+
+/* =============================================================
+   TÍTULO
+============================================================= */
+
+#produto-titulo {
+
+    font-size: clamp(2rem, 4vw, 3.5rem);
+
+    line-height: 1;
+
+    font-weight: 900;
+
+    margin-bottom: 20px;
+
+    color: #111;
+}
+
+/* =============================================================
+   AVALIAÇÕES
+============================================================= */
+
+.produto-avaliacoes {
+
+    margin-bottom: 25px;
+}
+
+.stars {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    color: #ffbc00;
+
+    font-size: 14px;
+}
+
+.stars span {
+
+    color: #666;
+
+    margin-left: 8px;
+}
+
+/* =============================================================
+   PREÇO
+============================================================= */
+
+.produto-preco-box {
+
+    margin-bottom: 30px;
+}
+
+#produto-preco {
+
+    font-size: 2.2rem;
+
+    font-weight: 800;
+
+    color: #111;
+
+    margin-bottom: 8px;
+}
+
+.produto-preco-box p {
+
+    color: #666;
+
+    font-size: 1rem;
+}
+
+/* =============================================================
+   DESCRIÇÃO
+============================================================= */
+
+.produto-descricao {
+
+    margin-bottom: 35px;
+}
+
+.produto-descricao p {
+
+    font-size: 1rem;
+
+    line-height: 1.7;
+
+    color: #555;
+}
+
+/* =============================================================
+   TAMANHOS
+============================================================= */
+
+.produto-tamanhos {
+
+    margin-bottom: 40px;
+}
+
+.tamanho-topo {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 18px;
+}
+
+.tamanho-topo h3 {
+
+    font-size: 1rem;
+
+    font-weight: 700;
+}
+
+.tamanho-topo span {
+
+    font-size: 0.9rem;
+
+    color: #777;
+
+    text-decoration: underline;
+
+    cursor: pointer;
+}
+
+.tamanhos-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 12px;
+}
+
+.tamanhos-grid button {
+
+    height: 65px;
+
+    border: 1px solid #ddd;
+
+    background: #fff;
+
+    border-radius: 10px;
+
+    font-size: 1rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.25s ease;
+}
+
+.tamanhos-grid button:hover {
+
+    background: #111;
+
+    color: #fff;
+
+    border-color: #111;
+}
+
+.tamanhos-grid button.ativo {
+
+    background: #111;
+
+    color: #fff;
+
+    border-color: #111;
+}
+
+/* =============================================================
+   BOTÕES
+============================================================= */
+
+.produto-botoes {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+.produto-botoes button {
+
+    height: 60px;
+
+    border: none;
+
+    border-radius: 50px;
+
+    font-size: 1rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.3s ease;
+}
+
+/* CARRINHO */
+
+.btn-carrinho {
+
+    background: #fff;
+
+    border: 2px solid #111 !important;
+
+    color: #111;
+}
+
+.btn-carrinho:hover {
+
+    background: #111;
+
+    color: #fff;
+}
+
+/* COMPRAR */
+
+.btn-comprar {
+
+    background: #111;
+
+    color: #fff;
+}
+
+.btn-comprar:hover {
+
+    background: #000;
+
+    transform: translateY(-2px);
+}
+
+/* =============================================================
+   NOTEBOOKS
+============================================================= */
+
+@media (max-width: 1366px) {
+
+    .produto-page {
+
+        gap: 50px;
+
+        padding: 130px 30px 70px;
+    }
+
+    #produto-imagem {
+
+        max-width: 550px;
+    }
+}
+
+/* =============================================================
+   TABLETS
+============================================================= */
+
+@media (max-width: 1000px) {
+
+    .produto-page {
+
+        flex-direction: column;
+
+        gap: 40px;
+
+        padding: 120px 20px 60px;
+    }
+
+    .produto-direita {
+
+        max-width: 100%;
+    }
+
+    .produto-imagem-container {
+
+        padding: 30px;
+    }
+
+    #produto-imagem {
+
+        max-width: 400px;
+    }
+
+    .tamanhos-grid {
+
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* =============================================================
+   CELULARES
+============================================================= */
+
+@media (max-width: 600px) {
+
+    .produto-page {
+
+        padding: 110px 15px 50px;
+    }
+
+    .produto-imagem-container {
+
+        border-radius: 18px;
+
+        padding: 20px;
+    }
+
+    #produto-imagem {
+
+        max-width: 300px;
+    }
+
+    #produto-titulo {
+
+        font-size: 2rem;
+    }
+
+    #produto-preco {
+
+        font-size: 1.8rem;
+    }
+
+    .tamanhos-grid button {
+
+        height: 55px;
+    }
+
+    .produto-botoes button {
+
+        height: 55px;
+
+        font-size: 0.95rem;
+    }
+}

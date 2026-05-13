@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/produtos.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/filtro_de_pesquisa.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <title>Femenino VintageSports</title>
+</head>
+<body class="internal-page">
+
+<div id="overlay"></div>
+
+<header>
+  <div class="logo">
+      <img src="/assets/img/logo.png" alt="">
+      <h1>Vintage<span style="color:#f6d221;">Sports</span></h1>
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/pages/masculino.html">Masculino</a></li>
+      <li><a href="/pages/femenino.html" class="active">Feminino</a></li>
+      <li><a href="/pages/ofertas.html">Ofertas</a></li>
+    </ul>
+  </nav>
+
+  <div class="icons">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar...">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    </div>
+    <button id="cart-btn">
+      <i class="fa-solid fa-bag-shopping"></i>
+      <span id="cart-count">0</span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <div class="shop-container">
+
+    <!-- ==========================================================
+        FILTROS ESTILO NIKE
+    =========================================================== -->
+
+    <aside class="filters">
+
+      <!-- ========================================================
+          FILTRO TIMES
+      ========================================================= -->
+
+      <div class="filtro-item">
+
+        <button type="button" class="filtro-btn">
+          <span>Times</span>
+          <span class="arrow">⌄</span>
+        </button>
+
+        <div class="filtro-conteudo active" data-tipo="time">
+
+          <label>
+            <input type="checkbox" value="bayern">
+            Bayern
+          </label>
+
+          <label>
+            <input type="checkbox" value="boca">
+            Boca Juniors
+          </label>
+
+          <label>
+            <input type="checkbox" value="real-madrid">
+            Real Madrid
+          </label>
+
+          <label>
+            <input type="checkbox" value="barcelona">
+            Barcelona
+          </label>
+
+          <label>
+            <input type="checkbox" value="psg">
+            PSG
+          </label>
+
+          <label>
+            <input type="checkbox" value="milan">
+            Milan
+          </label>
+
+        </div>
+
+      </div>
+
+      <!-- ========================================================
+          FILTRO PAÍS
+      ========================================================= -->
+
+      <div class="filtro-item">
+
+        <button type="button" class="filtro-btn">
+          <span>País</span>
+          <span class="arrow">⌄</span>
+        </button>
+
+        <div class="filtro-conteudo" data-tipo="pais">
+
+          <label>
+            <input type="checkbox" value="brasil">
+            Alemanha
+          </label>
+
+          <label>
+            <input type="checkbox" value="arabia">
+            Arabia Saudita
+          </label>
+
+          <label>
+            <input type="checkbox" value="argentina">
+            Argentina
+          </label>
+
+          <label>
+            <input type="checkbox" value="australia">
+            Australia
+          </label>
+
+          <label>
+            <input type="checkbox" value="belgica">
+            Belgica
+          </label>
+
+          <label>
+            <input type="checkbox" value="brasil">
+            Brasil
+          </label>
+
+          <label>
+            <input type="checkbox" value="canada">
+            Canada
+          </label>
+
+          <label>
+            <input type="checkbox" value="coreia">
+            Coreia do Sul
+          </label>
+
+          <label>
+            <input type="checkbox" value="croacia">
+            Croacia
+          </label>
+
+          <label>
+            <input type="checkbox" value="egito">
+            Egito
+          </label>
+
+          <label>
+            <input type="checkbox" value="espanha">
+            Espanha
+          </label>
+
+          <label>
+            <input type="checkbox" value="franca">
+            França
+          </label>
+
+          <label>
+            <input type="checkbox" value="Holanda">
+            Holanda
+          </label>
+          
+          <label>
+            <input type="checkbox" value="inglaterra">
+            Inglaterra
+          </label>
+
+          <label>
+            <input type="checkbox" value="japao">
+            Japão
+          </label>
+
+          <label>
+            <input type="checkbox" value="marrocos">
+            Marrocos
+          </label>
+
+          <label>
+            <input type="checkbox" value="mexico">
+            Mexico
+          </label>
+
+          <label>
+            <input type="checkbox" value="portugal">
+            Portugal
+          </label>
+
+          <label>
+            <input type="checkbox" value="uruguai">
+            Uruguai
+          </label>
+
+          <label>
+            <input type="checkbox" value="usa">
+            Usa
+          </label>
+
+        </div>
+
+      </div>
+      
+      <!-- ========================================================
+          FILTRO PREÇO
+      ========================================================= -->
+
+      <div class="filtro-item">
+
+        <button type="button" class="filtro-btn">
+          <span>Preço</span>
+          <span class="arrow">⌄</span>
+        </button>
+
+        <div class="filtro-conteudo" data-tipo="preco">
+
+          <label>
+            <input type="checkbox" value="0-150">
+            Até R$150
+          </label>
+
+          <label>
+            <input type="checkbox" value="150-200">
+            R$150 - R$200
+          </label>
+
+          <label>
+            <input type="checkbox" value="200-300">
+            R$200 - R$300
+          </label>
+
+          <label>
+            <input type="checkbox" value="300+">
+            Acima de R$300
+          </label>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+    <!-- 🔥 PRODUTOS -->
+    <section class="products">
+      <h2>Produtos Femeninos</h2>
+      <div class="grid" id="product-list"></div>
+    </section>
+
+  </div>
+
+</main>
+  
+<!-- 🔥 CARRINHO -->
+<div id="cart" class="cart">
+  <h2>Seu Carrinho</h2>
+
+  <ul id="cart-items"></ul>
+
+  <div class="cart-footer">
+    <p>Total: R$ <span id="total">0.00</span></p>
+
+    <button class="vercart-btn" onclick="VerCarrinho()">
+      Ver Carrinho completo
+    </button>
+
+    <button class="conti-btn" onclick="ContinuarCompra()">
+      continuar Comprando
+    </button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+
+    <div>
+      <h4>Sobre</h4>
+      <ul>
+        <li><a href="#">Quem somos</a></li>
+        <li><a href="#">Carreiras</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Ajuda</h4>
+      <ul>
+        <li><a href="#">Frete</a></li>
+        <li><a href="#">Trocas</a></li>
+        <li><a href="#">Contato</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Redes</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <p>© 2026 VintageSports - Todos os direitos reservados</p>
+</footer>
+
+<script src="/js/produtos_fe.js"></script>
+<script src="/js/modal_produto.js"></script>
+<script src="/js/script.js" defer></script>
+
+
+<div id="custom-confirm" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Remover item?</h3>
+    <p>Tem certeza que deseja remover este item do carrinho?</p>
+
+    <div class="modal-buttons">
+      <button id="confirm-yes" class="btn-confirm">Remover</button>
+      <button id="confirm-no" class="btn-cancel">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="overlay-loading" class="overlay-loading hidden">
+    <div class="spinner"></div>
+</div>
+
+
+</body>
+</html>

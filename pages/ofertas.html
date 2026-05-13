@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/produtos.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/ofertas.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <title>Ofertas VintageSports</title>
+</head>
+<body>
+
+<div id="overlay"></div>
+
+<header>
+  <div class="logo">
+      <img src="/assets/img/logo.png" alt="">
+      <h1>Vintage<span style="color:#f6d221;">Sports</span></h1>
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/pages/masculino.html">Masculino</a></li>
+      <li><a href="/pages/femenino.html">Feminino</a></li>
+      <li><a href="/pages/ofertas.html" class="active">Ofertas</a></li>
+    </ul>
+  </nav>
+
+  <div class="icons">
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar...">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    </div>
+    <button id="cart-btn">
+      <i class="fa-solid fa-bag-shopping"></i>
+      <span id="cart-count">0</span>
+    </button>
+  </div>
+</header>
+
+<section class="promo">
+  <div class="promo-overlay"></div>
+
+  <div class="promo-content">
+    <!-- 1. Use a classe "tag" conforme o CSS -->
+    <span class="tag">Promoção Exclusiva</span>
+
+    <!-- 2. Envolva os emojis em um <span> para o CSS controlar o itálico deles -->
+    <h2>
+      SUA COMPRA PODE TE LEVAR ATÉ O SEU ÍDOLO <span>⚽🔥</span>
+    </h2>
+
+    <p>
+      Em compras acima de R$299, você concorre a uma camisa oficial autografada ou até mesmo à chance de conhecer um jogador do seu time.
+    </p>
+
+    <!-- 3. Use a classe "btn-promo" que estilizamos -->
+    <a href="#promo" class="btn-promo">
+      Participe!
+    </a>
+  </div>
+</section>
+
+
+<section class="products">
+  <h2>Ofertas de Produtos</h2>
+  
+  <!-- LINHA 1 -->
+  <div class="carrossel-container">
+    <!-- Seta Esquerda -->
+    <button class="nav-arrow left" onclick="rolarLinha('linha-1', -320)" aria-label="Anterior">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    
+    <div class="linha-wrapper" id="linha-1">
+        <!-- O JS injetará os cards aqui -->
+    </div>
+
+    <!-- Seta Direita -->
+    <button class="nav-arrow right" onclick="rolarLinha('linha-1', 320)" aria-label="Próximo">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
+
+  <!-- LINHA 2 -->
+  <div class="carrossel-container">
+    <!-- Seta Esquerda -->
+    <button class="nav-arrow left" onclick="rolarLinha('linha-2', -320)" aria-label="Anterior">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    
+    <div class="linha-wrapper" id="linha-2">
+        <!-- O JS injetará os cards aqui -->
+    </div>
+
+    <!-- Seta Direita -->
+    <button class="nav-arrow right" onclick="rolarLinha('linha-2', 320)" aria-label="Próximo">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
+</section>
+
+<section id="promo" class="secao-promo full-section">
+
+  <div class="section-container">
+
+    <span class="tag-promo">Sua chance de ouro</span>
+
+    <h2>COMO GARANTIR SUA EXPERIÊNCIA?</h2>
+
+    <p class="subtitulo-promo">
+      Transforme sua compra em uma memória inesquecível.
+      Siga os passos e entre no jogo.
+    </p>
+
+    <div class="cards-promo">
+
+      <!-- PASSO 1 -->
+      <div class="card card-1">
+        <div class="step-number">01</div>
+        <h3>ESCOLHA SEU MANTO</h3>
+        <p>
+          Selecione a camisa do seu time do coração
+          e adicione ao carrinho.
+        </p>
+      </div>
+
+      <!-- PASSO 2 -->
+      <div class="card card-2">
+        <div class="step-number">02</div>
+        <h3>ALCANCE O OBJETIVO</h3>
+        <p>
+          Ao atingir <strong>R$ 299</strong> em compras,
+          sua participação é confirmada na hora.
+        </p>
+      </div>
+
+      <!-- PASSO 3 -->
+      <div class="card card-3">
+        <div class="step-number">03</div>
+        <h3>CONCORRA AO ÉPICO</h3>
+        <p>
+          Ganhe o manto autografado ou a chance única
+          de conhecer um jogador do time escolhido.
+        </p>
+      </div>
+
+    </div>
+
+    <h2 class="titulo-produtos">
+      ESCOLHA O SEU TIME E PARTICIPE
+    </h2>
+
+    <p class="subtitulo-promo">
+      produtos participantes:
+    </p>
+
+    <div class="produtos">
+      <!-- cards -->
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- 🔥 CARRINHO -->
+<div id="cart" class="cart">
+  <h2>Seu Carrinho</h2>
+
+  <ul id="cart-items"></ul>
+
+  <div class="cart-footer">
+    <p>Total: R$ <span id="total">0.00</span></p>
+
+    <button class="vercart-btn" onclick="VerCarrinho()">
+      Ver carrinho completo
+    </button>
+
+    <button class="conti-btn" onclick="ContinuarCompra()">
+      Continuar Comprando
+    </button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid animar">
+
+    <div>
+      <h4>Sobre</h4>
+      <ul>
+        <li><a href="#">Quem somos</a></li>
+        <li><a href="#">Carreiras</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Ajuda</h4>
+      <ul>
+        <li><a href="#">Frete</a></li>
+        <li><a href="#">Trocas</a></li>
+        <li><a href="#">Contato</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4>Redes</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <p>© 2026 VintageSports - Todos os direitos reservados</p>
+</footer>
+
+<script src="/js/produtos_ofertas.js"></script>
+<script src="/js/modal_produto.js"></script>
+<script src="/js/script.js" defer></script>
+
+<div id="custom-confirm" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Remover item?</h3>
+    <p>Tem certeza que deseja remover este item do carrinho?</p>
+
+    <div class="modal-buttons">
+      <button id="confirm-yes" class="btn-confirm">Remover</button>
+      <button id="confirm-no" class="btn-cancel">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="overlay-loading" class="overlay-loading hidden">
+    <div class="spinner"></div>
+</div>
+
+
+</body>
+</html>

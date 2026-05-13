@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="../css/produtos.css">
+  <link rel="stylesheet" href="../css/footer.css">
+  <link rel="stylesheet" href="../css/checkout.css">
+  <!-- Ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <title>Checkout - VintageSports</title>
+</head>
+
+<body>
+
+<header class="checkout-header">
+  <div class="nav-left">
+    <img class="logo" src="../assets/img/logo.png" alt="Logo VintageSports">
+    <h1>Vintage<span>Sports</span></h1>
+  </div>
+
+  <div class="nav-right">
+    <a href="#" onclick="history.back()" class="back-link">Voltar</a>
+    <a href="#" class="help">Ajuda</a>
+  </div>
+</header>
+
+<!-- Barra de Progresso Estilo Nike -->
+<div class="steps-container">
+  <div class="step active">
+    <span class="number">1</span> Carrinho
+  </div>
+  <div class="step">
+    <span class="number">2</span> Identificação
+  </div>
+  <div class="step">
+    <span class="number">3</span> Pagamento
+  </div>
+</div>
+
+
+<div id="checkout-content">
+
+  <div class="alert" id="estoque-alert">
+    <p>Os produtos no carrinho não estão reservados. Finalize seu pedido antes que o estoque acabe.</p>
+    <button class="close-alert" onclick="fecharAlerta()">×</button>
+  </div>
+
+
+
+  <div class="container">
+
+    <!-- ESQUERDA: LISTA DE PRODUTOS -->
+    <div class="left">
+      <h3 class="section-title">Produtos</h3>
+      <div id="cart-items"></div>
+    </div>
+
+    <!-- DIREITA: PAGAMENTO E RESUMO -->
+    <div class="right">
+
+      <!-- SEÇÃO FRETE -->
+      <div class="box shipping-section">
+        <h3 class="section-title">Prazo de entrega</h3>
+        <div class="input-group">
+          <input
+            type="text"
+            id="cep-input"
+            placeholder="00000-000"
+            maxlength="9"
+            inputmode="numeric"
+            oninput="mascaraCEP(this)"
+          >
+          <button onclick="calcularFrete(event)">Calcular</button>
+        </div>
+
+        <div class="cep-acoes">
+          <div id="mensagem-cep"></div>
+          <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" target="_blank" class="find-zip-link">
+            Não sei o meu CEP
+          </a>
+        </div>
+              <!-- Abaixo do link "Não sei meu CEP" -->
+        <div id="resultado-frete" class="frete-card" style="display: none;"></div>
+
+      </div>
+
+      <!-- SEÇÃO CUPOM -->
+      <div class="box">
+        <h3 class="section-title">Cupom de desconto</h3>
+        <div class="input-group">
+          <input type="text" id="cupom" oninput="monitorarCupom(this)" placeholder="Digite seu cupom">
+          <button class="btn-secondary" onclick="aplicarCupom()">Aplicar</button>
+        </div>
+      <!-- Elemento que receberá as mensagens -->
+        <div id="mensagem-cupom" class="cupom-status"></div>
+      </div>
+
+
+      <!-- RESUMO DE VALORES -->
+      <div class="box resumo">
+        <h3 class="section-title">Resumo</h3>
+
+        <div class="summary-row">
+          <span>Valor dos produtos</span>
+          <span>R$ <span id="subtotal">0.00</span></span>
+        </div>
+
+        <div class="summary-row">
+          <span>Desconto cupom</span>
+          <span>- R$ <span id="desconto">0.00</span></span>
+        </div>
+
+        <div class="summary-row">
+          <span>Frete</span>
+          <span>R$ <span id="frete">0.00</span></span>
+        </div>
+
+        <div class="total-section">
+          <span class="total-price">Total: R$ <span id="total">0.00</span></span>
+          <span class="total-subtitle">Ou em até 10x sem juros</span>
+        </div>
+
+        <button class="btn-primary finalizar">Continuar</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- Mensagem de Carrinho Vazio -->
+<div id="carrinho-vazio" class="checkout-vazio-container hidden">
+    <h1>Seu carrinho está vazio</h1>
+    <p>Navegue pelas categorias da loja ou faça uma busca pelo seu produto.</p>
+    <a href="../index.html" class="btn-voltar">Voltar para o site</a>
+</div>
+
+
+<!-- FOOTER -->
+
+
+<div id="custom-confirm" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Remover item?</h3>
+    <p>Tem certeza que deseja remover este item do carrinho?</p>
+    <div class="modal-buttons">
+      <button id="confirm-yes" class="btn-confirm">Remover</button>
+      <button id="confirm-no" class="btn-cancel">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Alerta de CEP/Cupom -->
+<div id="custom-alert" class="modal-overlay">
+  <div class="modal-content">
+    <i class="fa-solid fa-circle-exclamation" style="font-size: 40px; color: #ff0000; margin-bottom: 15px;"></i>
+    <h3>Ops! Algo deu errado</h3>
+    <p id="alert-message">Por favor, digite um CEP válido.</p>
+    <div class="modal-buttons">
+      <button onclick="fecharModalAlerta()" class="btn-confirm">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notificação Estilo Nike (Toast) -->
+<div id="toast-container" class="toast-container">
+  <div id="toast-success" class="nike-toast">
+    <span id="toast-message">Cupom aplicado com sucesso!</span>
+    <button class="toast-close" onclick="hideToast()">✕</button>
+    <div class="toast-progress"></div>
+  </div>
+</div>
+
+
+
+<script src="../js/checkout.js"></script>
+
+</body>
+</html>

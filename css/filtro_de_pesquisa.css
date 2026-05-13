@@ -1,0 +1,303 @@
+/* =============================================================
+   SHOP CONTAINER
+============================================================= */
+
+.shop-container {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 45px;
+
+  padding:
+    110px 40px 40px;
+}
+
+/* =============================================================
+   SIDEBAR FILTROS
+============================================================= */
+
+/* =============================================================
+   FILTROS
+============================================================= */
+
+.filters {
+  width: 260px;
+
+  min-width: 260px;
+
+  position: sticky;
+
+  top: 110px;
+
+  align-self: flex-start;
+
+  height: fit-content;
+
+  background: transparent;
+}
+
+/* =============================================================
+   ITEM FILTRO
+============================================================= */
+
+.filtro-item {
+  border-bottom: 1px solid #ececec;
+
+  padding: 18px 0;
+}
+
+/* =============================================================
+   BOTÃO FILTRO
+============================================================= */
+
+.filtro-btn {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: none;
+
+  border: none;
+
+  padding: 0;
+
+  cursor: pointer;
+
+  text-align: left;
+
+  color: #111;
+
+  font-size: 1rem;
+  font-weight: 600;
+
+  transition: opacity 0.2s ease;
+}
+
+/* Hover */
+
+.filtro-btn:hover {
+  opacity: 0.7;
+}
+
+/* =============================================================
+   SETA
+============================================================= */
+
+.arrow {
+  font-size: 0.9rem;
+
+  transition: transform 0.3s ease;
+}
+
+/* Rotação */
+
+.filtro-btn.active .arrow {
+  transform: rotate(180deg);
+}
+
+/* =============================================================
+   CONTEÚDO FILTRO
+============================================================= */
+
+.filtro-conteudo {
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+
+  max-height: 0;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  padding-top: 0;
+
+  transition:
+    max-height 0.35s ease,
+    opacity 0.25s ease,
+    padding 0.3s ease;
+}
+
+/* Aberto */
+
+.filtro-conteudo.active {
+
+  max-height: 240px;
+
+  overflow-y: auto;
+
+  opacity: 1;
+
+  padding-top: 18px;
+}
+
+/* =============================================================
+   SCROLLBAR MODERNA
+============================================================= */
+
+.filtro-conteudo::-webkit-scrollbar {
+  width: 5px;
+}
+
+.filtro-conteudo::-webkit-scrollbar-thumb {
+  background: #d6d6d6;
+
+  border-radius: 20px;
+}
+
+.filtro-conteudo::-webkit-scrollbar-thumb:hover {
+  background: #bcbcbc;
+}
+
+/* =============================================================
+   LABEL
+============================================================= */
+
+.filtro-conteudo label {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  cursor: pointer;
+
+  color: #222;
+
+  font-size: 0.95rem;
+  font-weight: 400;
+
+  transition: color 0.2s ease;
+}
+
+/* Hover */
+
+.filtro-conteudo label:hover {
+  color: black;
+}
+
+/* =============================================================
+   CHECKBOX MODERNO
+============================================================= */
+
+.filtro-conteudo input[type="checkbox"] {
+
+  appearance: none;
+
+  width: 18px;
+  height: 18px;
+
+  min-width: 18px;
+
+  border: 1.5px solid #bdbdbd;
+
+  border-radius: 4px;
+
+  background: white;
+
+  cursor: pointer;
+
+  position: relative;
+
+  transition: 0.2s ease;
+}
+
+/* Hover */
+
+.filtro-conteudo input[type="checkbox"]:hover {
+  border-color: #111;
+}
+
+/* Marcado */
+
+.filtro-conteudo input[type="checkbox"]:checked {
+
+  background: #111;
+
+  border-color: #111;
+}
+
+/* Check */
+
+.filtro-conteudo input[type="checkbox"]:checked::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 5px;
+  top: 2px;
+
+  width: 4px;
+  height: 8px;
+
+  border: solid white;
+
+  border-width: 0 2px 2px 0;
+
+  transform: rotate(45deg);
+}
+
+/* =============================================================
+   CONTADOR
+============================================================= */
+
+.filtro-conteudo label span {
+
+  margin-left: auto;
+
+  color: #999;
+
+  font-size: 0.85rem;
+}
+
+/* =============================================================
+   MOBILE
+============================================================= */
+
+@media (max-width: 1024px) {
+
+  .shop-container {
+    flex-direction: column;
+
+    gap: 30px;
+
+    padding:
+      100px 25px 35px;
+  }
+
+  .filters {
+    width: 100%;
+
+    min-width: 100%;
+
+    position: static;
+  }
+}
+
+/* =============================================================
+   MOBILE PEQUENO
+============================================================= */
+
+@media (max-width: 600px) {
+
+  .shop-container {
+    padding:
+      90px 16px 25px;
+  }
+
+  .filters {
+    width: 100%;
+  }
+
+  .filtro-btn {
+    font-size: 0.95rem;
+  }
+
+  .filtro-conteudo label {
+    font-size: 0.9rem;
+  }
+}
