@@ -418,9 +418,11 @@
   <p>© 2026 VintageSports - Todos os direitos reservados</p>
 </footer>
 
+
 <script src="/js/carrossel.js" defer></script>
 <script src="/js/produtos.js"></script>
 <script src="/js/script.js" defer></script>
+<script src="/js/pag_produtos.js" defer></script>
 
 <div id="custom-confirm" class="modal-overlay">
   <div class="modal-content">
@@ -436,22 +438,36 @@
 
 </div>
 
+<div id="cart-overlay" class="cart-overlay hidden"></div>
+
 <div id="cart-notification" class="cart-notification hidden">
 
     <div class="cart-box">
 
-        <div class="cart-info">
+        <!-- 🔥 LADO ESQUERDO: IMAGEM + INFO -->
+        <div class="cart-left">
 
-            <h3 id="cart-title">Produto</h3>
+            <img id="cart-image" class="cart-image" src="" alt="Produto">
 
-            <p id="cart-desc">Descrição do produto</p>
+            <div class="cart-info">
+
+                <h3 id="cart-title">Produto</h3>
+
+                <p id="cart-desc">Descrição do produto</p>
+
+            </div>
 
         </div>
 
+        <!-- 🔥 LADO DIREITO: BOTÕES -->
         <div class="cart-buttons">
 
             <button class="btn-add" onclick="confirmarCarrinho()">
                 Adicionar
+            </button>
+
+            <button class="btn-view" onclick="verProdutoCompleto()">
+                Ver produto
             </button>
 
             <button class="btn-later" onclick="verDepois()">
@@ -468,9 +484,11 @@
 
 </div>
 
-<div id="toast-added" class="toast-added hidden">
-    Produto adicionado ao carrinho ✓
+<div id="overlay-loading" class="overlay-loading hidden">
+    <div class="spinner"></div>
 </div>
+
+
 
 </body>
 </html>

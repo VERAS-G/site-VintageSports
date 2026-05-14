@@ -1,4 +1,4 @@
-/* ==========================================================================
+    /* ==========================================================================
    VARIÁVEIS GLOBAIS E FUNÇÃO MESTRA
    ========================================================================== */
 
@@ -75,25 +75,18 @@ function criarHTMLCard(produto) {
 
             <div class="buttons">
 
-                <!-- 🔥 AGORA ABRE O CARRINHO -->
                 <button
                     class="btn-adicionar"
-                    onclick="abrirCarrinho({
-                        nome: '${produto.nome}',
-                        preco: ${produto.preco},
-                        imagem: '${produto.imagem}'
-                    })">
+                    onclick='abrirCarrinho(${JSON.stringify(produto)})'>
 
                     🛒 Adicionar
-
                 </button>
 
                 <button
                     class="buy-btn"
-                    onclick="comprarProduto(this, '${produto.nome}')">
+                    onclick='comprarProduto(${JSON.stringify(produto)}, this)'>
 
                     Comprar
-
                 </button>
 
             </div>
@@ -102,32 +95,27 @@ function criarHTMLCard(produto) {
     `;
 }
 
-function comprarProduto(btn, nomeProduto) {
+function comprarProduto(produto, btn) {
 
     const overlay = document.getElementById("overlay-loading");
 
-    // segurança: evita quebra do sistema
-    if (!overlay) {
-        console.error("Elemento #overlay-loading não encontrado no HTML");
-        abrirProduto(nomeProduto);
+    if (!produto || !produto.nome) {
+        console.error("Produto inválido:", produto);
         return;
     }
 
-    btn.disabled = true;
+    if (btn) btn.disabled = true;
 
-    overlay.classList.remove("hidden");
+    if (overlay) {
+        overlay.classList.remove("hidden");
+    }
 
     setTimeout(() => {
 
-        setTimeout(() => {
-
-            overlay.classList.add("hidden");
-
-            btn.disabled = false;
-
-            abrirProduto(nomeProduto);
-
-        }, 400);
+        window.location.href =
+            `pages/pag_produtos.html?nome=${encodeURIComponent(produto.nome)}` +
+            `&preco=${encodeURIComponent(produto.preco)}` +
+            `&img=${encodeURIComponent(produto.imagem)}`;
 
     }, 1500);
 }
@@ -1017,27 +1005,63 @@ startAutoSlide();
 
 let produtoSelecionado = null;
 
+document.addEventListener("DOMContentLoaded", () => {
+
+    const overlay = document.getElementById("cart-overlay");
+
+    if (overlay) {
+        overlay.addEventListener("click", fecharCarrinho);
+    }
+
+});
+
 function abrirCarrinho(produto) {
 
     const modal = document.getElementById("cart-notification");
+    const overlay = document.getElementById("cart-overlay");
+
+    const title = document.getElementById("cart-title");
+    const desc = document.getElementById("cart-desc");
+    const image = document.getElementById("cart-image");
+
     if (!modal || !produto) return;
 
     produtoSelecionado = produto;
 
-    document.getElementById("cart-title").innerText = produto.nome;
+    if (title) {
+        title.innerText = produto.nome || "Produto";
+    }
 
-    document.getElementById("cart-desc").innerText =
-        `Preço: R$ ${Number(produto.preco).toFixed(2).replace(".", ",")}`;
+    if (desc) {
+        desc.innerText = `Preço: R$ ${Number(produto.preco || 0)
+            .toFixed(2)
+            .replace(".", ",")}`;
+    }
+
+    if (image) {
+        image.src = produto.imagem || "";
+        image.alt = produto.nome || "Produto";
+    }
 
     modal.classList.remove("hidden");
+
+    if (overlay) {
+        overlay.classList.remove("hidden");
+    }
 }
 
 function fecharCarrinho() {
 
     const modal = document.getElementById("cart-notification");
-    if (!modal) return;
+    const overlay = document.getElementById("cart-overlay");
 
-    modal.classList.add("hidden");
+    if (modal) {
+        modal.classList.add("hidden");
+    }
+
+    if (overlay) {
+        overlay.classList.add("hidden");
+    }
 
     setTimeout(() => {
         produtoSelecionado = null;
@@ -1087,6 +1111,38 @@ function confirmarCarrinho(abrirImediato = false) {
     }
 
     fecharCarrinho();
+}
+
+function verProdutoCompleto() {
+
+    if (!produtoSelecionado) return;
+
+    const produto = produtoSelecionado;
+
+    const modal = document.getElementById("cart-notification");
+
+    // 🔥 some com a notificação primeiro
+    if (modal) {
+        modal.classList.add("hidden");
+    }
+
+    // 🔥 pega o loading que você já usa
+    const overlay = document.getElementById("overlay-loading") 
+                  || document.getElementById("page-loading");
+
+    if (overlay) {
+        overlay.classList.remove("hidden");
+    }
+
+    // 🔥 pequena pausa pra animação acontecer
+    setTimeout(() => {
+
+        window.location.href =
+            `pages/pag_produtos.html?nome=${encodeURIComponent(produto.nome)}` +
+            `&preco=${encodeURIComponent(produto.preco)}` +
+            `&img=${encodeURIComponent(produto.imagem)}`;
+
+    }, 500);
 }
 
 function verDepois() {

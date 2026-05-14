@@ -562,6 +562,7 @@ main {
         opacity: 1;
     }
 }
+
 .cart-notification {
     position: fixed;
     top: 55%;
@@ -572,43 +573,72 @@ main {
     display: flex;
     justify-content: center;
 
-    /* estado inicial (fechado) */
     opacity: 0;
     transform: translateY(40px);
-
     pointer-events: none;
 
     transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
-/* estado aberto */
 .cart-notification:not(.hidden) {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
 }
 
+.hidden {
+    opacity: 0;
+    transform: translateY(40px);
+    pointer-events: none;
+}
+
+/* CONTAINER PRINCIPAL */
 .cart-box {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1100px;
 
     background: rgba(255,255,255,0.98);
     backdrop-filter: blur(10px);
 
-    padding: 16px 24px;
+    padding: 14px 20px;
 
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
+
+    gap: 20px;
 }
 
-/* INFO */
+/* 🔥 ESQUERDA: imagem + info juntos */
+.cart-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 250px;
+}
+
+/* imagem */
+.cart-image {
+    width: 75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* info */
+.cart-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .cart-info h3 {
     margin: 0;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
 }
 
@@ -618,13 +648,15 @@ main {
     color: #666;
 }
 
-/* BOTÕES */
+/* 🔥 DIREITA: botões bem alinhados */
 .cart-buttons {
     display: flex;
     gap: 10px;
     align-items: center;
+    flex-shrink: 0;
 }
 
+/* botões padrão */
 .cart-buttons button {
     border: none;
     padding: 10px 14px;
@@ -632,6 +664,7 @@ main {
     cursor: pointer;
     border-radius: 6px;
     transition: 0.2s;
+    white-space: nowrap;
 }
 
 /* principal */
@@ -642,6 +675,16 @@ main {
 
 .btn-add:hover {
     opacity: 0.85;
+}
+
+/* ver produto */
+.btn-view {
+    background: #e8f5e9;
+    color: #1b5e20;
+}
+
+.btn-view:hover {
+    background: #d7edd9;
 }
 
 /* secundário */
@@ -660,20 +703,14 @@ main {
     padding: 6px 10px;
 }
 
-/* hidden não “mata” animação mais */
-.hidden {
-    opacity: 0;
-    transform: translateY(40px);
-    pointer-events: none;
-}
-
+/* TOAST */
 .toast-added {
     position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%) translateY(-10px);
 
-    background: rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.9);
     color: white;
 
     padding: 10px 16px;
@@ -691,4 +728,26 @@ main {
 .toast-added.show {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+}
+
+.cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    z-index: 99998;
+
+    opacity: 0;
+    transition: 0.3s ease;
+    pointer-events: none;
+}
+
+.cart-overlay:not(.hidden) {
+    opacity: 1;
+    pointer-events: auto;
 }
