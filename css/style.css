@@ -751,3 +751,24 @@ main {
     opacity: 1;
     pointer-events: auto;
 }
+
+.cart-empty{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:40px 20px;
+    color:#999;
+}
+
+.cart-empty i{
+    font-size:40px;
+    margin-bottom:15px;
+    opacity:.7;
+}
+
+.cart-empty p{
+    font-size:15px;
+    font-weight:500;
+}

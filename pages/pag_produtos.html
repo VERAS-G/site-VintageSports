@@ -7,20 +7,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- CSS -->
+    <!-- CSS -->
     <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/produtos.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/pag_produtos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
 
     <!-- ICONS -->
     <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 
-    <title>Carregando Produto...</title>
+    <title>Produtos VintageSports</title>
 
 </head>
 
-<body>
+<body class="internal-page">
 
 <!-- =========================================================
 HEADER
@@ -40,7 +45,7 @@ HEADER
     <nav>
         <ul>
             <li><a href="/index.html">Home</a></li>
-            <li><a href="/pages/masculino.html" class="active">Masculino</a></li>
+            <li><a href="/pages/masculino.html">Masculino</a></li>
             <li><a href="/pages/femenino.html">Feminino</a></li>
             <li><a href="/pages/ofertas.html">Ofertas</a></li>
         </ul>
@@ -224,12 +229,46 @@ FOOTER
 
 </footer>
 
-<!-- =========================================================
-SCRIPTS
-========================================================= -->
+<div id="custom-confirm" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Remover item?</h3>
+    <p>Tem certeza que deseja remover este item do carrinho?</p>
 
-<script src="/js/produtos.js" defer></script>
+    <div class="modal-buttons">
+      <button id="confirm-yes" class="btn-confirm">Remover</button>
+      <button id="confirm-no" class="btn-cancel">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- 🔥 CAMADA DE FUNDO ESCURO (Obrigatória para o fechamento do carrinho funcionar) -->
+<div id="overlay"></div>
+
+<!-- 🔥 CARRINHO -->
+<div id="cart" class="cart">
+  <h2>Seu Carrinho</h2>
+
+  <!-- Lista onde os itens do carrinho serão renderizados dinamicamente -->
+  <ul id="cart-items"></ul>
+
+  <div class="cart-footer">
+    <p>Total: R$ <span id="total">0.00</span></p>
+
+    <button class="vercart-btn" onclick="VerCarrinho()">
+      Ver Carrinho completo
+    </button>
+
+    <!-- Ajustado: onclick chama a função global closeCart() para fechar a aba lateral -->
+    <button class="conti-btn" onclick="closeCart()">
+      Continuar Comprando
+    </button>
+  </div>
+</div>
+
+<script src="/js/script.js" defer></script>
+<script src="/js/produtos.js"></script>
 <script src="/js/pag_produtos.js" defer></script>
+
 
 </body>
 </html>

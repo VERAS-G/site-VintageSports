@@ -50,7 +50,8 @@ header {
   top: 0;
   left: 0;
 
-  z-index: 1000;
+  /* Alterado de 1000 para 99999 para furar qualquer bloqueio da pag_produtos */
+  z-index: 99999 !important; 
 
   background: rgba(0, 0, 0, 0.08);
 
@@ -65,6 +66,7 @@ header {
 
   border-bottom: 1px solid rgba(255,255,255,0.03);
 }
+
 
 /* =============================================================
    HEADER AO ROLAR
@@ -253,24 +255,51 @@ nav a.active::after {
 }
 
 /* =============================================================
-   BOTÕES / ÍCONES
+   BOTÕES / ÍCONES (AJUSTADO E BLINDADO)
 ============================================================= */
 
 .search-icon,
 #cart-btn {
-  background: none;
+  background: transparent !important;
 
-  border: none;
+  border: none !important;
 
   color: white;
 
-  font-size: 18px;
+  font-size: 20px; /* Tamanho ajustado para melhor clique */
 
   cursor: pointer;
+
+  display: inline-flex; /* Garante alinhamento perfeito do Font Awesome */
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
 
   transition:
     transform 0.2s ease,
     color 0.2s ease;
+}
+
+/* Força os ícones internos do Font Awesome a herdarem as propriedades corretas */
+.search-icon i,
+#cart-btn i {
+  font-size: 20px !important;
+  color: inherit !important;
+  display: inline-block;
+}
+
+/* Estilização para o contador de itens do carrinho se mantiver no lugar */
+#cart-count {
+  font-size: 12px;
+  background: #f6d221;
+  color: #111;
+  padding: 2px 6px;
+  border-radius: 50%;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-weight: 700;
 }
 
 /* Hover */
@@ -281,6 +310,7 @@ nav a.active::after {
 
   transform: translateY(-2px);
 }
+
 
 /* =============================================================
    RESPONSIVIDADE
@@ -379,7 +409,7 @@ nav a.active::after {
 
 body.internal-page header {
 
-  background: rgba(8, 8, 8, 0.45);
+  background: rgb(8, 8, 8);
 
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);

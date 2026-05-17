@@ -9,6 +9,15 @@ main {
     width: 100%;
 }
 
+/* Forçar a barra a aparecer escura no fundo branco da página de produto */
+header {
+  background: rgba(8, 8, 8, 0.95) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+
 /* =============================================================
    LAYOUT PRINCIPAL
 ============================================================= */
@@ -16,22 +25,20 @@ main {
 .produto-page {
 
     width: 100%;
-
-    max-width: 1600px;
+    max-width: 1400px;
 
     margin: 0 auto;
 
-    padding: 140px 40px 80px;
+    padding: 120px 30px 60px;
 
     display: flex;
 
-    gap: 80px;
+    gap: 50px;
 
     align-items: flex-start;
 
     justify-content: center;
 }
-
 /* =============================================================
    LADO ESQUERDO
 ============================================================= */
@@ -55,7 +62,7 @@ main {
 
     border-radius: 24px;
 
-    padding: 40px;
+    padding: 25px;
 
     display: flex;
 
@@ -68,7 +75,7 @@ main {
 
     width: 100%;
 
-    max-width: 700px;
+    max-width: 520px;
 
     object-fit: contain;
 
@@ -86,9 +93,9 @@ main {
 
 .produto-direita {
 
-    flex: 1;
+    flex: 0.9;
 
-    max-width: 550px;
+    max-width: 480px;
 
     display: flex;
 
@@ -120,13 +127,13 @@ main {
 
 #produto-titulo {
 
-    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-size: clamp(1.8rem, 3vw, 3rem);
 
-    line-height: 1;
+    line-height: 1.05;
 
     font-weight: 900;
 
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 
     color: #111;
 }
@@ -171,7 +178,7 @@ main {
 
 #produto-preco {
 
-    font-size: 2.2rem;
+    font-size: 1.9rem;
 
     font-weight: 800;
 
@@ -198,9 +205,9 @@ main {
 
 .produto-descricao p {
 
-    font-size: 1rem;
+    font-size: 0.95rem;
 
-    line-height: 1.7;
+    line-height: 1.6;
 
     color: #555;
 }
@@ -304,13 +311,13 @@ main {
 
 .produto-botoes button {
 
-    height: 60px;
+    height: 56px;
 
     border: none;
 
     border-radius: 50px;
 
-    font-size: 1rem;
+    font-size: 0.95rem;
 
     font-weight: 700;
 
@@ -348,9 +355,8 @@ main {
 
 .btn-comprar:hover {
 
-    background: #000;
+    background: #5c5c5c;
 
-    transform: translateY(-2px);
 }
 
 /* =============================================================
@@ -457,4 +463,75 @@ main {
 
         font-size: 0.95rem;
     }
+}
+
+/* ==========================================================
+   TAMANHO SELECIONADO
+========================================================== */
+
+.tamanhos-grid button.active {
+
+    background: #f6d221;
+
+    color: #000;
+
+    border-color: #f6d221;
+
+    transform: scale(1.05);
+}
+
+/* ==========================================================
+   PREÇO PROMOCIONAL
+========================================================== */
+
+.preco-antigo {
+
+    color: #8f8f8f;
+
+    text-decoration: line-through;
+
+    font-size: 1.1rem;
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
+}
+
+.preco-promocional {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+/* PREÇO ATUAL */
+
+.valor-atual {
+
+    color: #111;
+
+    font-size: 3rem;
+
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+/* DESCONTO */
+
+.desconto-percentual {
+
+    color: #16a34a;
+
+    font-size: 0.95rem;
+
+    font-weight: 800;
+
+    background: rgba(22, 163, 74, 0.12);
+
+    padding: 6px 12px;
+
+    border-radius: 999px;
 }

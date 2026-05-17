@@ -3,22 +3,23 @@
    ========================================================================== */
 
 // Função auxiliar padronizada
-function criarCamisaFem(nome, preco, pasta, foto, time, isPromo = false) {
+function criarCamisaFem(nome, preco, pasta, foto, time, pais, isPromo = false) {
   return {
     nome: nome,
     preco: preco,
     imagem: `/assets/img/${pasta}/${foto}`,
     time: time,
+    pais: pais,
     isPromo: isPromo
   };
 }
 
 // Lista de produtos femininos
 const produtosFemininos = [
-  criarCamisaFem("Camisa Feminina Bayern 1989", 299.90, "ALEMANHA", "BAYERN MUNICH 1989 1990.jpg", "bayern", true),
-  criarCamisaFem("Camisa Feminina Boca Juniors 1990", 199.90, "ARGENTINA", "Camisa Boca juniors 1 Retro 1990  1991.webp", "boca", true),
-  criarCamisaFem("Camisa Feminina Manchester Utd 90", 249.90, "INGLATERRA", "Camisa Manchester United Away Azul 1990-92 Masculina.webp", "manchester", true),
-  criarCamisaFem("Camisa Feminina Atlético Madrid 89", 249.90, "ESPANHA", "CAMISA ATLETICO DE MADRI 1989-1990.jpg", "atletico", true)
+  criarCamisaFem("Camisa Feminina Bayern 1989", 299.90, "ALEMANHA", "BAYERN MUNICH 1989 1990.jpg", "bayern","alemanha", true),
+  criarCamisaFem("Camisa Feminina Boca Juniors 1990", 199.90, "ARGENTINA", "Camisa Boca juniors 1 Retro 1990  1991.webp", "boca","argentina", true),
+  criarCamisaFem("Camisa Feminina Manchester Utd 90", 249.90, "INGLATERRA", "Camisa Manchester United Away Azul 1990-92 Masculina.webp", "manchester","inglaterra", true),
+  criarCamisaFem("Camisa Feminina Atlético Madrid 89", 249.90, "ESPANHA", "CAMISA ATLETICO DE MADRI 1989-1990.jpg", "atletico","espanha", true)
 ];
 
 /* ==========================================================================
