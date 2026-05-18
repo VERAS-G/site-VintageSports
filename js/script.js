@@ -10,17 +10,38 @@
             JSON.stringify(produto)
         );
 
-        const overlay =
-            document.getElementById("overlay-loading");
+        const atual = window.location.pathname;
+        const overlay = document.getElementById("overlay-loading");
 
+        // mostra loading
         if (overlay) {
             overlay.classList.remove("hidden");
         }
 
         setTimeout(() => {
 
-            window.location.href =
-                "/pages/pag_produtos.html";
+            try {
+
+                // 🔥 se NÃO estiver na página de produto → redireciona
+                if (!atual.includes("pag_produtos.html")) {
+
+                    window.location.href = "/pages/pag_produtos.html";
+                    return;
+                }
+
+                // 🔥 se já estiver na página → atualiza produto
+                if (typeof carregarProduto === "function") {
+                    carregarProduto();
+                }
+
+            } catch (erro) {
+                console.error("Erro ao carregar produto:", erro);
+            }
+
+            // 🔥 SEMPRE esconde o loading (independente de erro)
+            if (overlay) {
+                overlay.classList.add("hidden");
+            }
 
         }, 700);
     }
@@ -178,33 +199,40 @@
     }
     let overlay, cartPanel;
 
-    // --- FUNÇÕES COMPLEMENTARES DO CARRINHO (Ajustadas para evitar erros) ---
+        // --- FUNÇÕES COMPLEMENTARES DO CARRINHO (AJUSTADAS) ---
     function openCart() {
-        overlay = document.getElementById("overlay");
-        cartPanel = document.getElementById("cart");
-        if (cartPanel && overlay) {
-            cartPanel.classList.add("active");
-            overlay.classList.add("active");
-        }
+        if (!cartPanel || !overlay) return;
+
+        // Apenas adiciona a classe que congela o scroll do body
+        document.body.classList.add("no-scroll");
+
+        // Ativa o painel e o fundo escuro
+        cartPanel.classList.add("active");
+        overlay.classList.add("active");
     }
 
     function closeCart() {
-        overlay = document.getElementById("overlay");
-        cartPanel = document.getElementById("cart");
-        if (cartPanel && overlay) {
-            cartPanel.classList.remove("active");
-            overlay.classList.remove("active");
-        }
+        if (!cartPanel || !overlay) return;
+
+        // Remove as classes de ativação para iniciar a animação de saída
+        cartPanel.classList.remove("active");
+        overlay.classList.remove("active");
+
+        // Espera o tempo da animação acabar (ex: 300ms) para descongelar o scroll da página
+        setTimeout(() => {
+            document.body.classList.remove("no-scroll");
+        }, 300); // Esse tempo deve ser o mesmo do transition no CSS abaixo
     }
 
-    function updateCart() {
-        const cartCountElement = document.getElementById("cart-count");
-        if (cartCountElement) {
-            // Calcula o total de itens no carrinho
-            const totalItems = cart.reduce((total, item) => total + (item.quantity || 1), 0);
-            cartCountElement.innerText = totalItems;
+
+        function updateCart() {
+            const cartCountElement = document.getElementById("cart-count");
+            if (cartCountElement) {
+                // Calcula o total de itens no carrinho
+                const totalItems = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+                cartCountElement.innerText = totalItems;
+            }
         }
-    }
 
     // --- CONTROLE DE INTERAÇÕES (DOM carregado) ---
     document.addEventListener("DOMContentLoaded", () => {
@@ -289,35 +317,6 @@
         };
     });
 
-    /* ==========================================================================
-    FUNÇÕES DO CARRINHO
-    ========================================================================== */
-
-    function openCart() {
-
-        if (!cartPanel || !overlay) return;
-
-        /* trava scroll */
-        document.body.classList.add("no-scroll");
-
-        /* abre carrinho */
-        cartPanel.classList.add("active");
-        overlay.classList.add("active");
-    }
-
-    /* ========================================================================== */
-
-    function closeCart() {
-
-        if (!cartPanel || !overlay) return;
-
-        /* libera scroll */
-        document.body.classList.remove("no-scroll");
-
-        /* fecha carrinho */
-        cartPanel.classList.remove("active");
-        overlay.classList.remove("active");
-    }
 
     function addToCart(name, price, image, btn, abrirImediato = false) {
         // 1. LÓGICA DO CARRINHO (Garante que o array exista)
@@ -1339,10 +1338,7 @@
         }
 
         setTimeout(() => {
-
-            window.location.href =
-                "/pages/pag_produtos.html";
-
+            window.location.href = "/pages/pag_produtos.html";
         }, 700);
     }
 
@@ -1350,3 +1346,25 @@
         if (!produtoSelecionado) return;
         fecharCarrinho();
     }
+
+    function desmarcarTodosItens() {
+    if (!Array.isArray(cart)) return;
+
+    cart.forEach(item => {
+        item.selected = false;
+    });
+}
+
+    function selecionarApenasItem(nomeItem) {
+        if (!Array.isArray(cart)) return;
+
+        cart.forEach(item => {
+            item.selected = (item.name === nomeItem);
+        });
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        if (typeof updateCart === "function") {
+            updateCart();
+        }
+}

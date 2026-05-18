@@ -6,40 +6,27 @@ let tamanhoSelecionado = null;
 
 document.addEventListener("DOMContentLoaded", () => {
 
-
-
     /* ==========================================================
-    PEGA PRODUTO SALVO
+       PEGA PRODUTO SALVO
     ========================================================== */
 
-    const produto =
-        JSON.parse(
-            sessionStorage.getItem("produtoAtual")
-        );
+    const produto = JSON.parse(
+        sessionStorage.getItem("produtoAtual") || "null"
+    );
 
     if (!produto) {
-
-        console.error(
-            "Produto não encontrado"
-        );
-
+        console.error("Produto não encontrado");
         return;
     }
-
-    sessionStorage.getItem("produtoAtual")
 
     /* ==========================================================
        ELEMENTOS
     ========================================================== */
 
     const imagem = document.getElementById("produto-imagem");
-
     const titulo = document.getElementById("produto-titulo");
-
     const preco = document.getElementById("produto-preco");
-
     const descricao = document.getElementById("produto-descricao");
-
     const time = document.getElementById("produto-time");
 
     const estrelas = document.querySelector(
@@ -50,41 +37,42 @@ document.addEventListener("DOMContentLoaded", () => {
        PREENCHE DADOS
     ========================================================== */
 
-    imagem.src = produto.imagem;
-    imagem.alt = produto.nome;
+    if (imagem) {
+        imagem.src = produto.imagem;
+        imagem.alt = produto.nome;
+    }
 
-    titulo.innerText = produto.nome;
+    if (titulo) titulo.innerText = produto.nome;
 
-    descricao.innerText =
-        produto.descricao ||
-        "Camisa retrô oficial vintage de alta qualidade.";
+    if (descricao) {
+        descricao.innerText =
+            produto.descricao ||
+            "Camisa retrô oficial vintage de alta qualidade.";
+    }
 
-    time.innerText =
-        produto.time || "Vintage Sports";
+    if (time) {
+        time.innerText = produto.time || "Vintage Sports";
+    }
 
     /* ==========================================================
-    AVALIAÇÕES DINÂMICAS
+       AVALIAÇÕES DINÂMICAS
     ========================================================== */
 
     function gerarAvaliacoesFixas(nome) {
-
         let hash = 0;
 
         for (let i = 0; i < nome.length; i++) {
-
-            hash =
-                nome.charCodeAt(i) +
-                ((hash << 5) - hash);
+            hash = nome.charCodeAt(i) + ((hash << 5) - hash);
         }
 
         return Math.abs(hash % 450) + 80;
     }
 
-    const qtdAvaliacoes =
-        gerarAvaliacoesFixas(produto.nome);
+    const qtdAvaliacoes = gerarAvaliacoesFixas(produto.nome);
 
-    estrelas.innerText =
-        `(${qtdAvaliacoes} avaliações)`;
+    if (estrelas) {
+        estrelas.innerText = `(${qtdAvaliacoes} avaliações)`;
+    }
 
     /* ==========================================================
        PREÇO NORMAL / PROMOÇÃO
@@ -99,72 +87,55 @@ document.addEventListener("DOMContentLoaded", () => {
         produto.isPromo === true ||
         produto.imagem.toLowerCase().includes("ofertas");
 
-    if (mostrarOferta) {
+    if (preco) {
 
-        preco.innerHTML = `
+        if (mostrarOferta) {
 
-            <div class="preco-antigo">
-                R$ ${precoOriginal
-                    .toFixed(2)
-                    .replace(".", ",")}
-            </div>
+            preco.innerHTML = `
+                <div class="preco-antigo">
+                    R$ ${precoOriginal.toFixed(2).replace(".", ",")}
+                </div>
 
-            <div class="preco-promocional">
+                <div class="preco-promocional">
+                    <span class="valor-atual">
+                        R$ ${produto.preco.toFixed(2).replace(".", ",")}
+                    </span>
 
-                <span class="valor-atual">
-                    R$ ${produto.preco
-                        .toFixed(2)
-                        .replace(".", ",")}
-                </span>
+                    <span class="desconto-percentual">
+                        15% OFF
+                    </span>
+                </div>
+            `;
 
-                <span class="desconto-percentual">
-                    15% OFF
-                </span>
-
-            </div>
-        `;
-
-    } else {
-
-        preco.innerHTML =
-            `R$ ${produto.preco
-                .toFixed(2)
-                .replace(".", ",")}`;
+        } else {
+            preco.innerHTML =
+                `R$ ${produto.preco.toFixed(2).replace(".", ",")}`;
+        }
     }
 
     /* ==========================================================
-    TAMANHOS
+       TAMANHOS
     ========================================================== */
 
     const botoesTamanho =
-        document.querySelectorAll(
-            ".tamanhos-grid button"
-        );
+        document.querySelectorAll(".tamanhos-grid button");
 
     botoesTamanho.forEach(btn => {
 
         btn.addEventListener("click", () => {
 
-            // se clicar no mesmo botão selecionado
             if (btn.classList.contains("active")) {
-
                 btn.classList.remove("active");
-
                 tamanhoSelecionado = null;
-
                 return;
             }
 
-            // remove seleção dos outros
             botoesTamanho.forEach(b =>
                 b.classList.remove("active")
             );
 
-            // ativa o atual
             btn.classList.add("active");
-
-            tamanhoSelecionado =
-                btn.innerText;
+            tamanhoSelecionado = btn.innerText;
         });
     });
 
@@ -180,33 +151,24 @@ document.addEventListener("DOMContentLoaded", () => {
         btnCarrinho.addEventListener("click", () => {
 
             if (!tamanhoSelecionado) {
-
-                showToast(
-                    "Selecione um tamanho"
-                );
-
+                showToast("Selecione um tamanho");
                 return;
             }
 
             addToCart(
-                produto.nome +
-                ` - Tam ${tamanhoSelecionado}`,
-
+                produto.nome + ` - Tam ${tamanhoSelecionado}`,
                 produto.preco,
-
                 produto.imagem,
-
                 btnCarrinho
             );
 
-            showToast(
-                "Produto adicionado ✓"
-            );
+            showToast("Produto adicionado ✓");
         });
     }
 
+
     /* ==========================================================
-       BOTÃO COMPRAR
+    BOTÃO COMPRAR AGORA
     ========================================================== */
 
     const btnComprar =
@@ -216,30 +178,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
         btnComprar.addEventListener("click", () => {
 
+            const produtoAtual =
+                JSON.parse(sessionStorage.getItem("produtoAtual") || "null");
+
+            if (!produtoAtual) return;
+
             if (!tamanhoSelecionado) {
-
-                showToast(
-                    "Selecione um tamanho"
-                );
-
+                showToast("Selecione um tamanho");
                 return;
             }
 
+            const nomeItem =
+                produtoAtual.nome + ` - Tam ${tamanhoSelecionado}`;
+
             addToCart(
-                produto.nome +
-                ` - Tam ${tamanhoSelecionado}`,
-
-                produto.preco,
-
-                produto.imagem,
-
+                nomeItem,
+                produtoAtual.preco,
+                produtoAtual.imagem,
                 btnComprar,
-
                 true
             );
+
+            // 🔥 deixa só esse marcado
+            selecionarApenasItem(nomeItem);
 
             openCart();
         });
     }
 
-});
+    });

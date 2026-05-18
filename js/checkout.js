@@ -5,6 +5,7 @@
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let frete = parseFloat(localStorage.getItem("frete_valor")) || 0;
 let descontoPercentual = parseFloat(localStorage.getItem("desconto_percentual")) || 0;
+let freteSelecionado = null;
 let toastTimeout;
 
 function limparCheckoutStorage() {
@@ -24,7 +25,7 @@ function limparCheckoutStorage() {
 function render() {
   const container = document.getElementById("cart-items");
   if (!container) return;
-
+  
   container.innerHTML = "";
   let subtotal = 0;
 
@@ -582,15 +583,17 @@ async function calcularFrete(event) {
       const renderUI = () => {
         resultadoFrete.innerHTML = `
           <div class="frete-box">
-            <div>
+
+            <div class="frete-lista">
               ${renderList(expanded ? data : visiveis)}
             </div>
 
             ${restantes > 0 ? `
-              <button id="toggle-frete">
-                ${expanded ? "Fechar" : `Ver mais ${restantes}`}
+              <button id="toggle-frete" class="btn-ver-mais-frete">
+                ${expanded ? "Fechar opções" : `Ver mais ${restantes} opções`}
               </button>
             ` : ""}
+
           </div>
         `;
       };
@@ -609,15 +612,51 @@ async function calcularFrete(event) {
 
         if (!item) return;
 
+        const lista = document.querySelector(".frete-lista");
+
+        const price = Number(item.dataset.price);
+
+        // 🔥 verifica se clicou no mesmo frete
+        const isSame = freteSelecionado?.price === price;
+
+        // ==============================
+        // CASO 1: DESMARCAR
+        // ==============================
+        if (isSame) {
+          item.classList.remove("active");
+          freteSelecionado = null;
+
+          window.frete = 0;
+          localStorage.removeItem("frete_valor");
+
+          render();
+          return;
+        }
+
+        // ==============================
+        // CASO 2: SELECIONAR NOVO
+        // ==============================
         document.querySelectorAll(".frete-item")
           .forEach(i => i.classList.remove("active"));
 
         item.classList.add("active");
 
-        window.frete = Number(item.dataset.price);
-        localStorage.setItem("frete_valor", String(window.frete));
+        freteSelecionado = {
+          price: price,
+          name: item.querySelector("span")?.innerText || ""
+        };
 
-        if (typeof render === "function") render();
+        // move para o topo
+        if (lista) {
+          lista.prepend(item);
+          lista.scrollTop = 0;
+        }
+
+        // salva valor
+        window.frete = price;
+        localStorage.setItem("frete_valor", String(price));
+
+        render();
       };
     }
 
@@ -679,34 +718,61 @@ function rebuildFreteUI(data) {
     `).join("");
   };
 
-  const renderUI = () => {
-    resultadoFrete.innerHTML = `
-      <div class="frete-box">
-        <div class="frete-lista">
-          ${renderList(expanded ? data : visiveis)}
-        </div>
+const renderUI = () => {
 
-        <div class="frete-actions">
-          ${restantes > 0 ? `
-            <button id="toggle-frete">
-              ${expanded ? "Fechar opções" : `Ver mais ${restantes} opções`}
-            </button>
-          ` : ""}
+  function ordenarFrete(list) {
+    if (!freteSelecionado) return list;
+
+    const selecionado = freteSelecionado;
+
+    const itemSelecionado = list.find(i =>
+      i.price == selecionado.price
+    );
+
+    if (!itemSelecionado) return list;
+
+    const resto = list.filter(i => i !== itemSelecionado);
+
+    return [itemSelecionado, ...resto];
+  }
+
+  const listaBase = ordenarFrete(data);
+  const listaVisivel = ordenarFrete(visiveis);
+
+  const renderList = (list) =>
+    list.map(op => `
+      <div class="frete-item ${op.price == freteSelecionado?.price ? "active" : ""}" data-price="${op.price}">
+        <div class="frete-info">
+          <i class="fa-solid fa-truck-fast"></i>
+          <span>${op.name}</span>
+        </div>
+        <div>
+          <strong>R$ ${op.price.toFixed(2).replace(".", ",")}</strong>
+          <small>${op.delivery_time || "--"} dias</small>
         </div>
       </div>
-    `;
-  };
+    `).join("");
 
-  renderUI();
+  resultadoFrete.innerHTML = `
+    <div class="frete-box">
 
-  // reativa seleção visual
-  document.querySelectorAll(".frete-item").forEach(item => {
-    const nome = item.querySelector(".frete-metodo")?.innerText;
+      <div class="frete-lista">
+        ${renderList(expanded ? listaBase : listaVisivel)}
+      </div>
 
-    if (nome === savedNome) {
-      item.classList.add("active");
-    }
-  });
+      ${restantes > 0 ? `
+        <div class="frete-actions">
+          <button id="toggle-frete">
+            ${expanded ? "Fechar opções" : `Ver mais ${restantes} opções`}
+          </button>
+        </div>
+      ` : ""}
+
+    </div>
+  `;
+};
+
+renderUI();
 }
 
 
