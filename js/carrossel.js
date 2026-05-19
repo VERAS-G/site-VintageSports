@@ -49,3 +49,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 });
+
+
+/* =============================================================
+   FILTRO POR PAÍS
+   ============================================================= */
+
+function filtrarPais(elemento) {
+    const pais = elemento.dataset.pais;
+
+    // Redireciona para a página de produtos
+    window.location.href = `produtos.html?pais=${pais}`;
+}
