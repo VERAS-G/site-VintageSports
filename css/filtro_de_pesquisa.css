@@ -5,49 +5,101 @@
 .shop-container {
   display: flex;
   align-items: flex-start;
-
-  gap: 45px;
-
-  padding:
-    110px 40px 40px;
+  gap: 36px;
+  padding: 90px 32px 40px 280px;
 }
 
 /* =============================================================
-   SIDEBAR FILTROS
-============================================================= */
-
-/* =============================================================
-   FILTROS
+   FILTROS (ESTILO MODERNO NIKE - BASEADO NA FOTO)
 ============================================================= */
 
 .filters {
+  position: fixed;
+  top: 78px;
+  left: 14px;
+
   width: 260px;
+  height: calc(100vh - 102px);
 
-  min-width: 260px;
+  display: flex;
+  flex-direction: column;
 
-  position: sticky;
+  background: #ffffff;
 
-  top: 110px;
+  border: none;
+  border-right: 1px solid #e5e5e5;
 
-  align-self: flex-start;
+  box-shadow: none;
 
-  height: fit-content;
+  z-index: 999;
 
-  background: transparent;
+  overflow: hidden;
 }
 
 /* =============================================================
-   ITEM FILTRO
+   SCROLL INTERNO REAL
 ============================================================= */
 
 .filtro-item {
-  border-bottom: 1px solid #ececec;
+  flex-shrink: 0;
+}
 
-  padding: 18px 0;
+.filters {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  padding-right: 0px; /* Colado na lateral direita como na foto */
 }
 
 /* =============================================================
-   BOTÃO FILTRO
+   SCROLLBAR ROBUSTA (IGUAL À FOTO DE REFERÊNCIA)
+============================================================= */
+
+.filters::-webkit-scrollbar {
+  width: 8px; /* Largura idêntica à barra da imagem */
+}
+
+.filters::-webkit-scrollbar-track {
+  background: #fcfcfc; /* Fundo levemente esbranquiçado da calha */
+}
+
+.filters::-webkit-scrollbar-thumb {
+  background: #8d8d8d; /* Tom de cinza escuro exato da foto */
+  border-radius: 4px;  /* Cantos arredondados na barra de arrastar */
+}
+
+.filters::-webkit-scrollbar-thumb:hover {
+  background: #6e6e6e;
+}
+
+/* =============================================================
+   ITEM FILTRO (ALINHADO COM A FOTO)
+============================================================= */
+
+/* =============================================================
+   ITEM FILTRO (ALINHADO COM A FOTO - APENAS HOVER)
+============================================================= */
+
+.filtro-item {
+  border-top: 1px solid #eaeaea; 
+  border-bottom: 1px solid #eaeaea; 
+  margin-top: -1px; 
+  transition: background-color 0.2s ease;
+}
+
+/* O efeito cinza agora acontece ESTRITAMENTE ao passar o mouse */
+.filtro-item:hover {
+  background: #eeeeee; 
+}
+
+/* Mantém o fundo totalmente limpo e transparente após clicar/abrir */
+.filtro-item.open {
+  background: transparent; 
+}
+
+
+/* =============================================================
+   BOTÃO FILTRO (IGUAL À FOTO DA NIKE)
 ============================================================= */
 
 .filtro-btn {
@@ -57,41 +109,42 @@
   align-items: center;
   justify-content: space-between;
 
-  background: none;
-
+  background: transparent;
   border: none;
 
-  padding: 0;
+  padding: 16px 12px; /* Espaçamento interno idêntico ao da imagem */
 
   cursor: pointer;
 
   text-align: left;
 
-  color: #111;
+  color: #000000; /* Texto preto nítido da foto */
 
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 15px; 
+  font-weight: 400; /* Peso de fonte equilibrado como na referência */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 
-  transition: opacity 0.2s ease;
-}
+  letter-spacing: -0.1px;
 
-/* Hover */
+  border-radius: 0px;
 
-.filtro-btn:hover {
-  opacity: 0.7;
+  transition: background-color 0.2s ease;
 }
 
 /* =============================================================
-   SETA
+   SETA (DISCRETA E FINA)
 ============================================================= */
 
 .arrow {
-  font-size: 0.9rem;
-
-  transition: transform 0.3s ease;
+  font-size: 14px;
+  color: #666666; /* Tom de cinza das setas da foto */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
 }
 
-/* Rotação */
+
 
 .filtro-btn.active .arrow {
   transform: rotate(180deg);
@@ -106,7 +159,7 @@
   display: flex;
   flex-direction: column;
 
-  gap: 14px;
+  gap: 12px;
 
   max-height: 0;
 
@@ -114,43 +167,22 @@
 
   opacity: 0;
 
-  padding-top: 0;
+  padding: 0 12px; /* Alinha o conteúdo interno com o texto do botão */
+
+  transform: translateY(0);
 
   transition:
-    max-height 0.35s ease,
-    opacity 0.25s ease,
-    padding 0.3s ease;
+    max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s ease,
+    padding-bottom 0.2s ease;
 }
 
-/* Aberto */
+
 
 .filtro-conteudo.active {
-
-  max-height: 240px;
-
-  overflow-y: auto;
-
+  max-height: 1200px;
   opacity: 1;
-
-  padding-top: 18px;
-}
-
-/* =============================================================
-   SCROLLBAR MODERNA
-============================================================= */
-
-.filtro-conteudo::-webkit-scrollbar {
-  width: 5px;
-}
-
-.filtro-conteudo::-webkit-scrollbar-thumb {
-  background: #d6d6d6;
-
-  border-radius: 20px;
-}
-
-.filtro-conteudo::-webkit-scrollbar-thumb:hover {
-  background: #bcbcbc;
+  padding-bottom: 16px;
 }
 
 /* =============================================================
@@ -165,62 +197,62 @@
 
   cursor: pointer;
 
-  color: #222;
+  color: #111111;
 
-  font-size: 0.95rem;
+  font-size: 14px;
   font-weight: 400;
 
-  transition: color 0.2s ease;
+  line-height: 1.4;
+
+  transition: color 0.15s ease;
 }
 
-/* Hover */
+
 
 .filtro-conteudo label:hover {
-  color: black;
+  color: #666666;
 }
 
 /* =============================================================
-   CHECKBOX MODERNO
+   CHECKBOX PREMIUM (MINIMALISTA)
 ============================================================= */
 
 .filtro-conteudo input[type="checkbox"] {
 
   appearance: none;
+  -webkit-appearance: none;
 
   width: 18px;
   height: 18px;
 
   min-width: 18px;
 
-  border: 1.5px solid #bdbdbd;
+  border: 1px solid #bbbbbb;
+  border-radius: 3px;
 
-  border-radius: 4px;
-
-  background: white;
+  background: #ffffff;
 
   cursor: pointer;
 
   position: relative;
 
-  transition: 0.2s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-/* Hover */
+
 
 .filtro-conteudo input[type="checkbox"]:hover {
-  border-color: #111;
+  border-color: #111111;
 }
 
-/* Marcado */
+
 
 .filtro-conteudo input[type="checkbox"]:checked {
-
-  background: #111;
-
-  border-color: #111;
+  background: #111111;
+  border-color: #111111;
 }
 
-/* Check */
+
 
 .filtro-conteudo input[type="checkbox"]:checked::after {
 
@@ -229,75 +261,76 @@
   position: absolute;
 
   left: 5px;
-  top: 2px;
+  top: 1.5px;
 
-  width: 4px;
-  height: 8px;
+  width: 5px;
+  height: 9px;
 
-  border: solid white;
-
+  border: solid #ffffff;
   border-width: 0 2px 2px 0;
 
   transform: rotate(45deg);
 }
 
 /* =============================================================
-   CONTADOR
+   CONTADOR (EX: "(1)" VISTO NA FOTO)
 ============================================================= */
 
 .filtro-conteudo label span {
-
-  margin-left: auto;
-
-  color: #999;
-
-  font-size: 0.85rem;
+  margin-left: 4px;
+  color: #666666;
+  font-size: 14px;
 }
 
 /* =============================================================
-   MOBILE
+   RESPONSIVO
 ============================================================= */
 
 @media (max-width: 1024px) {
 
   .shop-container {
     flex-direction: column;
-
-    gap: 30px;
-
-    padding:
-      100px 25px 35px;
+    gap: 28px;
+    padding: 90px 16px 35px;
   }
 
   .filters {
     width: 100%;
 
     min-width: 100%;
-
+    
     position: static;
+
+    max-height: unset;
+    overflow: visible;
+    border-right: none;
+    border-bottom: 1px solid #eaeaea;
   }
 }
 
-/* =============================================================
-   MOBILE PEQUENO
-============================================================= */
+
 
 @media (max-width: 600px) {
 
   .shop-container {
-    padding:
-      90px 16px 25px;
-  }
-
-  .filters {
-    width: 100%;
+    padding: 82px 14px 25px;
   }
 
   .filtro-btn {
-    font-size: 0.95rem;
+    font-size: 14px;
   }
 
   .filtro-conteudo label {
-    font-size: 0.9rem;
+    font-size: 14px;
   }
+}
+
+/* =============================================================
+   GLOBAL FIX
+============================================================= */
+
+main,
+body {
+  overflow-x: hidden;
+  background-color: #ffffff;
 }

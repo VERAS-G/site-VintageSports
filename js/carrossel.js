@@ -59,5 +59,5 @@ function filtrarPais(elemento) {
     const pais = elemento.dataset.pais;
 
     // Redireciona para a página de produtos
-    window.location.href = `produtos.html?pais=${pais}`;
+    window.location.href = `/pages/todos_produtos.html?pais=${pais}`;
 }

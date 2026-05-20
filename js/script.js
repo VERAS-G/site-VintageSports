@@ -248,13 +248,25 @@
         updateCart();
 
         // 🔥 ACORDEÃO DE FILTROS (Não quebra em páginas sem filtros)
-        document.querySelectorAll(".filtro button").forEach(btn => {
-            btn.onclick = () => {
-                const conteudo = btn.nextElementSibling;
-                if (conteudo) {
-                    conteudo.style.display = conteudo.style.display === "block" ? "none" : "block";
+        document.querySelectorAll(".filtro-btn").forEach(btn => {
+
+            btn.addEventListener("click", () => {
+
+                const item = btn.closest(".filtro-item");
+                const content = btn.nextElementSibling;
+
+                btn.classList.toggle("active");
+
+                if (content) {
+                    content.classList.toggle("active");
                 }
-            };
+
+                if (item) {
+                    item.classList.toggle("open");
+                }
+
+            });
+
         });
 
         // 🔥 BUSCA EM TEMPO REAL (Não quebra em páginas sem o box de busca)
@@ -315,6 +327,42 @@
                 }
             }
         };
+        const filters = document.querySelector(".filters");
+        const productsContainer = document.querySelector(".shop-container");
+
+        if (filters && productsContainer) {
+
+            const filterInitialTop =
+                filters.getBoundingClientRect().top + window.scrollY;
+
+            window.addEventListener("scroll", () => {
+
+                const scrollY = window.scrollY;
+
+                // fim real da lista de produtos
+                const containerBottom =
+                    productsContainer.offsetTop +
+                    productsContainer.offsetHeight;
+
+                const filterHeight = filters.offsetHeight;
+
+                // ponto onde o filtro deve parar
+                const stopPoint = containerBottom - filterHeight - 24;
+
+                if (scrollY + filterInitialTop > stopPoint) {
+
+                    const overlap =
+                        (scrollY + filterInitialTop) - stopPoint;
+
+                    filters.style.transform = `translateY(-${overlap}px)`;
+
+                } else {
+
+                    filters.style.transform = "translateY(0)";
+                }
+            });
+        }
+
     });
 
 
@@ -491,27 +539,6 @@
             updateCart();
         }
     }
-    /* ==========================================================================
-    FILTROS MODERNOS
-    ========================================================================== */
-
-    /* ==========================================================
-    ABRIR / FECHAR FILTROS
-    ========================================================== */
-
-    const filtroBtns = document.querySelectorAll(".filtro-btn");
-
-    filtroBtns.forEach(btn => {
-
-        btn.addEventListener("click", () => {
-
-            const content = btn.nextElementSibling;
-
-            btn.classList.toggle("active");
-
-            content.classList.toggle("active");
-        });
-    });
 
     /* ==========================================================================
     FILTRAR PRODUTOS
@@ -952,6 +979,8 @@
 
         const currentScroll = window.pageYOffset;
 
+        
+
         /* ======================================================
         EFEITO BACKGROUND
         ====================================================== */
@@ -1368,3 +1397,4 @@
             updateCart();
         }
 }
+
