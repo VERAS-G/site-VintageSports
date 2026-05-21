@@ -22,17 +22,18 @@
 
 .products {
   flex: 1;
-
   min-width: 0;
+
+  min-height: 100vh;
 }
 
 .products h2 {
   margin-bottom: 24px;
 
-  font-size: 2rem;
+  font-size: 20px;
   font-weight: 700;
 
-  color: #111;
+  color: #302f2fbe;
 }
 
 /* =============================================================
@@ -42,8 +43,8 @@
 /* 🔥 GRID FIXO: Aqui travamos em 4 colunas */
 .grid {
   display: grid;
-  /* repeat(4, 1fr) garante que sempre haverá 4 colunas iguais */
-  grid-template-columns: repeat(4, 1fr) !important;
+  /* repeat(3, 1fr) garante que sempre haverá 3 colunas iguais */
+  grid-template-columns: repeat(3, 1fr) !important;
   gap: 20px;
 }
 
@@ -200,90 +201,7 @@
   }
 }
 
-/* =============================================================
-   BOTÕES COM EFEITO DE BRILHO E ESTILO NIKE (MASC/FEM/OFERTAS)
-   ============================================================= */
 
-.buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: auto;
-}
-
-/* 1. ESTILO BASE PARA TODOS OS BOTÕES */
-.buttons button {
-    position: relative;
-    overflow: hidden; /* Garante que o brilho não saia do botão */
-    flex: 1;
-    padding: 12px 5px;
-    border-radius: 3px; /* Raio original solicitado */
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    border: 1px solid black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* 2. ANIMAÇÃO DE ESCALA E PULO (PARA OS DOIS) */
-.buttons button:hover {
-    transform: translateY(-3px) scale(1.02);
-}
-
-/* 3. O EFEITO DE BRILHO (A LUZ QUE PASSA PELO BOTÃO) */
-.buttons button::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        120deg, 
-        transparent, 
-        rgba(255, 255, 255, 0.4), 
-        transparent
-    );
-    transition: 0.5s;
-    z-index: 1;
-}
-
-/* Faz o brilho atravessar AMBOS os botões no hover */
-.buttons button:hover::after {
-    left: 100%;
-}
-
-/* 4. BOTÃO ADICIONAR (Estilo Branco / Inverte no Hover) */
-.buttons button:first-child {
-    background: #ffffff;
-    color: #000;
-    z-index: 2;
-}
-
-.buttons button:first-child:hover {
-    background: #000;
-    color: #fff;
-}
-
-/* 5. BOTÃO COMPRAR (Estilo Preto Sólido) */
-.buy-btn {
-    background: #000000 !important;
-    color: #ffffff !important;
-    border: 1px solid #000 !important;
-    z-index: 2;
-}
-
-.buy-btn:hover {
-    background: #333 !important;
-}
-
-/* Efeito de clique (apertar) */
-.buttons button:active {
-    transform: scale(0.95);
-}
 
 
 
@@ -351,4 +269,77 @@
     font-weight: 800;
     color: #111;
     margin: 12px 0;
+}
+
+
+/* =============================================================
+   OVERLAY "VER PRODUTO"
+   (APENAS GRID DE PRODUTOS)
+============================================================= */
+
+.grid .card {
+  position: relative;
+}
+
+/* Overlay */
+.grid .card::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.18);
+
+  opacity: 0;
+
+  transition: opacity 0.3s ease;
+
+  z-index: 5;
+
+  border-radius: 14px;
+}
+
+/* Texto minimalista */
+.grid .card::after {
+  content: "VER PRODUTO";
+
+  position: absolute;
+
+  top: 30%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  color: #fff;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  letter-spacing: 3px;
+
+  text-transform: uppercase;
+
+  opacity: 0;
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+
+  z-index: 6;
+
+  pointer-events: none;
+}
+
+/* Hover overlay */
+.grid .card:hover::before {
+  opacity: 1;
+}
+
+/* Hover texto */
+.grid .card:hover::after {
+  opacity: 1;
+
+  transform: translate(-50%, -50%) translateY(-4px);
 }

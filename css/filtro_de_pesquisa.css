@@ -7,6 +7,17 @@
   align-items: flex-start;
   gap: 36px;
   padding: 90px 32px 40px 280px;
+  min-height: calc(100vh - 320px);
+}
+
+/* =============================================================
+   AJUSTE SOMENTE DA PÁGINA TODOS PRODUTOS
+============================================================= */
+
+.pagina-todos-produtos {
+  padding-left: 300px;
+  padding-right: 40px;
+  gap: 28px;
 }
 
 /* =============================================================

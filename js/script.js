@@ -120,24 +120,6 @@
 
             ${blocoPreco}
 
-            <div class="buttons">
-
-                <button
-                    class="btn-adicionar"
-                    onclick='event.stopPropagation(); abrirCarrinho(${JSON.stringify(produto)})'>
-
-                    🛒 Adicionar
-                </button>
-
-                <button
-                    class="buy-btn"
-                    onclick='event.stopPropagation(); comprarProduto(${JSON.stringify(produto)}, this)'>
-
-                    Comprar
-                </button>
-
-            </div>
-
         </div>
     `;
 }
@@ -328,37 +310,44 @@
             }
         };
         const filters = document.querySelector(".filters");
-        const productsContainer = document.querySelector(".shop-container");
+        const products = document.querySelector(".products");
 
-        if (filters && productsContainer) {
+        if (filters && products) {
 
-            const filterInitialTop =
-                filters.getBoundingClientRect().top + window.scrollY;
+            const defaultTop = 78;
 
             window.addEventListener("scroll", () => {
 
-                const scrollY = window.scrollY;
+                // posição do final da área de produtos
+                const productsBottom =
+                    products.offsetTop + products.offsetHeight;
 
-                // fim real da lista de produtos
-                const containerBottom =
-                    productsContainer.offsetTop +
-                    productsContainer.offsetHeight;
+                // altura do filtro
+                const filterHeight =
+                    filters.offsetHeight;
 
-                const filterHeight = filters.offsetHeight;
+                // quanto o usuário scrollou
+                const scrollY =
+                    window.scrollY;
 
-                // ponto onde o filtro deve parar
-                const stopPoint = containerBottom - filterHeight - 24;
+                // limite máximo onde o filtro pode ficar
+                const maxTop =
+                    productsBottom - filterHeight - defaultTop;
 
-                if (scrollY + filterInitialTop > stopPoint) {
+                // posição atual desejada
+                const currentTop =
+                    scrollY + defaultTop;
 
-                    const overlap =
-                        (scrollY + filterInitialTop) - stopPoint;
+                // se chegou no limite
+                if (currentTop >= maxTop) {
 
-                    filters.style.transform = `translateY(-${overlap}px)`;
+                    filters.style.top =
+                        `${maxTop - scrollY}px`;
 
                 } else {
 
-                    filters.style.transform = "translateY(0)";
+                    filters.style.top =
+                        `${defaultTop}px`;
                 }
             });
         }
@@ -863,7 +852,7 @@
 
         if (containerHome) {
             // Na Home, mostra apenas os primeiros 4 produtos
-            desenharCards(containerHome, lista.slice(0, 4));
+            desenharCards(containerHome, lista.slice(0, 3));
         } else {
             // Na página da Loja, mostra tudo
             desenharCards(container, lista);
@@ -1398,3 +1387,52 @@
         }
 }
 
+const paisCheckboxes = document.querySelectorAll(
+  '.filtro-conteudo[data-tipo="pais"] input[type="checkbox"]'
+);
+
+const productsTitle =
+  document.getElementById("products-title");
+
+function atualizarTituloProdutos() {
+
+  // pega todos marcados
+  const selecionados = [...paisCheckboxes]
+    .filter(input => input.checked)
+    .map(input => {
+
+      // pega o texto do label
+      return input.parentElement.textContent.trim();
+    });
+
+  // nenhum selecionado
+  if (selecionados.length === 0) {
+
+    productsTitle.textContent =
+      "Todos os Produtos";
+
+    return;
+  }
+
+  // um país
+  if (selecionados.length === 1) {
+
+    productsTitle.textContent =
+      `Produtos relacionados à ${selecionados[0]}`;
+
+    return;
+  }
+
+  // vários países
+  productsTitle.textContent =
+    `Produtos relacionados à ${selecionados.join(", ")}`;
+}
+
+// eventos
+paisCheckboxes.forEach(input => {
+
+  input.addEventListener(
+    "change",
+    atualizarTituloProdutos
+  );
+});

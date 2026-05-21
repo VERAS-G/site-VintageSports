@@ -293,7 +293,7 @@ document
         paisSelecionado.slice(1);
 
       titulo.innerText =
-        `Produtos de ${nomeFormatado}`;
+        `Produtos Relacionados à ${nomeFormatado}`;
 
     } else {
 
