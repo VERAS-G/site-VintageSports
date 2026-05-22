@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* ==========================================================
-       PREÇO NORMAL / PROMOÇÃO
+    PREÇO NORMAL / PROMOÇÃO (VERSÃO PROFISSIONAL)
     ========================================================== */
 
     const descontoPercentual = 15;
@@ -92,26 +92,59 @@ document.addEventListener("DOMContentLoaded", () => {
         if (mostrarOferta) {
 
             preco.innerHTML = `
-                <div class="preco-antigo">
-                    R$ ${precoOriginal.toFixed(2).replace(".", ",")}
-                </div>
+                <div class="preco-info">
 
-                <div class="preco-promocional">
-                    <span class="valor-atual">
-                        R$ ${produto.preco.toFixed(2).replace(".", ",")}
+                    <span class="preco-antigo">
+                        R$ ${precoOriginal.toFixed(2).replace(".", ",")}
                     </span>
 
-                    <span class="desconto-percentual">
-                        15% OFF
+                    <span class="preco-desconto">
+                        -${descontoPercentual}%
                     </span>
+
                 </div>
+
+                <div class="preco-principal">
+                    R$ ${produto.preco.toFixed(2).replace(".", ",")}
+                </div>
+
+                <p>ou 12x sem juros</p>
             `;
 
         } else {
-            preco.innerHTML =
-                `R$ ${produto.preco.toFixed(2).replace(".", ",")}`;
+
+            preco.innerHTML = `
+                <div class="preco-principal">
+                    R$ ${produto.preco.toFixed(2).replace(".", ",")}
+                </div>
+
+                <p>ou 12x sem juros</p>
+            `;
         }
     }
+
+    // ================================
+    // PARCELAMENTO AUTOMÁTICO
+    // ================================
+
+    const precoTexto = document.querySelector(".preco-principal").innerText;
+
+    // Remove R$, espaços e troca vírgula por ponto
+    const precoNumero = parseFloat(
+        precoTexto
+            .replace("R$", "")
+            .replace(/\./g, "")
+            .replace(",", ".")
+            .trim()
+    );
+
+    // Calcula 4x
+    const parcela = (precoNumero / 4).toFixed(2).replace(".", ",");
+
+    // Mostra na tela
+    document.getElementById("parcelamento-info").innerHTML = `
+        Em até <strong>4x de R$ ${parcela}</strong> com juros
+    `;
 
     /* ==========================================================
        TAMANHOS

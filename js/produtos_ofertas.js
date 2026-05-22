@@ -28,6 +28,19 @@ const produtosOfertas = [
   criarCamisaOferta("Paris Saint-Germain 1989 - 1990", 289.99, "FRANCA", "Paris Saint-Germain 1989-1990 Home Jersey PSG.jpg"),
 ];
 
+/* ============================
+   DUPLICAÇÃO PROFISSIONAL (ESSENCIAL)
+============================ */
+function duplicarCarrossel(el) {
+  if (!el.dataset.duplicado) {
+    el.innerHTML += el.innerHTML;
+    el.dataset.duplicado = "true";
+  }
+}
+
+/* ============================
+   RENDER
+============================ */
 function renderizarOfertas() {
 
   const l1 = document.getElementById("linha-1");
@@ -48,7 +61,7 @@ function renderizarOfertas() {
 }
 
 /* ============================
-   SETAS (FUNCIONANDO 100%)
+   SETAS
 ============================ */
 window.rolarLinha = function(id, distancia) {
 
@@ -63,7 +76,7 @@ window.rolarLinha = function(id, distancia) {
 };
 
 /* ============================
-   AUTO SCROLL INFINITO ESTÁVEL
+   AUTO SCROLL INFINITO PROFISSIONAL
 ============================ */
 function autoScroll(el, speed) {
 
@@ -78,7 +91,6 @@ function autoScroll(el, speed) {
   const arrows = el.parentElement.querySelectorAll(".nav-arrow");
 
   arrows.forEach(arrow => {
-
     arrow.addEventListener("mouseenter", () => hoverArrow = true);
     arrow.addEventListener("mouseleave", () => hoverArrow = false);
   });
@@ -89,8 +101,9 @@ function autoScroll(el, speed) {
 
       el.scrollLeft += speed;
 
+      // 🔥 RESET LIMPO E ESTÁVEL (sem flicker)
       if (el.scrollLeft >= getHalf()) {
-        el.scrollLeft -= getHalf();
+        el.scrollLeft = el.scrollLeft - getHalf();
       }
     }
 
@@ -101,7 +114,7 @@ function autoScroll(el, speed) {
 }
 
 /* ============================
-   VER MAIS (TOGGLE)
+   VER MAIS
 ============================ */
 window.toggleSegundaLinha = function () {
 
@@ -122,7 +135,7 @@ window.toggleSegundaLinha = function () {
 };
 
 /* ============================
-   INIT CORRIGIDO
+   INIT FINAL
 ============================ */
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -134,9 +147,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const l2 = document.getElementById("linha-2");
     const container2 = document.getElementById("carrossel-2");
 
-    if (l1) autoScroll(l1, 0.35);
+    if (l1) {
+      duplicarCarrossel(l1);
+      autoScroll(l1, 0.35);
+    }
 
     if (l2 && container2 && !container2.classList.contains("hidden")) {
+      duplicarCarrossel(l2);
       autoScroll(l2, 0.18);
     }
   });

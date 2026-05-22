@@ -345,3 +345,18 @@ body {
   overflow-x: hidden;
   background-color: #ffffff;
 }
+
+/* =============================================================
+   FIX SOMBRA DOS CARDS
+============================================================= */
+
+.products,
+.grid,
+.shop-container {
+  overflow: visible;
+}
+
+.grid .card {
+  position: relative;
+  z-index: 2;
+}

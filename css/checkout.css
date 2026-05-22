@@ -1115,3 +1115,19 @@ button.finalizar:hover { background: #333; }
   background: #111;
   color: #fff;
 }
+
+/* ==========================================
+   PARCELAMENTO CHECKOUT
+========================================== */
+
+.checkout-parcelamento {
+    margin-top: 4px;
+    font-size: 0.92rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+.checkout-parcelamento strong {
+    color: #046a0d;
+    font-weight: 700;
+}

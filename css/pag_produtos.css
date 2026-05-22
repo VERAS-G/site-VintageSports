@@ -1,14 +1,19 @@
 /* =============================================================
-   PÁGINA DE PRODUTO - VINTAGE SPORTS
+   PARTE 1: ESTRUTURA, TITULO E REMOÇÃO DE DUPLICADOS
 ============================================================= */
+
+/* Fonte premium importada globalmente */
+@import url('https://googleapis.com');
 
 main {
     flex: 1;
     width: 100%;
     overflow-x: hidden;
+    font-family: 'Inter', sans-serif;
+    background-color: #ffffff;
+    -webkit-font-smoothing: antialiased;
 }
 
-/* Header fixo estilo premium */
 header {
   background: rgba(8, 8, 8, 0.95) !important;
   backdrop-filter: blur(14px) !important;
@@ -16,337 +21,374 @@ header {
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
 
-/* =============================================================
-   LAYOUT PRINCIPAL
-============================================================= */
-
 .produto-page {
     width: 100%;
-    max-width: 1400px;
+    max-width: 1300px;
     margin: 0 auto;
-
-    padding: 120px 30px 60px;
-
+    padding: 160px 40px 80px;
     display: flex;
-    gap: 50px;
-
+    gap: 80px;
     align-items: flex-start;
     justify-content: center;
-
-    flex-wrap: wrap; /* 🔥 evita quebra estranha em telas médias */
+    flex-wrap: wrap;
 }
 
-/* =============================================================
-   LADO ESQUERDO
-============================================================= */
-
 .produto-esquerda {
-    flex: 1.1;
+    flex: 1.2;
     display: flex;
     justify-content: center;
     align-items: center;
-
-    min-width: 280px; /* 🔥 evita esmagamento */
+    min-width: 320px;
 }
 
 .produto-imagem-container {
     width: 100%;
-    background: #f5f5f5;
-
-    border-radius: 24px;
-    padding: 25px;
-
+    background: #fafafa;
+    border-radius: 0px; 
+    padding: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    overflow: hidden; /* 🔥 evita “vazar zoom” */
+    overflow: hidden;
 }
 
 #produto-imagem {
     width: 100%;
-    max-width: 520px;
+    max-width: 480px;
     object-fit: contain;
-
-    transition: transform 0.3s ease;
-    will-change: transform;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 #produto-imagem:hover {
-    transform: scale(1.02); /* 🔥 leve ajuste pra não quebrar layout */
+    transform: scale(1.015);
 }
 
-/* =============================================================
-   LADO DIREITO
-============================================================= */
-
 .produto-direita {
-    flex: 0.9;
-    max-width: 480px;
-    min-width: 280px;
-
+    flex: 0.8;
+    max-width: 440px;
+    min-width: 320px;
     display: flex;
     flex-direction: column;
 }
 
-/* =============================================================
-   TIME
-============================================================= */
-
 .produto-time {
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #f6d221;
-    margin-bottom: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #111111; 
+    margin-bottom: 8px;
+    order: -2;
 }
-
-/* =============================================================
-   TÍTULO
-============================================================= */
 
 #produto-titulo {
-    font-size: clamp(1.8rem, 3vw, 3rem);
-    line-height: 1.05;
-    font-weight: 900;
-    margin-bottom: 18px;
-    color: #111;
+    font-size: clamp(1.6rem, 2.2vw, 2.1rem);
+    line-height: 1.2;
+    font-weight: 700; 
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+    color: #000000;
+    order: -3; 
 }
 
-/* =============================================================
-   AVALIAÇÕES
-============================================================= */
-
 .produto-avaliacoes {
-    margin-bottom: 25px;
+    margin-bottom: 24px;
+    order: -1;
 }
 
 .stars {
     display: flex;
     align-items: center;
-    gap: 6px;
-    color: #ffbc00;
-    font-size: 14px;
+    gap: 4px;
+    color: #000000; 
+    font-size: 11px;
 }
 
 .stars span {
-    color: #666;
-    margin-left: 8px;
+    color: #111111;
+    font-weight: 400;
+    margin-left: 6px;
+    text-decoration: underline;
 }
-
-/* =============================================================
-   PREÇO
-============================================================= */
 
 .produto-preco-box {
-    margin-bottom: 30px;
+    margin-bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-#produto-preco {
-    font-size: 1.9rem;
-    font-weight: 800;
-    color: #111;
-    margin-bottom: 8px;
+.preco-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.produto-preco-box p {
-    color: #666;
+.preco-antigo {
+    font-size: 0.9rem;
+    color: #757575;
+    text-decoration: line-through;
+    font-weight: 400;
+}
+
+.preco-desconto {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #00914b; /* verde */
+    background: #00ff1576;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.preco-principal {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #000000;
+    letter-spacing: 0;
+}
+
+/* Parcelamento */
+
+.parcelamento-info {
+    margin-top: 10px;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: #555555;
+    font-weight: 400;
+}
+
+.parcelamento-info strong {
+    color: #000000;
+    font-weight: 600;
+}
+
+.primeira-compra {
+    margin-top: 8px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #046a0d;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 🔥 CORREÇÃO DO PARCELAMENTO DUPLICADO: Oculta qualquer texto de parcelamento repetido subsequente */
+.produto-preco-box p, 
+.produto-preco-box span,
+.produto-direita br + text { 
     font-size: 1rem;
+    color: #757575;
+    margin: 0;
+    font-weight: 400;
+}
+
+.produto-preco-box p:nth-of-type(n+2),
+.produto-preco-box text:nth-of-type(n+2),
+.produto-direita p:contains("ou 12x") ~ p:contains("ou 12x") {
+    display: none !important;
+}
+
+/* Fallback agressivo para duplicados soltos no container de preço */
+.produto-preco-box h3 + p + p, 
+.produto-preco-box br + p,
+.produto-preco-box p:last-child {
+    display: none !important;
 }
 
 /* =============================================================
-   DESCRIÇÃO
+   PARTE 2: GUIA DE TAMANHOS MINIMALISTA E INTERAÇÕES
 ============================================================= */
 
 .produto-descricao {
-    margin-bottom: 35px;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 24px;
 }
 
 .produto-descricao p {
     font-size: 0.95rem;
     line-height: 1.6;
-    color: #555;
+    color: #111111;
 }
 
-/* =============================================================
-   TAMANHOS
-============================================================= */
-
 .produto-tamanhos {
-    margin-bottom: 40px;
+    margin-bottom: 35px;
 }
 
 .tamanho-topo {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
 }
 
 .tamanho-topo h3 {
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #000000;
 }
 
-.tamanho-topo span {
-    font-size: 0.9rem;
-    color: #777;
-    text-decoration: underline;
-    cursor: pointer;
+/* 🔥 CORREÇÃO DO GUIA DE TAMANHOS: Remove o roxo nativo e deixa minimalista */
+.tamanho-topo span, 
+.tamanho-topo a, 
+a[href*="tamanhos"], 
+.Guia-de-tamanhos,
+#guia-tamanhos {
+    font-size: 0.80rem !important;
+    color: #757575 !important;
+    text-decoration: underline !important;
+    text-underline-offset: 4px !important;
+    cursor: pointer !important;
+    font-weight: 400 !important;
+    transition: color 0.2s ease !important;
+}
+
+.tamanho-topo span:hover, 
+.tamanho-topo a:hover {
+    color: #000000 !important;
 }
 
 .tamanhos-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    gap: 8px;
+    padding-top: 6px;
 }
 
 .tamanhos-grid button {
-    height: 65px;
-    border: 1px solid #ddd;
-    background: #fff;
-    border-radius: 10px;
-
-    font-size: 1rem;
-    font-weight: 700;
-
+    height: 48px;
+    border: 1px solid #e5e5e5;
+    background: #ffffff;
+    border-radius: 4px; 
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: #000000;
     cursor: pointer;
-    transition: 0.25s ease;
-
-    will-change: transform;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease, opacity 0.1s ease;
+    will-change: transform, opacity;
 }
 
 .tamanhos-grid button:hover {
-    background: #111;
-    color: #fff;
-    border-color: #111;
+    background: #000000;
+    color: #ffffff;
+    border-color: #000000;
+    transform: translateY(-3px);
 }
 
-/* 🔥 CORREÇÃO IMPORTANTE (bug comum) */
+.tamanhos-grid button:active {
+    transform: translateY(-1px) !important;
+    opacity: 0.75;
+}
+
 .tamanhos-grid button.ativo,
-.tamanhos-grid button.active {
-    background: #f6d221;
-    color: #000;
-    border-color: #f6d221;
-    transform: scale(1.05);
+.tamanhos-grid button.active,
+.tamanhos-grid button.ativo:hover,
+.tamanhos-grid button.active:hover {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border-color: #000000 !important;
+    transform: translateY(-3px) !important;
+    opacity: 1 !important;
+    font-weight: 600;
 }
-
-/* =============================================================
-   BOTÕES
-============================================================= */
 
 .produto-botoes {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
 }
 
 .produto-botoes button {
-    height: 56px;
+    height: 60px; 
     border: none;
-    border-radius: 50px;
-
-    font-size: 0.95rem;
-    font-weight: 700;
-
+    border-radius: 30px; 
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: all 0.2s ease;
 }
 
-/* CARRINHO */
 .btn-carrinho {
-    background: #fff;
-    border: 2px solid #111 !important;
-    color: #111;
+    background: #ffffff;
+    border: 1px solid #e5e5e5 !important;
+    color: #000000;
 }
 
 .btn-carrinho:hover {
-    background: #111;
-    color: #fff;
+    border-color: #000000 !important;
+    background: #f5f5f5;
 }
 
-/* COMPRAR */
 .btn-comprar {
-    background: #111;
-    color: #fff;
+    background: #000000;
+    color: #ffffff;
 }
 
 .btn-comprar:hover {
-    background: #5c5c5c;
+    background: #1e1e1e;
+    opacity: 0.85;
 }
 
 /* =============================================================
-   RESPONSIVO NOTEBOOK
+   RESPONSIVIDADE
 ============================================================= */
 
 @media (max-width: 1366px) {
     .produto-page {
-        gap: 40px;
-        padding: 120px 25px 60px;
+        gap: 50px;
+        padding: 140px 30px 60px;
     }
-
     #produto-imagem {
-        max-width: 500px;
+        max-width: 440px;
     }
 }
 
-/* =============================================================
-   TABLETS
-============================================================= */
-
-@media (max-width: 1000px) {
+@media (max-width: 1024px) {
     .produto-page {
         flex-direction: column;
-        gap: 35px;
+        align-items: center;
+        gap: 40px;
+        padding: 120px 24px 60px;
     }
-
-    .produto-direita {
-        max-width: 100%;
+    .produto-esquerda, .produto-direita {
+        width: 100%;
+        max-width: 550px;
     }
-
     #produto-imagem {
-        max-width: 400px;
-    }
-
-    .tamanhos-grid {
-        grid-template-columns: repeat(2, 1fr);
+        max-width: 380px;
     }
 }
-
-/* =============================================================
-   CELULAR
-============================================================= */
 
 @media (max-width: 600px) {
     .produto-page {
-        padding: 100px 15px 50px;
+        padding: 100px 16px 40px;
+        gap: 30px;
     }
-
     .produto-imagem-container {
-        border-radius: 18px;
-        padding: 18px;
+        padding: 24px;
     }
-
     #produto-imagem {
-        max-width: 280px;
+        max-width: 300px;
     }
-
     #produto-titulo {
-        font-size: 1.9rem;
-    }
-
-    #produto-preco {
         font-size: 1.7rem;
     }
-
-    .tamanhos-grid button {
-        height: 52px;
+    .tamanhos-grid {
+        grid-template-columns: repeat(4, 1fr); 
     }
-
+    .tamanhos-grid button {
+        height: 46px;
+    }
     .produto-botoes button {
-        height: 52px;
-        font-size: 0.9rem;
+        height: 54px;
+        font-size: 0.95rem;
     }
 }
-

@@ -180,51 +180,68 @@ document.addEventListener("DOMContentLoaded", render);
 
 
 function atualizarResumoInterface(subtotal) {
+
   const subtotalEl = document.getElementById("subtotal");
   const freteEl = document.getElementById("frete");
   const descontoEl = document.getElementById("desconto");
   const totalEl = document.getElementById("total");
+  const parcelamentoEl = document.getElementById("checkout-parcelamento");
 
-  // 🔥 FUNÇÃO SEGURA DE NÚMERO
+  // SEGURANÇA
   const safeNumber = (value) => {
     const num = Number(value);
     return isNaN(num) ? 0 : num;
   };
 
-  // 🔥 FRETE SEMPRE LIMPO
-  const freteSalvo = localStorage.getItem("frete_valor");
-
+  // FRETE
   let vFrete = safeNumber(window.frete);
 
-  if (isNaN(vFrete) || vFrete <= 0) {
-    vFrete = safeNumber(freteSalvo);
+  if (vFrete <= 0) {
+    vFrete = safeNumber(localStorage.getItem("frete_valor"));
   }
 
-  if (isNaN(vFrete) || vFrete < 0) {
-    vFrete = 0;
-  }
-
-  // 🔥 DESCONTO
+  // DESCONTO
   let vDesconto = 0;
-  if (typeof descontoPercentual !== "undefined" && descontoPercentual > 0) {
+
+  if (descontoPercentual > 0) {
     vDesconto = subtotal * (descontoPercentual / 100);
   }
 
-  // 🔥 TOTAL SEM RISCO DE NaN
+  // TOTAL
   const vTotal = safeNumber(subtotal) + vFrete - vDesconto;
 
-  // 🔥 UI SEGURA
-  if (subtotalEl)
-    subtotalEl.innerText = safeNumber(subtotal).toFixed(2).replace(".", ",");
+  // UI
+  if (subtotalEl) {
+    subtotalEl.innerText =
+      safeNumber(subtotal).toFixed(2).replace(".", ",");
+  }
 
-  if (freteEl)
-    freteEl.innerText = vFrete.toFixed(2).replace(".", ",");
+  if (freteEl) {
+    freteEl.innerText =
+      vFrete.toFixed(2).replace(".", ",");
+  }
 
-  if (descontoEl)
-    descontoEl.innerText = vDesconto.toFixed(2).replace(".", ",");
+  if (descontoEl) {
+    descontoEl.innerText =
+      vDesconto.toFixed(2).replace(".", ",");
+  }
 
-  if (totalEl)
-    totalEl.innerText = vTotal.toFixed(2).replace(".", ",");
+  if (totalEl) {
+    totalEl.innerText =
+      vTotal.toFixed(2).replace(".", ",");
+  }
+
+  // PARCELAMENTO
+  if (parcelamentoEl) {
+
+    const parcela = (vTotal / 4)
+      .toFixed(2)
+      .replace(".", ",");
+
+    parcelamentoEl.innerHTML = `
+      Em até <strong>4x de R$ ${parcela}</strong> com juros
+    `;
+  }
 }
 
 /* ==========================================================================
@@ -807,21 +824,6 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.removeItem("desconto_percentual");
   }
 });
-
-
-function verificarEstadoCarrinho() {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const telaConteudo = document.getElementById("checkout-content");
-    const telaVazio = document.getElementById("carrinho-vazio");
-
-    if (cart.length === 0) {
-        telaConteudo.classList.add("hidden");
-        telaVazio.classList.remove("hidden");
-    } else {
-        telaConteudo.classList.remove("hidden");
-        telaVazio.classList.add("hidden");
-    }
-}
 
 // Chame a função assim que carregar
 document.addEventListener("DOMContentLoaded", verificarEstadoCarrinho);

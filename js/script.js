@@ -721,9 +721,84 @@
         });
     }
 
+
+    function renderizarListaFiltrada(lista) {
+
+        const container =
+            document.getElementById("product-list");
+
+        if (!container) return;
+
+        container.innerHTML = "";
+
+        lista.forEach(p => {
+
+            container.innerHTML += criarHTMLCard(p);
+        });
+    }
+
+    /* ==========================================================
+    GERAR FILTRO DE TIMES DINÂMICO
+    ========================================================== */
+
+    function gerarFiltroTimes() {
+
+        const container =
+            document.getElementById("filtro-times");
+
+        if (!container) return;
+
+        let listaOriginal = [];
+
+        if (typeof produtos !== "undefined") {
+
+            listaOriginal = produtos;
+
+        } else if (typeof produtosFemininos !== "undefined") {
+
+            listaOriginal = produtosFemininos;
+
+        } else if (typeof produtosOfertas !== "undefined") {
+
+            listaOriginal = produtosOfertas;
+        }
+
+        const timesUnicos = [
+            ...new Set(
+                listaOriginal
+                    .map(p => p.time)
+                    .filter(Boolean)
+            )
+        ];
+
+        timesUnicos.sort();
+
+        container.innerHTML = timesUnicos.map(time => `
+
+            <label>
+                <input
+                    type="checkbox"
+                    value="${time.toLowerCase()}"
+                >
+                ${time}
+            </label>
+
+        `).join("");
+
+        container
+            .querySelectorAll('input[type="checkbox"]')
+            .forEach(input => {
+
+                input.addEventListener(
+                    "change",
+                    filtrarProdutos
+                );
+            });
+    }
+
     /* ==========================================================================
     EVENTOS DOS FILTROS
-    ========================================================================== */
+========================================================================== */
 
     document
         .querySelectorAll(
@@ -860,7 +935,13 @@
     }
 
     // Inicializa a loja ao carregar
-    document.addEventListener("DOMContentLoaded", renderizarLoja);
+    document.addEventListener("DOMContentLoaded", () => {
+
+        renderizarLoja();
+
+        gerarFiltroTimes();
+
+    });
 
     /* ==========================================================================
     RENDERIZAÇÃO UNIFICADA (HOME / LOJA)
