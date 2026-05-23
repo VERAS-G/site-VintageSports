@@ -794,3 +794,125 @@
 .btn-ver-mais:hover::after {
   width: 100%;
 }
+
+/* =============================================================
+   PRODUTOS PARTICIPANTES
+============================================================= */
+
+.produtos {
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 30px;
+
+  margin-top: 40px;
+}
+
+/* CARD DENTRO DA GRADE */
+.produtos .card {
+
+  width: 100%;
+
+  min-width: unset !important;
+
+  flex: unset !important;
+}
+
+
+/* TABLET */
+@media (max-width: 900px) {
+
+  .produtos {
+
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+
+  .produtos {
+
+    grid-template-columns: 1fr;
+  }
+
+  .produtos .card {
+
+    min-width: 100% !important;
+  }
+}
+
+/* Overlay escuro */
+.produtos .card::before {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.18);
+
+  opacity: 0;
+
+  transition: opacity 0.3s ease;
+
+  z-index: 5;
+
+  border-radius: 12px;
+
+  pointer-events: none;
+}
+
+
+
+
+/* Texto */
+.produtos .card::after {
+
+  content: "VER PRODUTO";
+
+  position: absolute;
+
+  top: 30%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  color: #fff;
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  letter-spacing: 3px;
+
+  text-transform: uppercase;
+
+  opacity: 0;
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+
+  z-index: 6;
+
+  pointer-events: none;
+}
+
+/* Hover overlay */
+.produtos .card:hover::before {
+
+  opacity: 1;
+}
+
+/* Hover texto */
+.produtos .card:hover::after {
+
+  opacity: 1;
+
+  transform: translate(-50%, -50%) translateY(-4px);
+}
+

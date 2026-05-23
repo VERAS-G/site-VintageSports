@@ -1,588 +1,773 @@
-/* ==========================================================================
-   CONFIGURAÇÃO INICIAL
-   ========================================================================== */
-// Busca os valores salvos no navegador. Se não existirem, começa em 0.
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-let frete = parseFloat(localStorage.getItem("frete_valor")) || 0;
-let descontoPercentual = parseFloat(localStorage.getItem("desconto_percentual")) || 0;
-let freteSelecionado = null;
-let toastTimeout;
+    /* ==========================================================================
+      CONFIGURAÇÃO INICIAL
+      ========================================================================== */
+    // Busca os valores salvos no navegador. Se não existirem, começa em 0.
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let frete = parseFloat(localStorage.getItem("frete_valor")) || 0;
+    let descontoPercentual = parseFloat(localStorage.getItem("desconto_percentual")) || 0;
+    let freteSelecionado = null;
+    let toastTimeout;
+    let etapaAtual = "step-carrinho";
+    let pedidoCache = null;
 
-function limparCheckoutStorage() {
-  localStorage.removeItem("frete_valor");
-  localStorage.removeItem("cep_salvo");
-  localStorage.removeItem("cupom_ativo");
-  localStorage.removeItem("desconto_percentual");
+    function limparCheckoutStorage() {
+      localStorage.removeItem("frete_valor");
+      localStorage.removeItem("cep_salvo");
+      localStorage.removeItem("cupom_ativo");
+      localStorage.removeItem("desconto_percentual");
 
-  frete = 0;
-  descontoPercentual = 0;
-}
-
-
-/* ==========================================================================
-   RENDERIZAÇÃO DO CARRINHO (COM PREÇO DE OFERTA LADO A LADO)
-   ========================================================================== */
-function render() {
-  const container = document.getElementById("cart-items");
-  if (!container) return;
-  
-  container.innerHTML = "";
-  let subtotal = 0;
-
-  cart.forEach((item, i) => {
-    const totalItem = item.price * item.quantity;
-
-    if (item.selected !== false) {
-      subtotal += totalItem;
+      frete = 0;
+      descontoPercentual = 0;
     }
 
-    let htmlPreco = "";
-    if (item.isPromo) {
-      const precoAntigoTotal = (item.price * 1.15) * item.quantity;
-      htmlPreco = `
-        <div class="checkout-price-row">
-          <span class="price-old">R$ ${precoAntigoTotal.toFixed(2).replace(".", ",")}</span>
-          <span class="price-new">R$ ${totalItem.toFixed(2).replace(".", ",")}</span>
-        </div>
-      `;
-    } else {
-      htmlPreco = `<div class="checkout-price">R$ ${totalItem.toFixed(2).replace(".", ",")}</div>`;
-    }
 
-    const statusClasse = item.selected === false ? "item-morto" : "";
-    const div = document.createElement("div");
-    div.className = `checkout-product ${statusClasse}`;
+    /* ==========================================================================
+      RENDERIZAÇÃO DO CARRINHO (COM PREÇO DE OFERTA LADO A LADO)
+      ========================================================================== */
+    function render() {
+      const container = document.getElementById("cart-items");
+      if (!container) return;
+      
+      container.innerHTML = "";
+      let subtotal = 0;
 
-    div.innerHTML = `
-      <div class="product-main-info">
-        <input type="checkbox" ${item.selected !== false ? "checked" : ""} 
-               onchange="alternarSelecao(${i})" class="cart-check">
+      cart.forEach((item, i) => {
+        const totalItem = item.price * item.quantity;
 
-        <img src="${item.image}" class="checkout-img">
+        if (item.selected !== false) {
+          subtotal += totalItem;
+        }
 
-        <div class="checkout-details">
-          <h4>${item.name}</h4>
-          <p class="checkout-category">Camisa retrô</p>
-
-          <div class="checkout-actions">
-            <div class="qtd">
-              <button onclick="menos(${i})">−</button>
-              <span>${item.quantity}</span>
-              <button onclick="mais(${i})">+</button>
+        let htmlPreco = "";
+        if (item.isPromo) {
+          const precoAntigoTotal = (item.price * 1.15) * item.quantity;
+          htmlPreco = `
+            <div class="checkout-price-row">
+              <span class="price-old">R$ ${precoAntigoTotal.toFixed(2).replace(".", ",")}</span>
+              <span class="price-new">R$ ${totalItem.toFixed(2).replace(".", ",")}</span>
             </div>
-            <button class="remove" onclick="remover(${i})">
-              <i class="fa-regular fa-trash-can"></i>
-            </button>
+          `;
+        } else {
+          htmlPreco = `<div class="checkout-price">R$ ${totalItem.toFixed(2).replace(".", ",")}</div>`;
+        }
+
+        const statusClasse = item.selected === false ? "item-morto" : "";
+        const div = document.createElement("div");
+        div.className = `checkout-product ${statusClasse}`;
+
+        div.innerHTML = `
+          <div class="product-main-info">
+            <input type="checkbox" ${item.selected !== false ? "checked" : ""} 
+                  onchange="alternarSelecao(${i})" class="cart-check">
+
+            <img src="${item.image}" class="checkout-img">
+
+            <div class="checkout-details">
+              <h4>${item.name}</h4>
+              <p class="checkout-category">Camisa retrô</p>
+
+              <div class="checkout-actions">
+                <div class="qtd">
+                  <button onclick="menos(${i})">−</button>
+                  <span>${item.quantity}</span>
+                  <button onclick="mais(${i})">+</button>
+                </div>
+                <button class="remove" onclick="remover(${i})">
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      ${htmlPreco}
-    `;
+          ${htmlPreco}
+        `;
 
-    container.appendChild(div);
-  });
+        container.appendChild(div);
+      });
 
-  // 🔥 DESCONTO
-  let valorDesconto = 0;
-  if (typeof descontoPercentual !== 'undefined' && descontoPercentual > 0) {
-    valorDesconto = subtotal * (descontoPercentual / 100);
-    localStorage.setItem("desconto_percentual", descontoPercentual);
-  } else {
-    localStorage.removeItem("desconto_percentual");
-    localStorage.removeItem("cupom_ativo");
-  }
+      // 🔥 DESCONTO
+      let valorDesconto = 0;
+      if (typeof descontoPercentual !== 'undefined' && descontoPercentual > 0) {
+        valorDesconto = subtotal * (descontoPercentual / 100);
+        localStorage.setItem("desconto_percentual", descontoPercentual);
+      } else {
+        localStorage.removeItem("desconto_percentual");
+        localStorage.removeItem("cupom_ativo");
+      }
 
-  // 🔥 FRETE (CORRIGIDO AQUI)
-  const vFrete = Number(window.frete || localStorage.getItem("frete_valor") || 0);
+      // 🔥 FRETE (CORRIGIDO AQUI)
+      const vFrete = Number(window.frete || localStorage.getItem("frete_valor") || 0);
 
-  if (vFrete > 0) {
-    localStorage.setItem("frete_valor", vFrete);
-  }
+      if (vFrete > 0) {
+        localStorage.setItem("frete_valor", vFrete);
+      }
 
-  const totalFinal = subtotal - valorDesconto + vFrete;
+      const totalFinal = subtotal - valorDesconto + vFrete;
 
-  atualizarResumoInterface(subtotal, valorDesconto, totalFinal);
+      atualizarResumoInterface(subtotal, valorDesconto, totalFinal);
 
-  localStorage.setItem("cart", JSON.stringify(cart));
+      localStorage.setItem("cart", JSON.stringify(cart));
 
-  if (typeof verificarEstadoCarrinho === "function") {
-    verificarEstadoCarrinho();
-  }
+      if (typeof verificarEstadoCarrinho === "function") {
+        verificarEstadoCarrinho();
+      }
 
-  // LIMPA SE VAZIO
-  if (cart.length === 0) {
-    limparCheckoutStorage();
+      // LIMPA SE VAZIO
+      if (cart.length === 0) {
+        limparCheckoutStorage();
 
-    const cepInput = document.getElementById("cep-input");
-    const cupomInput = document.getElementById("cupom");
+        const cepInput = document.getElementById("cep-input");
+        const cupomInput = document.getElementById("cupom");
 
-    if (cepInput) cepInput.value = "";
-    if (cupomInput) cupomInput.value = "";
-  }
-}
-
-
-
-// --- FUNÇÕES DE APOIO ---
-
-function verificarEstadoCarrinho() {
-  const telaConteudo = document.getElementById("checkout-content");
-  const telaVazio = document.getElementById("carrinho-vazio");
-
-  if (!telaConteudo || !telaVazio) return;
-
-  if (cart.length === 0) {
-    telaConteudo.classList.add("hidden");
-    telaVazio.classList.remove("hidden");
-  } else {
-    telaConteudo.classList.remove("hidden");
-    telaVazio.classList.add("hidden");
-  }
-}
-
-function alternarSelecao(index) {
-  cart[index].selected = !cart[index].selected;
-  render();
-}
-
-function mais(i) {
-  cart[i].quantity++;
-  render();
-}
-
-function menos(i) {
-  if (cart[i].quantity > 1) {
-    cart[i].quantity--;
-  } else {
-    remover(i);
-  }
-  render();
-}
-
-function remover(i) {
-  const modal = document.getElementById("custom-confirm");
-  if (!modal) return;
-  
-  modal.style.display = "flex";
-
-  document.getElementById("confirm-yes").onclick = function() {
-    cart.splice(i, 1);
-    modal.style.display = "none";
-    render(); // Isso já vai disparar a verificação de carrinho vazio
-  };
-
-  document.getElementById("confirm-no").onclick = () => modal.style.display = "none";
-}
-
-// Inicializa a página
-document.addEventListener("DOMContentLoaded", render);
-
-
-function atualizarResumoInterface(subtotal) {
-
-  const subtotalEl = document.getElementById("subtotal");
-  const freteEl = document.getElementById("frete");
-  const descontoEl = document.getElementById("desconto");
-  const totalEl = document.getElementById("total");
-  const parcelamentoEl = document.getElementById("checkout-parcelamento");
-
-  // SEGURANÇA
-  const safeNumber = (value) => {
-    const num = Number(value);
-    return isNaN(num) ? 0 : num;
-  };
-
-  // FRETE
-  let vFrete = safeNumber(window.frete);
-
-  if (vFrete <= 0) {
-    vFrete = safeNumber(localStorage.getItem("frete_valor"));
-  }
-
-  // DESCONTO
-  let vDesconto = 0;
-
-  if (descontoPercentual > 0) {
-    vDesconto = subtotal * (descontoPercentual / 100);
-  }
-
-  // TOTAL
-  const vTotal = safeNumber(subtotal) + vFrete - vDesconto;
-
-  // UI
-  if (subtotalEl) {
-    subtotalEl.innerText =
-      safeNumber(subtotal).toFixed(2).replace(".", ",");
-  }
-
-  if (freteEl) {
-    freteEl.innerText =
-      vFrete.toFixed(2).replace(".", ",");
-  }
-
-  if (descontoEl) {
-    descontoEl.innerText =
-      vDesconto.toFixed(2).replace(".", ",");
-  }
-
-  if (totalEl) {
-    totalEl.innerText =
-      vTotal.toFixed(2).replace(".", ",");
-  }
-
-  // PARCELAMENTO
-  if (parcelamentoEl) {
-
-    const parcela = (vTotal / 4)
-      .toFixed(2)
-      .replace(".", ",");
-
-    parcelamentoEl.innerHTML = `
-      Em até <strong>4x de R$ ${parcela}</strong> com juros
-    `;
-  }
-}
-
-/* ==========================================================================
-   NOTIFICAÇÕES (TOAST & ALERTA)
-   ========================================================================== */
-/* 🔥 NOTIFICAÇÃO ESTILO NIKE DINÂMICA */
-
-function showToast(message, type = "success") {
-    let container = document.querySelector(".toast-container");
-    if (!container) {
-        container = document.createElement("div");
-        container.className = "toast-container";
-        document.body.appendChild(container);
+        if (cepInput) cepInput.value = "";
+        if (cupomInput) cupomInput.value = "";
+      }
     }
 
-    const toast = document.createElement("div");
-    toast.className = `nike-toast ${type === "warning" ? "warning" : ""}`;
 
-    toast.innerHTML = `
-        <div class="toast-content">
-            <i class="fa-solid fa-circle-check toast-icon"></i>
-            <span>${message}</span>
-        </div>
-        <button class="toast-close" onclick="fecharToastManual(this)">✕</button>
-        <div class="toast-progress"></div>
-    `;
 
-    container.appendChild(toast);
+    // --- FUNÇÕES DE APOIO ---
 
-    // Entrada suave
-    setTimeout(() => toast.classList.add("show"), 50);
+    function verificarEstadoCarrinho() {
+      const telaConteudo = document.getElementById("checkout-content");
+      const telaVazio = document.getElementById("carrinho-vazio");
 
-    // Saída automática suave
-    setTimeout(() => {
-        if (toast) {
-            toast.classList.remove("show"); // Inicia animação de saída
-            setTimeout(() => {
-                if (toast.parentNode) toast.remove(); // Remove do HTML após a animação
-            }, 600); // Tempo igual ao 'transition' do CSS
+      if (!telaConteudo || !telaVazio) return;
+
+      if (cart.length === 0) {
+        telaConteudo.classList.add("hidden");
+        telaVazio.classList.remove("hidden");
+      } else {
+        telaConteudo.classList.remove("hidden");
+        telaVazio.classList.add("hidden");
+      }
+    }
+
+    function alternarSelecao(index) {
+      cart[index].selected = !cart[index].selected;
+      render();
+    }
+
+    function mais(i) {
+      cart[i].quantity++;
+      render();
+    }
+
+    function menos(i) {
+      if (cart[i].quantity > 1) {
+        cart[i].quantity--;
+      } else {
+        remover(i);
+      }
+      render();
+    }
+
+    function remover(i) {
+      const modal = document.getElementById("custom-confirm");
+      if (!modal) return;
+      
+      modal.style.display = "flex";
+
+      document.getElementById("confirm-yes").onclick = function() {
+        cart.splice(i, 1);
+        modal.style.display = "none";
+        render(); // Isso já vai disparar a verificação de carrinho vazio
+      };
+
+      document.getElementById("confirm-no").onclick = () => modal.style.display = "none";
+    }
+
+    // Inicializa a página
+    document.addEventListener("DOMContentLoaded", render);
+
+
+    function atualizarResumoInterface(subtotal) {
+
+      const subtotalEl = document.getElementById("subtotal");
+      const freteEl = document.getElementById("frete");
+      const descontoEl = document.getElementById("desconto");
+      const totalEl = document.getElementById("total");
+      const parcelamentoEl = document.getElementById("checkout-parcelamento");
+
+      // SEGURANÇA
+      const safeNumber = (value) => {
+        const num = Number(value);
+        return isNaN(num) ? 0 : num;
+      };
+
+      // FRETE
+      let vFrete = safeNumber(window.frete);
+
+      if (vFrete <= 0) {
+        vFrete = safeNumber(localStorage.getItem("frete_valor"));
+      }
+
+      // DESCONTO
+      let vDesconto = 0;
+
+      if (descontoPercentual > 0) {
+        vDesconto = subtotal * (descontoPercentual / 100);
+      }
+
+      // TOTAL
+      const vTotal = safeNumber(subtotal) + vFrete - vDesconto;
+
+      // UI
+      if (subtotalEl) {
+        subtotalEl.innerText =
+          safeNumber(subtotal).toFixed(2).replace(".", ",");
+      }
+
+      if (freteEl) {
+        freteEl.innerText =
+          vFrete.toFixed(2).replace(".", ",");
+      }
+
+      if (descontoEl) {
+        descontoEl.innerText =
+          vDesconto.toFixed(2).replace(".", ",");
+      }
+
+      if (totalEl) {
+        totalEl.innerText =
+          vTotal.toFixed(2).replace(".", ",");
+      }
+
+      // PARCELAMENTO
+      if (parcelamentoEl) {
+
+        const parcela = (vTotal / 4)
+          .toFixed(2)
+          .replace(".", ",");
+
+        parcelamentoEl.innerHTML = `
+          Em até <strong>4x de R$ ${parcela}</strong> com juros
+        `;
+      }
+    }
+
+    /* ==========================================================================
+      NOTIFICAÇÕES (TOAST & ALERTA)
+      ========================================================================== */
+    /* 🔥 NOTIFICAÇÃO ESTILO NIKE DINÂMICA */
+
+    function showToast(message, type = "success") {
+        let container = document.querySelector(".toast-container");
+        if (!container) {
+            container = document.createElement("div");
+            container.className = "toast-container";
+            document.body.appendChild(container);
         }
-    }, 3000);
-}
 
-function fecharToastManual(btn) {
-    const toast = btn.parentElement;
-    toast.classList.remove("show");
-    setTimeout(() => toast.remove(), 600);
-}
+        const toast = document.createElement("div");
+        toast.className = `nike-toast ${type === "warning" ? "warning" : ""}`;
 
-/* 🔔 MODAL DE ALERTA */
-function mostrarAlerta(mensagem) {
-  const modal = document.getElementById("custom-alert");
-  const texto = document.getElementById("alert-message");
-  if (modal && texto) {
-    texto.innerText = mensagem;
-    modal.style.display = "flex";
-  }
-}
+        toast.innerHTML = `
+            <div class="toast-content">
+                <i class="fa-solid fa-circle-check toast-icon"></i>
+                <span>${message}</span>
+            </div>
+            <button class="toast-close" onclick="fecharToastManual(this)">✕</button>
+            <div class="toast-progress"></div>
+        `;
 
-function fecharModalAlerta() {
-  const modal = document.getElementById("custom-alert");
-  if (modal) modal.style.display = "none";
-}
+        container.appendChild(toast);
 
-/* ==========================================================================
-   CUPOM E DESCONTO
-   ========================================================================== */
+        // Entrada suave
+        setTimeout(() => toast.classList.add("show"), 50);
 
-// 1. ADICIONE ESTA FUNÇÃO: Ela monitora o campo e remove o cupom se o usuário apagar o texto
-function monitorarCupom(input) {
-  const msgCupom = document.getElementById("mensagem-cupom");
-
-  // Se o campo ficar vazio
-  if (input.value.trim() === "") {
-    // 1. Zera a porcentagem para permitir aplicar novos cupons
-    descontoPercentual = 0;
-    
-    // 2. Limpa o rastro no navegador para o F5 não bugar
-    localStorage.removeItem("cupom_ativo");
-    localStorage.removeItem("desconto_percentual");
-
-    // 3. Limpa as mensagens de erro/sucesso e a borda vermelha
-    if (msgCupom) msgCupom.innerHTML = "";
-    input.classList.remove("input-error");
-    
-    // 4. Atualiza o resumo lateral para o desconto sumir na hora
-    render();
-  }
-}
-
-// Certifique-se de ter essa variável no topo do arquivo (fora das funções)
-// let descontoPercentual = 0; 
-
-/* ==========================================================================
-   FUNÇÃO: APLICAR CUPOM (VINTAGE SPORTS)
-   ========================================================================== */
-function aplicarCupom() {
-  const input = document.getElementById("cupom");
-  const msgCupom = document.getElementById("mensagem-cupom");
-  
-  // 🔥 AJUSTE AQUI: Busca o botão que está dentro do mesmo grupo do input de cupom
-  // Isso evita que a animação vá para o botão de frete.
-  const btn = input.parentElement.querySelector("button");
-
-  if (!input || !msgCupom || !btn) return;
-  
-  const valor = input.value.trim().toUpperCase();
-
-  // 1. Validação de campo vazio
-  if (valor === "") {
-    input.classList.add("input-error");
-    msgCupom.innerHTML = `<div class="cupom-feedback text-error"><i class="fa-solid fa-circle-exclamation"></i> Digite um código</div>`;
-    return;
-  }
-
-  // 2. Verifica se já existe um cupom ativo
-  if (typeof descontoPercentual !== 'undefined' && descontoPercentual > 0) {
-    return showToast("Um cupom já está ativo!", "warning");
-  }
-
-  // 3. Animação de Loading (Agora no botão correto)
-  const originalText = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-
-  setTimeout(() => {
-    btn.disabled = false;
-    btn.innerHTML = originalText;
-
-    let cupomValido = false;
-    let porcentagem = 0;
-
-    // 4. Lógica de Validação dos Cupons
-    if (valor === "VINTAGE10") {
-      porcentagem = 5; 
-      cupomValido = true;
-    } else if (valor === "DESCONTO10") {
-      porcentagem = 10; 
-      cupomValido = true;
+        // Saída automática suave
+        setTimeout(() => {
+            if (toast) {
+                toast.classList.remove("show"); // Inicia animação de saída
+                setTimeout(() => {
+                    if (toast.parentNode) toast.remove(); // Remove do HTML após a animação
+                }, 600); // Tempo igual ao 'transition' do CSS
+            }
+        }, 3000);
     }
 
-    if (cupomValido) {
-      descontoPercentual = porcentagem;
-      input.classList.remove("input-error");
+    function fecharToastManual(btn) {
+        const toast = btn.parentElement;
+        toast.classList.remove("show");
+        setTimeout(() => toast.remove(), 600);
+    }
+
+    /* 🔔 MODAL DE ALERTA */
+    function mostrarAlerta(mensagem) {
+      const modal = document.getElementById("custom-alert");
+      const texto = document.getElementById("alert-message");
+      if (modal && texto) {
+        texto.innerText = mensagem;
+        modal.style.display = "flex";
+      }
+    }
+
+    function fecharModalAlerta() {
+      const modal = document.getElementById("custom-alert");
+      if (modal) modal.style.display = "none";
+    }
+
+    /* ==========================================================================
+      CUPOM E DESCONTO
+      ========================================================================== */
+
+    // 1. ADICIONE ESTA FUNÇÃO: Ela monitora o campo e remove o cupom se o usuário apagar o texto
+    function monitorarCupom(input) {
+      const msgCupom = document.getElementById("mensagem-cupom");
+
+      // Se o campo ficar vazio
+      if (input.value.trim() === "") {
+        // 1. Zera a porcentagem para permitir aplicar novos cupons
+        descontoPercentual = 0;
+        
+        // 2. Limpa o rastro no navegador para o F5 não bugar
+        localStorage.removeItem("cupom_ativo");
+        localStorage.removeItem("desconto_percentual");
+
+        // 3. Limpa as mensagens de erro/sucesso e a borda vermelha
+        if (msgCupom) msgCupom.innerHTML = "";
+        input.classList.remove("input-error");
+        
+        // 4. Atualiza o resumo lateral para o desconto sumir na hora
+        render();
+      }
+    }
+
+    // Certifique-se de ter essa variável no topo do arquivo (fora das funções)
+    // let descontoPercentual = 0; 
+
+    /* ==========================================================================
+      FUNÇÃO: APLICAR CUPOM (VINTAGE SPORTS)
+      ========================================================================== */
+    function aplicarCupom() {
+      const input = document.getElementById("cupom");
+      const msgCupom = document.getElementById("mensagem-cupom");
       
-      msgCupom.innerHTML = `
-        <div class="cupom-feedback text-success">
-          Cupom ativo: ${valor} (${porcentagem}% OFF)
-          <i class="fa-solid fa-xmark" onclick="removerCupom()" style="cursor:pointer; margin-left:8px;" title="Remover cupom"></i>
-        </div>`;
+      // 🔥 AJUSTE AQUI: Busca o botão que está dentro do mesmo grupo do input de cupom
+      // Isso evita que a animação vá para o botão de frete.
+      const btn = input.parentElement.querySelector("button");
 
-      showToast(`Cupom de ${porcentagem}% aplicado!`);
+      if (!input || !msgCupom || !btn) return;
       
-      // Persistência no LocalStorage
-      localStorage.setItem("cupom_ativo", valor);
-      localStorage.setItem("desconto_percentual", porcentagem); 
-      
-      // Atualiza o resumo
-      if (typeof render === "function") render(); 
+      const valor = input.value.trim().toUpperCase();
 
-    } else {
-      input.classList.add("input-error");
-      msgCupom.innerHTML = `<div class="cupom-feedback text-error"><i class="fa-solid fa-circle-exclamation"></i> Cupom inválido</div>`;
-      showToast("Cupom inválido.", "warning");
-    }
-  }, 1000);
-}
+      // 1. Validação de campo vazio
+      if (valor === "") {
+        input.classList.add("input-error");
+        msgCupom.innerHTML = `<div class="cupom-feedback text-error"><i class="fa-solid fa-circle-exclamation"></i> Digite um código</div>`;
+        return;
+      }
 
+      // 2. Verifica se já existe um cupom ativo
+      if (typeof descontoPercentual !== 'undefined' && descontoPercentual > 0) {
+        return showToast("Um cupom já está ativo!", "warning");
+      }
 
-function removerCupom() {
-    // 1. Zera a variável global para o cálculo atual
-    descontoPercentual = 0;
+      // 3. Animação de Loading (Agora no botão correto)
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
-    // 2. Limpa o "banco de dados" do navegador (IGUAL OS NOMES DA SUA IMAGEM)
-    localStorage.removeItem("cupom_ativo");
-    localStorage.removeItem("desconto_percentual");
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
 
-    // 3. Limpa a parte visual (Input e Mensagem)
-    const input = document.getElementById("cupom");
-    const msgCupom = document.getElementById("mensagem-cupom");
+        let cupomValido = false;
+        let porcentagem = 0;
 
-    if (input) input.value = "";
-    if (msgCupom) msgCupom.innerHTML = "";
-
-    // 4. 🔥 O PASSO MAIS IMPORTANTE: Avisa o resumo para recalcular com ZERO
-    render(); 
-    
-    showToast("Cupom removido!");
-}
-
-
-
-/* ==========================================================================
-   PERSISTÊNCIA (DOMContentLoaded) - Adicione/Ajuste no seu arquivo
-   ========================================================================== */
-document.addEventListener("DOMContentLoaded", () => {
-  const cupomSalvo = localStorage.getItem("cupom_ativo");
-  const inputCupom = document.getElementById("cupom");
-  const msgCupom = document.getElementById("mensagem-cupom");
-
-  if (cupomSalvo && inputCupom) {
-    inputCupom.value = cupomSalvo;
-    desconto = 10; // Valor fixo baseado na sua regra
-
-    if (msgCupom) {
-      msgCupom.innerHTML = `
-        <div class="cupom-feedback text-success">
-          Cupom ativo: ${cupomSalvo}
-          <i class="fa-solid fa-xmark" onclick="removerCupom()" style="cursor:pointer; margin-left:8px;"></i>
-        </div>`;
-    }
-  }
-
-  render();
-});
-
-
-/* ==========================================================================
-   LÓGICA DE FRETE (CEP)
-   ========================================================================== */
-
-// Função para colocar o hífen (00000-000) automaticamente
-function mascaraCEP(input) {
-  let v = input.value.replace(/\D/g, ""); // Remove tudo que não é número
-  if (v.length > 5) v = v.replace(/^(\d{5})(\d)/, "$1-$2");
-  input.value = v;
-
-  // Se apagar o CEP, esconde o resultado e limpa o storage
-  if (v === "") {
-    const resultadoFrete = document.getElementById("resultado-frete");
-    if (resultadoFrete) resultadoFrete.style.display = "none";
-    localStorage.removeItem("frete_valor");
-    localStorage.removeItem("cep_salvo");
-    frete = 0;
-    render();
-  }
-}
-
-async function calcularFrete(event) {
-  const btn = event.target;
-  const cepInput = document.getElementById("cep-input");
-  const msgCep = document.getElementById("mensagem-cep");
-  const resultadoFrete = document.getElementById("resultado-frete");
-
-  const cepNumeros = cepInput.value.replace(/\D/g, "");
-
-  // RESET UI
-  cepInput.classList.remove("input-error");
-  if (msgCep) msgCep.innerHTML = "";
-
-  // VALIDAÇÃO
-  if (cepNumeros.length !== 8) {
-    cepInput.classList.add("input-error");
-    if (msgCep) {
-      msgCep.innerHTML = `
-        <div class="cupom-feedback text-error">
-          <i class="fa-solid fa-circle-exclamation"></i> CEP inválido
-        </div>`;
-    }
-    return;
-  }
-
-  // LOADING
-  const originalText = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-
-  const API_URL = (
-    window.API_URL || "https://backend-loja-de-camisas.onrender.com"
-  ).replace(/\/$/, "");
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 15000);
-
-  try {
-    const response = await fetch(`${API_URL}/frete`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      signal: controller.signal,
-      body: JSON.stringify({
-        from: { postal_code: "05750-210" },
-        to: { postal_code: cepNumeros },
-        package: {
-          height: 5,
-          width: 20,
-          length: 30,
-          weight: 0.3
+        // 4. Lógica de Validação dos Cupons
+        if (valor === "VINTAGE10") {
+          porcentagem = 5; 
+          cupomValido = true;
+        } else if (valor === "DESCONTO10") {
+          porcentagem = 10; 
+          cupomValido = true;
         }
-      })
+
+        if (cupomValido) {
+          descontoPercentual = porcentagem;
+          input.classList.remove("input-error");
+          
+          msgCupom.innerHTML = `
+            <div class="cupom-feedback text-success">
+              Cupom ativo: ${valor} (${porcentagem}% OFF)
+              <i class="fa-solid fa-xmark" onclick="removerCupom()" style="cursor:pointer; margin-left:8px;" title="Remover cupom"></i>
+            </div>`;
+
+          showToast(`Cupom de ${porcentagem}% aplicado!`);
+          
+          // Persistência no LocalStorage
+          localStorage.setItem("cupom_ativo", valor);
+          localStorage.setItem("desconto_percentual", porcentagem); 
+          
+          // Atualiza o resumo
+          if (typeof render === "function") render(); 
+
+        } else {
+          input.classList.add("input-error");
+          msgCupom.innerHTML = `<div class="cupom-feedback text-error"><i class="fa-solid fa-circle-exclamation"></i> Cupom inválido</div>`;
+          showToast("Cupom inválido.", "warning");
+        }
+      }, 1000);
+    }
+
+
+    function removerCupom() {
+        // 1. Zera a variável global para o cálculo atual
+        descontoPercentual = 0;
+
+        // 2. Limpa o "banco de dados" do navegador (IGUAL OS NOMES DA SUA IMAGEM)
+        localStorage.removeItem("cupom_ativo");
+        localStorage.removeItem("desconto_percentual");
+
+        // 3. Limpa a parte visual (Input e Mensagem)
+        const input = document.getElementById("cupom");
+        const msgCupom = document.getElementById("mensagem-cupom");
+
+        if (input) input.value = "";
+        if (msgCupom) msgCupom.innerHTML = "";
+
+        // 4. 🔥 O PASSO MAIS IMPORTANTE: Avisa o resumo para recalcular com ZERO
+        render(); 
+        
+        showToast("Cupom removido!");
+    }
+
+
+
+    /* ==========================================================================
+      PERSISTÊNCIA (DOMContentLoaded) - Adicione/Ajuste no seu arquivo
+      ========================================================================== */
+    document.addEventListener("DOMContentLoaded", () => {
+      const cupomSalvo = localStorage.getItem("cupom_ativo");
+      const inputCupom = document.getElementById("cupom");
+      const msgCupom = document.getElementById("mensagem-cupom");
+
+      if (cupomSalvo && inputCupom) {
+        inputCupom.value = cupomSalvo;
+        desconto = 10; // Valor fixo baseado na sua regra
+
+        if (msgCupom) {
+          msgCupom.innerHTML = `
+            <div class="cupom-feedback text-success">
+              Cupom ativo: ${cupomSalvo}
+              <i class="fa-solid fa-xmark" onclick="removerCupom()" style="cursor:pointer; margin-left:8px;"></i>
+            </div>`;
+        }
+      }
+
+      render();
     });
 
-    clearTimeout(timeoutId);
 
-    const result = await response.json();
+    /* ==========================================================================
+      LÓGICA DE FRETE (CEP)
+      ========================================================================== */
 
-    if (!response.ok) {
-      throw new Error(result?.erro || "Erro ao calcular frete");
+    // Função para colocar o hífen (00000-000) automaticamente
+    function mascaraCEP(input) {
+      let v = input.value.replace(/\D/g, ""); // Remove tudo que não é número
+      if (v.length > 5) v = v.replace(/^(\d{5})(\d)/, "$1-$2");
+      input.value = v;
+
+      // Se apagar o CEP, esconde o resultado e limpa o storage
+      if (v === "") {
+        const resultadoFrete = document.getElementById("resultado-frete");
+        if (resultadoFrete) resultadoFrete.style.display = "none";
+        localStorage.removeItem("frete_valor");
+        localStorage.removeItem("cep_salvo");
+        frete = 0;
+        render();
+
+        verificarCepValido();
+      }
     }
 
-    const rawData = result?.data || result;
+    async function calcularFrete(event) {
+      const btn = event.target;
+      const cepInput = document.getElementById("cep-input");
+      const msgCep = document.getElementById("mensagem-cep");
+      const resultadoFrete = document.getElementById("resultado-frete");
 
-    if (!Array.isArray(rawData)) {
-      throw new Error("Formato inválido de frete");
+      const cepNumeros = cepInput.value.replace(/\D/g, "");
+
+      // RESET UI
+      cepInput.classList.remove("input-error");
+      if (msgCep) msgCep.innerHTML = "";
+
+      // VALIDAÇÃO
+      if (cepNumeros.length !== 8) {
+        cepInput.classList.add("input-error");
+        if (msgCep) {
+          msgCep.innerHTML = `
+            <div class="cupom-feedback text-error">
+              <i class="fa-solid fa-circle-exclamation"></i> CEP inválido
+            </div>`;
+        }
+        return;
+
+      window.frete = data[0].price;
+
+      }
+
+      // LOADING
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+      const API_URL = (
+        window.API_URL || "https://backend-loja-de-camisas.onrender.com"
+      ).replace(/\/$/, "");
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+      try {
+        const response = await fetch(`${API_URL}/frete`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          signal: controller.signal,
+          body: JSON.stringify({
+            from: { postal_code: "05750-210" },
+            to: { postal_code: cepNumeros },
+            package: {
+              height: 5,
+              width: 20,
+              length: 30,
+              weight: 0.3
+            }
+          })
+        });
+
+        clearTimeout(timeoutId);
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result?.erro || "Erro ao calcular frete");
+        }
+
+        const rawData = result?.data || result;
+
+        if (!Array.isArray(rawData)) {
+          throw new Error("Formato inválido de frete");
+        }
+
+        // 🔥 FUNÇÃO SEGURA DE PREÇO (APENAS UMA VEZ)
+        const parsePreco = (valor) => {
+          const num = Number(
+            String(valor)
+              .replace(/[^\d,.-]/g, "")
+              .replace(",", ".")
+          );
+
+          return isNaN(num) ? null : num;
+        };
+
+        // FILTRO
+        const data = rawData
+          .map(frete => {
+            const price = parsePreco(frete.price);
+            if (price === null || price <= 0) return null;
+
+            return { ...frete, price };
+          })
+          .filter(Boolean);
+
+        if (data.length === 0) {
+          throw new Error("Nenhuma opção de frete válida");
+        }
+
+        window.frete = data[0].price;
+
+        // RENDER UI
+        if (resultadoFrete) {
+          resultadoFrete.style.display = "block";
+
+          let expanded = false;
+
+          const renderList = (list) =>
+            list.map(op => `
+              <div class="frete-item" data-price="${op.price}">
+                <div class="frete-info">
+                  <i class="fa-solid fa-truck-fast"></i>
+                  <span>${op.name}</span>
+                </div>
+                <div>
+                  <strong>R$ ${op.price.toFixed(2).replace(".", ",")}</strong>
+                  <small>${op.delivery_time || "--"} dias</small>
+                </div>
+              </div>
+            `).join("");
+
+          const visiveis = data.slice(0, 2);
+          const restantes = data.length - visiveis.length;
+
+          const renderUI = () => {
+            resultadoFrete.innerHTML = `
+              <div class="frete-box">
+
+                <div class="frete-lista">
+                  ${renderList(expanded ? data : visiveis)}
+                </div>
+
+                ${restantes > 0 ? `
+                  <button id="toggle-frete" class="btn-ver-mais-frete">
+                    ${expanded ? "Fechar opções" : `Ver mais ${restantes} opções`}
+                  </button>
+                ` : ""}
+
+              </div>
+            `;
+          };
+
+          renderUI();
+
+          resultadoFrete.onclick = (e) => {
+            const item = e.target.closest(".frete-item");
+            const toggle = e.target.closest("#toggle-frete");
+
+            if (toggle) {
+              expanded = !expanded;
+              renderUI();
+              return;
+            }
+
+            if (!item) return;
+
+            const lista = document.querySelector(".frete-lista");
+
+            const price = Number(item.dataset.price);
+
+            // 🔥 verifica se clicou no mesmo frete
+            const isSame = freteSelecionado?.price === price;
+
+            // ==============================
+            // CASO 1: DESMARCAR
+            // ==============================
+            if (isSame) {
+              item.classList.remove("active");
+              freteSelecionado = null;
+
+              window.frete = 0;
+              localStorage.removeItem("frete_valor");
+
+              render();
+              return;
+            }
+
+            // ==============================
+            // CASO 2: SELECIONAR NOVO
+            // ==============================
+            document.querySelectorAll(".frete-item")
+              .forEach(i => i.classList.remove("active"));
+
+            item.classList.add("active");
+
+            freteSelecionado = {
+              price: price,
+              name: item.querySelector("span")?.innerText || ""
+            };
+
+            // move para o topo
+            if (lista) {
+              lista.prepend(item);
+              lista.scrollTop = 0;
+            }
+
+            // salva valor
+            window.frete = price;
+            localStorage.setItem("frete_valor", String(price));
+
+            render();
+
+            verificarCepValido();
+          };
+        }
+
+        if (typeof showToast === "function") {
+          showToast("Frete calculado com sucesso!");
+        }
+
+        localStorage.setItem("frete_valor", String(window.frete));
+        localStorage.setItem("cep_salvo", cepInput.value);
+
+        if (typeof render === "function") render();
+
+      } catch (error) {
+        console.error("❌ ERRO FRETE:", error);
+
+        const msg = error.name === "AbortError"
+          ? "Tempo esgotado ao calcular frete"
+          : error.message;
+
+        if (msgCep) {
+          msgCep.innerHTML = `
+            <div class="cupom-feedback text-error">
+              <i class="fa-solid fa-circle-exclamation"></i> ${msg}
+            </div>`;
+        }
+
+      } finally {
+        clearTimeout(timeoutId);
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+      }
     }
 
-    // 🔥 FUNÇÃO SEGURA DE PREÇO (APENAS UMA VEZ)
-    const parsePreco = (valor) => {
-      const num = Number(
-        String(valor)
-          .replace(/[^\d,.-]/g, "")
-          .replace(",", ".")
-      );
 
-      return isNaN(num) ? null : num;
-    };
+    function rebuildFreteUI(data) {
+      const resultadoFrete = document.getElementById("resultado-frete");
+      if (!resultadoFrete || !Array.isArray(data)) return;
 
-    // FILTRO
-    const data = rawData
-      .map(frete => {
-        const price = parsePreco(frete.price);
-        if (price === null || price <= 0) return null;
-
-        return { ...frete, price };
-      })
-      .filter(Boolean);
-
-    if (data.length === 0) {
-      throw new Error("Nenhuma opção de frete válida");
-    }
-
-    window.frete = data[0].price;
-
-    // RENDER UI
-    if (resultadoFrete) {
-      resultadoFrete.style.display = "block";
+      const savedNome = localStorage.getItem("frete_nome");
 
       let expanded = false;
 
+      const visiveis = data.slice(0, 2);
+      const restantes = data.length - visiveis.length;
+
+      const renderList = (list) => {
+        return list.map(op => `
+          <div class="frete-item ${op.name === savedNome ? "active" : ""}" data-price="${op.price}">
+            <div class="frete-info">
+              <i class="fa-solid fa-truck-fast"></i>
+              <span class="frete-metodo">${op.name}</span>
+            </div>
+
+            <div class="frete-right">
+              <span class="frete-valor">R$ ${op.price.toFixed(2).replace(".", ",")}</span>
+              <small class="frete-prazo">${op.delivery_time || "--"} dias úteis</small>
+            </div>
+          </div>
+        `).join("");
+      };
+
+    const renderUI = () => {
+
+      function ordenarFrete(list) {
+        if (!freteSelecionado) return list;
+
+        const selecionado = freteSelecionado;
+
+        const itemSelecionado = list.find(i =>
+          i.price == selecionado.price
+        );
+
+        if (!itemSelecionado) return list;
+
+        const resto = list.filter(i => i !== itemSelecionado);
+
+        return [itemSelecionado, ...resto];
+      }
+
+      const listaBase = ordenarFrete(data);
+      const listaVisivel = ordenarFrete(visiveis);
+
       const renderList = (list) =>
         list.map(op => `
-          <div class="frete-item" data-price="${op.price}">
+          <div class="frete-item ${op.price == freteSelecionado?.price ? "active" : ""}" data-price="${op.price}">
             <div class="frete-info">
               <i class="fa-solid fa-truck-fast"></i>
               <span>${op.name}</span>
@@ -594,260 +779,546 @@ async function calcularFrete(event) {
           </div>
         `).join("");
 
-      const visiveis = data.slice(0, 2);
-      const restantes = data.length - visiveis.length;
+      resultadoFrete.innerHTML = `
+        <div class="frete-box">
 
-      const renderUI = () => {
-        resultadoFrete.innerHTML = `
-          <div class="frete-box">
+          <div class="frete-lista">
+            ${renderList(expanded ? listaBase : listaVisivel)}
+          </div>
 
-            <div class="frete-lista">
-              ${renderList(expanded ? data : visiveis)}
-            </div>
-
-            ${restantes > 0 ? `
-              <button id="toggle-frete" class="btn-ver-mais-frete">
+          ${restantes > 0 ? `
+            <div class="frete-actions">
+              <button id="toggle-frete">
                 ${expanded ? "Fechar opções" : `Ver mais ${restantes} opções`}
               </button>
-            ` : ""}
+            </div>
+          ` : ""}
+
+        </div>
+      `;
+    };
+
+    renderUI();
+    }
+
+
+    /* ==========================================================================
+      PERSISTÊNCIA AO CARREGAR A PÁGINA
+      ========================================================================== */
+    document.addEventListener("DOMContentLoaded", () => {
+      verificarCepValido();
+      const cepSalvo = localStorage.getItem("cep_salvo");
+      const freteSalvo = localStorage.getItem("frete_valor");
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      const cepInput = document.getElementById("cep-input");
+      const resultadoFrete = document.getElementById("resultado-frete");
+
+      // 🔥 SÓ RESTAURA SE TIVER PRODUTO NO CARRINHO
+      if (cart.length > 0) {
+
+        if (cepSalvo && cepInput) {
+          cepInput.value = cepSalvo;
+        }
+
+        if (freteSalvo) {
+          frete = parseFloat(freteSalvo);
+          if (resultadoFrete) resultadoFrete.style.display = "block";
+        }
+
+      } else {
+        // 🔥 SE NÃO TEM CARRINHO → LIMPA TUDO
+        localStorage.removeItem("frete_valor");
+        localStorage.removeItem("cep_salvo");
+        localStorage.removeItem("cupom_ativo");
+        localStorage.removeItem("desconto_percentual");
+      }
+    });
+
+    // Chame a função assim que carregar
+    document.addEventListener("DOMContentLoaded", verificarEstadoCarrinho);
+
+    /* ==========================================================================
+      INICIALIZAÇÃO E EVENTOS
+      ========================================================================== */
+    document.addEventListener("DOMContentLoaded", render);
+
+    function fecharAlerta() {
+      document.getElementById("estoque-alert").style.display = "none";
+    }
+
+    window.onclick = function(e) {
+      if (e.target.id === "custom-alert") e.target.style.display = "none";
+      if (e.target.id === "custom-confirm") e.target.style.display = "none";
+    };
+
+
+    window.addEventListener("beforeunload", () => {
+      const nav = performance.getEntriesByType("navigation")[0];
+
+      // 🔥 Só limpa se NÃO for reload
+      if (nav && nav.type !== "reload") {
+        limparCheckoutStorage();
+      }
+    });
+
+    function verificarCepValido() {
+      const cepInput = document.getElementById("cep-input");
+      const btn = document.getElementById("btn-continuar");
+
+      if (!cepInput || !btn) return;
+
+      const cep = cepInput.value.replace(/\D/g, "");
+
+      const cepValido = cep.length === 8;
+      const freteCalculado = Number(window.frete) > 0;
+
+      // 🔥 AGORA SÓ LIBERA SE OS DOIS FOREM VERDADE
+      btn.disabled = !(cepValido && freteCalculado);
+    }
+
+
+    function trocarEtapa(id) {
+      const steps = document.querySelectorAll(".checkout-step");
+
+      etapaAtual = id;
+
+      steps.forEach(step => step.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+
+      atualizarBarraEtapas(id);
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      // 🔥 garante execução depois do render da DOM da etapa
+      if (id === "step-identificacao") {
+        setTimeout(() => {
+          sincronizarCepParaIdentificacao();
+        }, 50);
+      }
+
+      if (id === "step-pagamento") {
+        setTimeout(() => {
+          pedidoCache = gerarPedidoFinal(); 
+          montarEtapaPagamento();
+        }, 150);
+      }
+    }
+
+    function atualizarBarraEtapas(etapa) {
+      const steps = document.querySelectorAll(".step");
+
+      steps.forEach(s => s.classList.remove("active", "done"));
+
+      if (etapa === "step-carrinho") {
+        steps[0].classList.add("active");
+      }
+
+      if (etapa === "step-identificacao") {
+        steps[0].classList.add("done");
+        steps[1].classList.add("active");
+      }
+
+      if (etapa === "step-pagamento") {
+        steps[0].classList.add("done");
+        steps[1].classList.add("done");
+        steps[2].classList.add("active");
+      }
+    }
+
+    function irParaIdentificacao() {
+      if (cart.length === 0) {
+        showToast("Adicione produtos ao carrinho");
+        return;
+      }
+
+      // 🔥 Abre apenas o modal flutuante. O usuário continua vendo o carrinho ao fundo.
+      const modal = document.getElementById("vintage-modal");
+      if (modal) {
+        modal.style.display = "flex";
+      }
+    }
+
+    function fecharVintageModal() {
+      const modal = document.getElementById("vintage-modal");
+      if (modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    function confirmarIdentificacao() {
+      // 1. Fecha o modal imediatamente
+      fecharVintageModal();
+      
+      // 2. Agora sim, avança fisicamente para a Etapa 2 (Identificação) mudando a tela e o topo
+      trocarEtapa("step-identificacao");
+    }
+
+
+    function voltarEtapa() {
+      if (etapaAtual === "step-identificacao") {
+        trocarEtapa("step-carrinho");
+      } else if (etapaAtual === "step-pagamento") {
+        trocarEtapa("step-identificacao");
+      }
+    }
+
+    async function buscarCepIdentificacao(cep) {
+      const cepNumeros = cep.replace(/\D/g, "");
+
+      if (cepNumeros.length !== 8) return;
+
+      try {
+        const response = await fetch(`https://viacep.com.br/ws/${cepNumeros}/json/`);
+        const data = await response.json();
+
+        if (data.erro) {
+          showToast("CEP não encontrado", "warning");
+          return;
+        }
+
+        const ruaEl = document.getElementById("rua");
+        const cidadeEl = document.getElementById("cidade");
+        const estadoEl = document.getElementById("estado");
+
+        if (ruaEl) ruaEl.value = data.logradouro || "";
+        if (cidadeEl) cidadeEl.value = data.localidade || "";
+        if (estadoEl) estadoEl.value = data.uf || "";
+
+      } catch (err) {
+        console.error(err);
+        showToast("Erro ao buscar CEP", "warning");
+      }
+    }
+
+    function sincronizarCepParaIdentificacao() {
+      const cep = localStorage.getItem("cep_salvo");
+
+      if (!cep) return;
+
+      const cepInput = document.getElementById("cep-endereco");
+
+      if (!cepInput) return;
+
+      // evita sobrescrever desnecessário
+      if (cepInput.value === cep) return;
+
+      cepInput.value = cep;
+
+      buscarCepIdentificacao(cep);
+    }
+
+    function salvarEnderecoCompleto() {
+      const endereco = {
+        nome: document.getElementById("nome")?.value || "", // 🔥 FALTAVA ISSO
+        cep: document.getElementById("cep-endereco")?.value || "",
+        rua: document.getElementById("rua")?.value || "",
+        numero: document.getElementById("numero")?.value || "",
+        complemento: document.getElementById("complemento")?.value || "",
+        cidade: document.getElementById("cidade")?.value || "",
+        estado: document.getElementById("estado")?.value || ""
+      };
+
+      localStorage.setItem("endereco_checkout", JSON.stringify(endereco));
+    }
+
+    function validarIdentificacao() {
+
+      salvarEnderecoCompleto();
+
+      // CAMPOS
+      const nome = document.getElementById("nome");
+      const email = document.getElementById("email");
+      const cep = document.getElementById("cep-endereco");
+      const rua = document.getElementById("rua");
+      const numero = document.getElementById("numero");
+      const cidade = document.getElementById("cidade");
+      const estado = document.getElementById("estado");
+
+      // LIMPA ERROS ANTIGOS
+      document.querySelectorAll(".campo-erro").forEach(el => el.remove());
+
+      document.querySelectorAll(".input-error").forEach(el => {
+        el.classList.remove("input-error");
+      });
+
+      let valido = true;
+
+      // FUNÇÃO DE ERRO
+      function mostrarErro(input, mensagem) {
+
+        input.classList.add("input-error");
+
+        const erro = document.createElement("div");
+
+        erro.className = "campo-erro";
+
+        erro.innerText = mensagem;
+
+        input.insertAdjacentElement("afterend", erro);
+
+        valido = false;
+      }
+
+      // =========================
+      // VALIDAÇÕES
+      // =========================
+
+      // NOME
+      if (!nome.value.trim()) {
+        mostrarErro(nome, "Digite seu nome");
+      }
+
+      // EMAIL
+      if (!email.value.trim()) {
+
+        mostrarErro(email, "Digite seu e-mail");
+
+      } else {
+
+        const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailValido.test(email.value.trim())) {
+          mostrarErro(email, "Digite um e-mail válido");
+        }
+      }
+
+      // CEP
+      if (!cep.value.trim()) {
+        mostrarErro(cep, "Digite o CEP");
+      }
+
+      // RUA
+      if (!rua.value.trim()) {
+        mostrarErro(rua, "Digite o endereço");
+      }
+
+      // NÚMERO
+      if (!numero.value.trim()) {
+        mostrarErro(numero, "Digite o número");
+      }
+
+      // CIDADE
+      if (!cidade.value.trim()) {
+        mostrarErro(cidade, "Digite a cidade");
+      }
+
+      // ESTADO
+      if (!estado.value.trim()) {
+        mostrarErro(estado, "Digite o estado");
+      }
+
+      // SE TIVER ERRO → PARA
+      if (!valido) return;
+
+      // SALVA
+      salvarEnderecoCompleto();
+
+      // AVANÇA
+      trocarEtapa("step-pagamento");
+    }
+
+    function gerarPedidoFinal() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const endereco = JSON.parse(localStorage.getItem("endereco_checkout")) || {};
+      const frete = Number(window.frete || localStorage.getItem("frete_valor") || 0);
+      const desconto = Number(localStorage.getItem("desconto_percentual")) || 0;
+
+      if (!cart.length) return null;
+      if (!cart || cart.length === 0) return null;
+      if (!frete && frete !== 0) return null;
+
+      const subtotal = cart.reduce((acc, item) => {
+        if (item.selected === false) return acc;
+        return acc + item.price * item.quantity;
+      }, 0);
+
+      const valorDesconto = subtotal * (desconto / 100);
+      const total = subtotal + frete - valorDesconto;
+
+      const pedido = {
+        id: gerarNumeroPedido(),
+        data: new Date().toISOString(),
+        endereco,
+        itens: cart,
+        subtotal,
+        frete,
+        desconto,
+        total,
+        prazo: calcularPrazoEntrega()
+      };
+
+      localStorage.setItem("pedido_final", JSON.stringify(pedido));
+
+      return pedido;
+    }
+
+    function gerarNumeroPedido() {
+      const prefixo = "VS";
+      const time = Date.now().toString(36).toUpperCase();
+      const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
+
+      return `${prefixo}-${time}-${rand}`;
+    }
+
+    function calcularPrazoEntrega() {
+      const hoje = new Date();
+
+      const min = new Date(hoje);
+      min.setDate(min.getDate() + 5);
+
+      const max = new Date(hoje);
+      max.setDate(max.getDate() + 10);
+
+      return {
+        inicio: min.toLocaleDateString("pt-BR"),
+        fim: max.toLocaleDateString("pt-BR")
+      };
+    }
+
+    function montarEtapaPagamento() {
+      if (!pedidoCache) {
+        pedidoCache = gerarPedidoFinal();
+      }
+
+      const pedido = pedidoCache;
+      if (!pedido) return;
+
+      // ID do pedido
+      const idEl = document.getElementById("sucesso-id-pedido");
+      if (idEl) idEl.innerText = pedido.id;
+
+      // Produtos
+      const container = document.getElementById("sucesso-produtos-lista");
+      if (container) {
+        container.innerHTML = "";
+
+          pedido.itens
+            .filter(item => item.selected !== false)
+            .forEach(item => {
+
+          // ======================================================
+          // BOTÃO MINIMALISTA
+          // ======================================================
+
+          const produtosAtivos = pedido.itens.filter(
+            item => item.selected !== false
+          );
+
+          const antigoBtn = document.getElementById("toggle-produtos-mini");
+
+          if (antigoBtn) antigoBtn.remove();
+
+          if (produtosAtivos.length > 2) {
+
+            const btn = document.createElement("button");
+
+            btn.id = "toggle-produtos-mini";
+            btn.className = "toggle-produtos-mini";
+
+            btn.innerHTML = `
+              Mostrar outros produtos
+              <i class="fa-solid fa-chevron-down"></i>
+            `;
+
+            let aberto = false;
+
+            btn.onclick = () => {
+
+              aberto = !aberto;
+
+              container.classList.toggle("expandido");
+
+              btn.classList.toggle("active");
+
+              btn.innerHTML = aberto
+                ? `Ocultar produtos <i class="fa-solid fa-chevron-down"></i>`
+                : `Mostrar outros produtos <i class="fa-solid fa-chevron-down"></i>`;
+            };
+
+            // 🔥 adiciona logo abaixo da lista
+            container.insertAdjacentElement("afterend", btn);
+          }
+
+          const div = document.createElement("div");
+
+          div.className = "vs-prod-item-mini";
+          div.innerHTML = `
+            <div class="vs-prod-mini-esquerda">
+              <img src="${item.image}" class="vs-prod-mini-img">
+              <div class="vs-prod-mini-detalhes">
+                <h4>${item.name}</h4>
+                <p>Qtd: ${item.quantity}</p>
+              </div>
+            </div>
+            <div class="vs-prod-mini-preco">
+              R$ ${(item.price * item.quantity).toFixed(2)}
+            </div>
+          `;
+
+          container.appendChild(div);
+        });
+      }
+
+      // valores
+      setText("sucesso-subtotal", pedido.subtotal);
+      setText("sucesso-frete", pedido.frete);
+      setText("sucesso-desconto", (pedido.subtotal * pedido.desconto / 100));
+      setText("sucesso-total", pedido.total);
+
+      // infos pedido
+      const info = document.querySelector(".vs-sucesso-info-bloco");
+
+      if (info) {
+        info.innerHTML = "";
+
+        const bloco = document.createElement("div");
+
+        bloco.className = "vs-info-item";
+        bloco.style.flexDirection = "column";
+
+        bloco.innerHTML = `
+
+          <div class="vs-info-toggle" id="toggle-info-pedido">
+            <h4>Informações do pedido</h4>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+
+          <div class="vs-info-conteudo" id="conteudo-info-pedido">
+
+            <p><strong>Nome:</strong> ${pedido.endereco?.nome || ""}</p>
+
+            <p><strong>CEP:</strong> ${pedido.endereco?.cep || ""}</p>
+
+            <p><strong>Endereço:</strong> ${pedido.endereco?.rua || ""}</p>
+
+            <p><strong>Entrega:</strong> ${pedido.prazo.inicio} até ${pedido.prazo.fim}</p>
+
+            <p><strong>Pedido:</strong> ${pedido.id}</p>
 
           </div>
         `;
-      };
 
-      renderUI();
+        info.appendChild(bloco);
 
-      resultadoFrete.onclick = (e) => {
-        const item = e.target.closest(".frete-item");
-        const toggle = e.target.closest("#toggle-frete");
+        const toggle = document.getElementById("toggle-info-pedido");
+        const conteudo = document.getElementById("conteudo-info-pedido");
 
-        if (toggle) {
-          expanded = !expanded;
-          renderUI();
-          return;
+        if (toggle && conteudo) {
+
+          toggle.onclick = () => {
+
+            toggle.classList.toggle("active");
+
+            conteudo.classList.toggle("open");
+          };
         }
-
-        if (!item) return;
-
-        const lista = document.querySelector(".frete-lista");
-
-        const price = Number(item.dataset.price);
-
-        // 🔥 verifica se clicou no mesmo frete
-        const isSame = freteSelecionado?.price === price;
-
-        // ==============================
-        // CASO 1: DESMARCAR
-        // ==============================
-        if (isSame) {
-          item.classList.remove("active");
-          freteSelecionado = null;
-
-          window.frete = 0;
-          localStorage.removeItem("frete_valor");
-
-          render();
-          return;
-        }
-
-        // ==============================
-        // CASO 2: SELECIONAR NOVO
-        // ==============================
-        document.querySelectorAll(".frete-item")
-          .forEach(i => i.classList.remove("active"));
-
-        item.classList.add("active");
-
-        freteSelecionado = {
-          price: price,
-          name: item.querySelector("span")?.innerText || ""
-        };
-
-        // move para o topo
-        if (lista) {
-          lista.prepend(item);
-          lista.scrollTop = 0;
-        }
-
-        // salva valor
-        window.frete = price;
-        localStorage.setItem("frete_valor", String(price));
-
-        render();
-      };
+      }
     }
 
-    if (typeof showToast === "function") {
-      showToast("Frete calculado com sucesso!");
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      el.innerText = Number(value || 0).toFixed(2).replace(".", ",");
     }
-
-    localStorage.setItem("frete_valor", String(window.frete));
-    localStorage.setItem("cep_salvo", cepInput.value);
-
-    if (typeof render === "function") render();
-
-  } catch (error) {
-    console.error("❌ ERRO FRETE:", error);
-
-    const msg = error.name === "AbortError"
-      ? "Tempo esgotado ao calcular frete"
-      : error.message;
-
-    if (msgCep) {
-      msgCep.innerHTML = `
-        <div class="cupom-feedback text-error">
-          <i class="fa-solid fa-circle-exclamation"></i> ${msg}
-        </div>`;
-    }
-
-  } finally {
-    clearTimeout(timeoutId);
-    btn.disabled = false;
-    btn.innerHTML = originalText;
-  }
-}
-
-
-function rebuildFreteUI(data) {
-  const resultadoFrete = document.getElementById("resultado-frete");
-  if (!resultadoFrete || !Array.isArray(data)) return;
-
-  const savedNome = localStorage.getItem("frete_nome");
-
-  let expanded = false;
-
-  const visiveis = data.slice(0, 2);
-  const restantes = data.length - visiveis.length;
-
-  const renderList = (list) => {
-    return list.map(op => `
-      <div class="frete-item ${op.name === savedNome ? "active" : ""}" data-price="${op.price}">
-        <div class="frete-info">
-          <i class="fa-solid fa-truck-fast"></i>
-          <span class="frete-metodo">${op.name}</span>
-        </div>
-
-        <div class="frete-right">
-          <span class="frete-valor">R$ ${op.price.toFixed(2).replace(".", ",")}</span>
-          <small class="frete-prazo">${op.delivery_time || "--"} dias úteis</small>
-        </div>
-      </div>
-    `).join("");
-  };
-
-const renderUI = () => {
-
-  function ordenarFrete(list) {
-    if (!freteSelecionado) return list;
-
-    const selecionado = freteSelecionado;
-
-    const itemSelecionado = list.find(i =>
-      i.price == selecionado.price
-    );
-
-    if (!itemSelecionado) return list;
-
-    const resto = list.filter(i => i !== itemSelecionado);
-
-    return [itemSelecionado, ...resto];
-  }
-
-  const listaBase = ordenarFrete(data);
-  const listaVisivel = ordenarFrete(visiveis);
-
-  const renderList = (list) =>
-    list.map(op => `
-      <div class="frete-item ${op.price == freteSelecionado?.price ? "active" : ""}" data-price="${op.price}">
-        <div class="frete-info">
-          <i class="fa-solid fa-truck-fast"></i>
-          <span>${op.name}</span>
-        </div>
-        <div>
-          <strong>R$ ${op.price.toFixed(2).replace(".", ",")}</strong>
-          <small>${op.delivery_time || "--"} dias</small>
-        </div>
-      </div>
-    `).join("");
-
-  resultadoFrete.innerHTML = `
-    <div class="frete-box">
-
-      <div class="frete-lista">
-        ${renderList(expanded ? listaBase : listaVisivel)}
-      </div>
-
-      ${restantes > 0 ? `
-        <div class="frete-actions">
-          <button id="toggle-frete">
-            ${expanded ? "Fechar opções" : `Ver mais ${restantes} opções`}
-          </button>
-        </div>
-      ` : ""}
-
-    </div>
-  `;
-};
-
-renderUI();
-}
-
-
-/* ==========================================================================
-   PERSISTÊNCIA AO CARREGAR A PÁGINA
-   ========================================================================== */
-document.addEventListener("DOMContentLoaded", () => {
-  const cepSalvo = localStorage.getItem("cep_salvo");
-  const freteSalvo = localStorage.getItem("frete_valor");
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-  const cepInput = document.getElementById("cep-input");
-  const resultadoFrete = document.getElementById("resultado-frete");
-
-  // 🔥 SÓ RESTAURA SE TIVER PRODUTO NO CARRINHO
-  if (cart.length > 0) {
-
-    if (cepSalvo && cepInput) {
-      cepInput.value = cepSalvo;
-    }
-
-    if (freteSalvo) {
-      frete = parseFloat(freteSalvo);
-      if (resultadoFrete) resultadoFrete.style.display = "block";
-    }
-
-  } else {
-    // 🔥 SE NÃO TEM CARRINHO → LIMPA TUDO
-    localStorage.removeItem("frete_valor");
-    localStorage.removeItem("cep_salvo");
-    localStorage.removeItem("cupom_ativo");
-    localStorage.removeItem("desconto_percentual");
-  }
-});
-
-// Chame a função assim que carregar
-document.addEventListener("DOMContentLoaded", verificarEstadoCarrinho);
-
-/* ==========================================================================
-   INICIALIZAÇÃO E EVENTOS
-   ========================================================================== */
-document.addEventListener("DOMContentLoaded", render);
-
-function fecharAlerta() {
-  document.getElementById("estoque-alert").style.display = "none";
-}
-
-window.onclick = function(e) {
-  if (e.target.id === "custom-alert") e.target.style.display = "none";
-  if (e.target.id === "custom-confirm") e.target.style.display = "none";
-};
-
-
-window.addEventListener("beforeunload", () => {
-  const nav = performance.getEntriesByType("navigation")[0];
-
-  // 🔥 Só limpa se NÃO for reload
-  if (nav && nav.type !== "reload") {
-    limparCheckoutStorage();
-  }
-});

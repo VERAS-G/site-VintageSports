@@ -29,18 +29,55 @@ const produtosOfertas = [
 ];
 
 /* ============================
-   DUPLICAÇÃO PROFISSIONAL (ESSENCIAL)
+   PRODUTOS PARTICIPANTES
 ============================ */
+
+const produtosParticipantes = [
+
+  criarCamisaOferta(
+    "Camisa Bayern Munich 1989",
+    299.90,
+    "ALEMANHA",
+    "BAYERN MUNICH 1989 1990.jpg",
+    "bayern"
+  ),
+
+  criarCamisaOferta(
+    "Camisa Boca Juniors 1990",
+    199.90,
+    "ARGENTINA",
+    "Camisa Boca Juniors 1 Retro 1990  1991.webp",
+    "boca"
+  ),
+
+  criarCamisaOferta(
+    "Manchester United 1990-92",
+    249.90,
+    "INGLATERRA",
+    "Camisa Manchester United Away Azul 1990-92 Masculina.webp",
+    "manchester"
+  )
+
+];
+
+/* ============================
+   DUPLICAÇÃO PROFISSIONAL
+============================ */
+
 function duplicarCarrossel(el) {
+
   if (!el.dataset.duplicado) {
+
     el.innerHTML += el.innerHTML;
+
     el.dataset.duplicado = "true";
   }
 }
 
 /* ============================
-   RENDER
+   RENDER OFERTAS
 ============================ */
+
 function renderizarOfertas() {
 
   const l1 = document.getElementById("linha-1");
@@ -56,13 +93,37 @@ function renderizarOfertas() {
     const card = criarHTMLCard(produto);
 
     const container = (i % 2 === 0 ? l1 : l2);
+
     container.insertAdjacentHTML("beforeend", card);
+
+  });
+}
+
+/* ============================
+   RENDER PRODUTOS PARTICIPANTES
+============================ */
+
+function renderizarProdutosParticipantes() {
+
+  const container = document.querySelector(".produtos");
+
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  produtosParticipantes.forEach(produto => {
+
+    const card = criarHTMLCard(produto);
+
+    container.insertAdjacentHTML("beforeend", card);
+
   });
 }
 
 /* ============================
    SETAS
 ============================ */
+
 window.rolarLinha = function(id, distancia) {
 
   const el = document.getElementById(id);
@@ -76,8 +137,9 @@ window.rolarLinha = function(id, distancia) {
 };
 
 /* ============================
-   AUTO SCROLL INFINITO PROFISSIONAL
+   AUTO SCROLL INFINITO
 ============================ */
+
 function autoScroll(el, speed) {
 
   let paused = false;
@@ -86,13 +148,17 @@ function autoScroll(el, speed) {
   const getHalf = () => el.scrollWidth / 2;
 
   el.addEventListener("mouseenter", () => paused = true);
+
   el.addEventListener("mouseleave", () => paused = false);
 
   const arrows = el.parentElement.querySelectorAll(".nav-arrow");
 
   arrows.forEach(arrow => {
+
     arrow.addEventListener("mouseenter", () => hoverArrow = true);
+
     arrow.addEventListener("mouseleave", () => hoverArrow = false);
+
   });
 
   function loop() {
@@ -101,9 +167,11 @@ function autoScroll(el, speed) {
 
       el.scrollLeft += speed;
 
-      // 🔥 RESET LIMPO E ESTÁVEL (sem flicker)
+      // 🔥 RESET LIMPO E ESTÁVEL
       if (el.scrollLeft >= getHalf()) {
+
         el.scrollLeft = el.scrollLeft - getHalf();
+
       }
     }
 
@@ -116,9 +184,11 @@ function autoScroll(el, speed) {
 /* ============================
    VER MAIS
 ============================ */
+
 window.toggleSegundaLinha = function () {
 
   const container = document.getElementById("carrossel-2");
+
   const btn = document.getElementById("btn-ver-mais");
 
   if (!container) return;
@@ -126,10 +196,15 @@ window.toggleSegundaLinha = function () {
   const isHidden = container.classList.contains("hidden");
 
   if (isHidden) {
+
     container.classList.remove("hidden");
+
     btn.innerText = "Ver menos ofertas";
+
   } else {
+
     container.classList.add("hidden");
+
     btn.innerText = "Ver mais ofertas";
   }
 };
@@ -137,23 +212,32 @@ window.toggleSegundaLinha = function () {
 /* ============================
    INIT FINAL
 ============================ */
+
 document.addEventListener("DOMContentLoaded", () => {
 
   renderizarOfertas();
 
+  renderizarProdutosParticipantes();
+
   requestAnimationFrame(() => {
 
     const l1 = document.getElementById("linha-1");
+
     const l2 = document.getElementById("linha-2");
+
     const container2 = document.getElementById("carrossel-2");
 
     if (l1) {
+
       duplicarCarrossel(l1);
+
       autoScroll(l1, 0.35);
     }
 
     if (l2 && container2 && !container2.classList.contains("hidden")) {
+
       duplicarCarrossel(l2);
+
       autoScroll(l2, 0.18);
     }
   });

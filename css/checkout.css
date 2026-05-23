@@ -1131,3 +1131,806 @@ button.finalizar:hover { background: #333; }
     color: #046a0d;
     font-weight: 700;
 }
+
+/* =============================================================
+   ETAPAS CHECKOUT (MULTI STEP)
+============================================================= */
+
+.checkout-step{
+  display: none;
+  animation: fadeCheckout 0.35s ease;
+}
+
+.checkout-step.active{
+  display: block;
+}
+
+@keyframes fadeCheckout{
+
+  from{
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+/* =============================================================
+   STEPS STATES
+============================================================= */
+
+/* ETAPA ATUAL */
+.step.active{
+  background: #f7f7f7;
+  color: #111;
+}
+
+.step.active .number{
+  background: #111;
+  color: #fff;
+}
+
+/* ETAPA CONCLUÍDA */
+.step.done{
+  background: #111;
+  color: #fff;
+}
+
+.step.done .number{
+  background: #fff;
+  color: #111;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-hint {
+  font-size: 12px;
+  color: #888;
+  margin-top: 8px;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.btn-hint.hidden {
+  display: none;
+}
+
+/* =============================================================
+   IDENTIFICAÇÃO
+============================================================= */
+
+.form-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.form-group{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group.full{
+  grid-column: span 2;
+}
+
+.form-group label{
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+}
+
+.form-group input{
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+
+  font-size: 14px;
+
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus{
+  border-color: #111;
+}
+
+/* =============================================================
+   PAGAMENTO
+============================================================= */
+
+.payment-options{
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  margin-top: 20px;
+}
+
+.payment-card{
+  border: 1px solid #e5e5e5;
+  border-radius: 14px;
+
+  padding: 18px;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.payment-card:hover{
+  border-color: #111;
+  background: #fafafa;
+}
+
+.payment-card.active{
+  border-color: #111;
+  background: #f7f7f7;
+}
+
+.payment-top{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payment-left{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.payment-left i{
+  font-size: 18px;
+}
+
+.payment-title{
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.payment-subtitle{
+  font-size: 12px;
+  color: #757575;
+  margin-top: 3px;
+}
+
+/* =============================================================
+   BOTÕES DE ETAPA
+============================================================= */
+
+.checkout-buttons{
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.btn-outline{
+  flex: 1;
+
+  height: 52px;
+
+  border-radius: 999px;
+
+  border: 1px solid #111;
+
+  background: #fff;
+  color: #111;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover{
+  background: #111;
+  color: #fff;
+}
+
+.btn-primary{
+  flex: 1;
+
+  height: 52px;
+
+  border-radius: 999px;
+
+  border: none;
+
+  background: #111;
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover{
+  background: #333;
+}
+
+/* =============================================================
+   RESUMO FIXO
+============================================================= */
+
+.right{
+  align-self: start;
+}
+
+/* =============================================================
+   RESPONSIVO
+============================================================= */
+
+@media(max-width: 900px){
+
+  .form-grid{
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full{
+    grid-column: span 1;
+  }
+
+  .checkout-buttons{
+    flex-direction: column;
+  }
+
+  .steps-container{
+    overflow-x: auto;
+  }
+
+  .step{
+    min-width: 180px;
+  }
+
+}
+
+@media(max-width: 600px){
+
+  .container{
+    padding: 0 15px;
+  }
+
+  .checkout-header{
+    padding: 18px 20px;
+  }
+
+  .nav-right{
+    gap: 15px;
+  }
+
+  .nav-left h1{
+    font-size: 17px;
+  }
+
+  .payment-card{
+    padding: 16px;
+  }
+
+}
+
+/* ==========================================================================
+   MODAL DE IDENTIFICAÇÃO PERSONALIZADO VINTAGESPORTS (ESTILO NIKE)
+   ========================================================================== */
+#vintage-modal.modal-overlay {
+  display: none; /* Controlado como flex/none via JavaScript */
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+#vintage-modal .modal-content {
+  background: #fff;
+  padding: 40px 35px;
+  border-radius: 16px;
+  max-width: 450px;
+  width: 90%;
+  text-align: left; /* Alinhamento à esquerda característico do modelo */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  animation: modalShow 0.3s ease;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Botão Fechar (X) no topo direito */
+.vs-modal-close {
+  position: absolute;
+  top: 15px; right: 20px;
+  background: none; border: none;
+  font-size: 26px; cursor: pointer;
+  color: #111; line-height: 1;
+}
+.vs-modal-close:hover {
+  color: #757575;
+}
+
+/* Tipografia interna do Modal */
+.vs-modal-title {
+  font-size: 26px; font-weight: 700;
+  color: #111; margin-bottom: 20px; margin-top: 0;
+  letter-spacing: -0.5px;
+}
+
+.vs-modal-text {
+  font-size: 15px; color: #111;
+  line-height: 1.5; margin-bottom: 12px;
+}
+
+.vs-modal-benefits {
+  font-size: 13px; color: #757575;
+  line-height: 1.5; margin-bottom: 25px;
+}
+
+.vs-modal-warning {
+  font-size: 12px; color: #757575;
+  text-align: center; line-height: 1.4;
+  margin-top: 5px; margin-bottom: 20px;
+}
+
+/* Força os botões existentes a ocuparem 100% da largura dentro do modal */
+#vintage-modal .btn-primary,
+#vintage-modal .btn-outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-decoration: none;
+  height: 52px;
+  box-sizing: border-box;
+}
+
+
+/* ==========================================================================
+   ETAPA 3: TELA DE SUCESSO E PAGAMENTO PIX (ESTILO DA FOTO)
+   ========================================================================== */
+.vs-sucesso-container {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 50px;
+  max-width: 1100px;
+  margin: 40px auto 100px;
+  padding: 0 20px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  animation: fadeCheckout 0.35s ease;
+}
+
+/* --- COLUNA ESQUERDA --- */
+.vs-sucesso-esquerda {
+  display: flex;
+  flex-direction: column;
+}
+
+.vs-pedido-numero {
+  font-size: 11px;
+  color: #777;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.vs-status-pagamento {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 35px;
+}
+
+.vs-status-pagamento i {
+  font-size: 16px;
+  color: #111;
+}
+
+.vs-pix-box-wrapper {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+/* Card Branco do QR Code */
+.vs-qrcode-card {
+  background: #fdfdfd;
+  border: 1px solid #eaeaea;
+  padding: 25px;
+  border-radius: 6px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  width: 200px;
+  box-sizing: border-box;
+}
+
+.vs-qrcode-placeholder img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
+
+.vs-qrcode-expira {
+  font-size: 13px;
+  color: #333;
+  margin-top: 20px;
+  line-height: 1.4;
+}
+
+.vs-qrcode-expira strong {
+  font-size: 22px;
+  font-weight: 800;
+  color: #000;
+  display: block;
+  margin-top: 4px;
+}
+
+/* Instruções e Textos */
+.vs-pix-instrucoes {
+  display: flex;
+  flex-direction: column;
+  max-width: 340px;
+}
+
+.vs-btn-copiar-pix {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: fit-content;
+  margin-bottom: 25px;
+  transition: background 0.2s;
+}
+
+.vs-btn-copiar-pix:hover {
+  background: #333;
+}
+
+.vs-instrucao-titulo {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 12px;
+}
+
+.vs-instrucao-texto {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.vs-instrucao-importante {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+.vs-link-alterar {
+  font-size: 13px;
+  color: #777;
+  text-decoration: underline;
+  width: fit-content;
+}
+
+/* --- COLUNA DIREITA --- */
+.vs-sucesso-direita {
+  background: #fff;
+}
+
+.vs-sucesso-produtos {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.vs-prod-item-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.vs-prod-mini-esquerda {
+  display: flex;
+  gap: 12px;
+}
+
+.vs-prod-mini-img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.vs-prod-mini-detalhes h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+  margin: 0 0 3px 0;
+  line-height: 1.3;
+}
+
+.vs-prod-mini-detalhes p {
+  font-size: 12px;
+  color: #777;
+  margin: 0;
+}
+
+.vs-prod-mini-preco {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+  white-space: nowrap;
+}
+
+/* Bloco de Preços */
+.vs-sucesso-valores {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 20px;
+  margin-bottom: 25px;
+}
+
+.vs-valores-linha {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #666;
+}
+
+.vs-desconto-linha {
+  color: #111;
+}
+
+.vs-valores-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 700;
+  color: #111;
+  margin-top: 5px;
+}
+
+/* Blocos Informativos Inferiores */
+.vs-sucesso-info-bloco {
+  display: flex;
+  flex-direction: column;
+}
+
+.vs-info-item {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  padding: 15px 0;
+}
+
+.vs-info-item.vs-border-top {
+  border-top: 1px solid #f0f0f0;
+  cursor: pointer;
+}
+
+.vs-info-item i {
+  font-size: 16px;
+  color: #111;
+  margin-top: 2px;
+}
+
+.vs-info-item h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vs-info-item p {
+  font-size: 12px;
+  color: #777;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.vs-seta-info {
+  font-size: 11px;
+  color: #aaa;
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+  .vs-sucesso-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .vs-pix-box-wrapper {
+    flex-direction: column;
+    gap: 25px;
+  }
+  .vs-qrcode-card {
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+  }
+  .vs-pix-instrucoes {
+    max-width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+  .vs-link-alterar {
+    margin: 0 auto;
+  }
+}
+
+
+/* =========================================================
+   LISTA DE PRODUTOS - ETAPA 3
+========================================================= */
+
+#sucesso-produtos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  overflow: hidden;
+
+  max-height: 125px;
+
+  transition: max-height 0.35s ease;
+}
+
+/* expandido */
+#sucesso-produtos-lista.expandido {
+  max-height: 240px;
+
+  overflow-y: auto;
+
+  padding-right: 4px;
+}
+
+/* scrollbar minimalista */
+#sucesso-produtos-lista.expandido::-webkit-scrollbar {
+  width: 4px;
+}
+
+#sucesso-produtos-lista.expandido::-webkit-scrollbar-thumb {
+  background: #d1d1d1;
+  border-radius: 20px;
+}
+
+/* botão minimalista */
+.toggle-produtos-mini {
+  margin-top: -4px;
+
+  border: none;
+  background: transparent;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  color: #666;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  transition: 0.2s;
+}
+
+.toggle-produtos-mini:hover {
+  color: #111;
+}
+
+.toggle-produtos-mini i {
+  font-size: 11px;
+  transition: transform 0.25s ease;
+}
+
+.toggle-produtos-mini.active i {
+  transform: rotate(180deg);
+}
+
+
+/* =========================================================
+   INFO PEDIDO COLAPSÁVEL
+========================================================= */
+
+.vs-info-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  cursor: pointer;
+
+  padding: 14px 0;
+
+  user-select: none;
+}
+
+.vs-info-toggle h4 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.vs-info-toggle i {
+  font-size: 13px;
+
+  transition: transform 0.25s ease;
+}
+
+/* seta girando */
+.vs-info-toggle.active i {
+  transform: rotate(180deg);
+}
+
+/* conteúdo escondido */
+.vs-info-conteudo {
+  overflow: hidden;
+
+  max-height: 0;
+
+  opacity: 0;
+
+  transition:
+    max-height 0.35s ease,
+    opacity 0.25s ease;
+}
+
+/* aberto */
+.vs-info-conteudo.open {
+  max-height: 300px;
+
+  opacity: 1;
+}
+
+/* =========================================================
+   ERRO NOS INPUTS
+========================================================= */
+
+.input-error {
+  border: 1px solid #e53935 !important;
+}
+
+.campo-erro {
+  color: #e53935;
+  font-size: 12px;
+  margin-top: 6px;
+  font-weight: 500;
+}

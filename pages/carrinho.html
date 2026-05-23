@@ -52,6 +52,7 @@
   </div>
 
 
+<section id="step-carrinho" class="checkout-step active">
 
   <div class="container">
 
@@ -74,7 +75,7 @@
             placeholder="00000-000"
             maxlength="9"
             inputmode="numeric"
-            oninput="mascaraCEP(this)"
+            oninput="mascaraCEP(this); verificarCepValido()"
           >
           <button onclick="calcularFrete(event)">Calcular</button>
         </div>
@@ -126,11 +127,192 @@
           <div id="checkout-parcelamento" class="checkout-parcelamento"></div>
         </div>
 
-        <button class="btn-primary finalizar">Continuar</button>
-      </div>
+        <button
+          id="btn-continuar"
+          class="btn-primary finalizar"
+          onclick="irParaIdentificacao()"
+          disabled
+        >
+          Continuar
+        </button>
+
+        <p id="msg-btn-continuar" class="btn-hint">
+          Calcule o frete antes de continuar
+        </p>
 
     </div>
   </div>
+
+</section>
+
+
+<section id="step-identificacao" class="checkout-step">
+
+  <div class="container">
+
+    <h2 class="step-title">Identificação</h2>
+    <p class="step-subtitle">Preencha seus dados e endereço de entrega</p>
+
+    <div class="form-grid">
+
+      <!-- DADOS PESSOAIS -->
+      <div class="form-group full">
+        <label for="nome">Nome completo</label>
+        <input type="text" id="nome" placeholder="Digite seu nome completo">
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" placeholder="exemplo@email.com">
+      </div>
+
+      <div class="form-group">
+        <label for="telefone">Telefone</label>
+        <input type="text" id="telefone" placeholder="(00) 00000-0000">
+      </div>
+
+      <!-- ENDEREÇO -->
+      <div class="form-group full">
+        <label for="cep-endereco">CEP</label>
+        <input type="text" id="cep-endereco" placeholder="00000-000" maxlength="9"
+        oninput="mascaraCEP(this); buscarCepEndereco(this.value)">
+
+      </div>
+
+      <div class="form-group full">
+        <label for="rua">Rua</label>
+        <input type="text" id="rua" placeholder="Nome da rua, avenida...">
+      </div>
+
+      <div class="form-group">
+        <label for="numero">Número</label>
+        <input type="text" id="numero" placeholder="123">
+      </div>
+
+      <div class="form-group">
+        <label for="complemento">Complemento</label>
+        <input type="text" id="complemento" placeholder="Apartamento, bloco, etc (opcional)">
+      </div>
+
+      <div class="form-group">
+        <label for="cidade">Cidade</label>
+        <input type="text" id="cidade" placeholder="Sua cidade">
+      </div>
+
+      <div class="form-group">
+        <label for="estado">Estado</label>
+        <input type="text" id="estado" placeholder="SP">
+      </div>
+
+    </div>
+
+    <div class="checkout-buttons">
+
+      <button onclick="voltarEtapa()" class="btn-outline">
+        Voltar
+      </button>
+
+      <button onclick="validarIdentificacao()" class="btn-primary">
+        Continuar
+      </button>
+
+    </div>
+  
+  </div>
+
+</section>
+
+
+<section id="step-pagamento" class="checkout-step">
+
+  <div class="vs-sucesso-container">
+    
+    <!-- COLUNA ESQUERDA: STATUS E PIX -->
+    <div class="vs-sucesso-esquerda">
+      <span class="vs-pedido-numero">PEDIDO: #<span id="sucesso-id-pedido">46091</span></span>
+      
+      <div class="vs-status-pagamento">
+        <i class="fa-solid fa-circle-notch fa-spin"></i> Aguardando pagamento
+      </div>
+
+      <div class="vs-pix-box-wrapper">
+        <!-- Card do QR Code -->
+        <div class="vs-qrcode-card">
+          <div class="vs-qrcode-placeholder">
+            <!-- QR Code fictício via API pública (muda dinamicamente) -->
+            <img id="vs-pix-qr" src="https://qrserver.com" alt="QR Code Pix">
+          </div>
+          <p class="vs-qrcode-expira">Este código expirará em<br><strong>2 horas</strong></p>
+        </div>
+
+        <!-- Instruções e Botão Copiar -->
+        <div class="vs-pix-instrucoes">
+          <button class="vs-btn-copiar-pix" onclick="copiarCodigoPix()">
+            <i class="fa-regular fa-copy"></i> Copiar código Pix
+          </button>
+
+          <p class="vs-instrucao-titulo">Abra o aplicativo ou Internet Banking para pagar</p>
+          <p class="vs-instrucao-texto">Na opção Pix, escolha 'Ler QR Code'</p>
+          <p class="vs-instrucao-texto">Leia o QR Code ou, se preferir, copie o código para Pix Copia e Cola.</p>
+          <p class="vs-instrucao-importante">Revise as informações e confirme o pagamento.</p>
+
+          <a href="#" onclick="voltarParaIdentificacao(event)" class="vs-link-alterar">Alterar meio de pagamento</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUNA DIREITA: RESUMO DO PEDIDO -->
+    <div class="vs-sucesso-direita">
+      
+      <!-- Lista de Itens Comprados (Injetado via JS) -->
+      <div id="sucesso-produtos-lista" class="vs-sucesso-produtos">
+        <!-- Renderizado dinamicamente pelo JS -->
+      </div>
+
+      <!-- Valores Detalhados -->
+      <div class="vs-sucesso-valores">
+        <div class="vs-valores-linha">
+          <span>Subtotal</span>
+          <span>R$ <span id="sucesso-subtotal">0,00</span></span>
+        </div>
+        <div class="vs-valores-linha vs-desconto-linha">
+          <span>Desconto da forma de pagamento</span>
+          <span>-R$ <span id="sucesso-desconto">0,00</span></span>
+        </div>
+        <div class="vs-valores-linha">
+          <span>Custo de frete</span>
+          <span>R$ <span id="sucesso-frete">0,00</span></span>
+        </div>
+        <div class="vs-valores-total">
+          <span>Total</span>
+          <span>R$ <span id="sucesso-total">0,00</span></span>
+        </div>
+      </div>
+
+      <!-- Informações de Entrega/Pedido -->
+      <div class="vs-sucesso-info-bloco">
+        <div class="vs-info-item">
+          <i class="fa-regular fa-envelope"></i>
+          <div>
+            <h4>Como acompanhar a entrega</h4>
+            <p>Enviamos um e-mail com link para esta página, aqui você pode acompanhar a evolução da entrega.</p>
+          </div>
+        </div>
+        
+        <div class="vs-info-item vs-border-top" onclick="toggleDetalhesPedido()">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <div>
+            <h4>Informações do pedido <i class="fa-solid fa-chevron-down vs-seta-info"></i></h4>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
 
 </div>
 
@@ -180,6 +362,37 @@
 
 
 <script src="../js/checkout.js"></script>
+
+<!-- Modal de Autenticação / Identificação VintageSports -->
+<div id="vintage-modal" class="modal-overlay">
+  <div class="modal-content">
+    <button class="vs-modal-close" onclick="fecharVintageModal()">×</button>
+    
+    <h2 class="vs-modal-title">Identificação</h2>
+    
+    <p class="vs-modal-text">
+      Entre ou crie uma conta <strong>VintageSports</strong> para concluir sua compra.
+    </p>
+    
+    <p class="vs-modal-benefits">
+      Receba cupons de desconto, acesso antecipado a camisas exclusivas e outros benefícios gratuitos.
+    </p>
+
+    <!-- Botão Principal: Login/Cadastro -->
+    <a href="/login" class="btn-primary">Entrar ou criar conta</a>
+
+    <p class="vs-modal-warning">
+      Para favoritar itens, vale-troca e histórico de compras <strong>é necessária uma conta</strong>.
+    </p>
+
+    <!-- Botão Secundário: Avançar sem cadastro -->
+    <button class="btn-outline" onclick="confirmarIdentificacao()">
+      Continuar sem uma conta
+    </button>
+  </div>
+</div>
+
+
 
 </body>
 </html>
