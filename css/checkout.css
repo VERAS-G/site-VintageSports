@@ -1131,7 +1131,7 @@ button.finalizar:hover { background: #333; }
     color: #046a0d;
     font-weight: 700;
 }
-
+  
 /* =============================================================
    ETAPAS CHECKOUT (MULTI STEP)
 ============================================================= */
@@ -1933,4 +1933,213 @@ button.finalizar:hover { background: #333; }
   font-size: 12px;
   margin-top: 6px;
   font-weight: 500;
+}
+/* ==========================================================================
+   FORMA DE PAGAMENTO EM CARTÃO & CARDS DE SELEÇÃO (VINTAGESPORTS)
+   ========================================================================= */
+
+#opcoes-pagamento-container {
+  width: 100%;
+  margin-top: 25px;
+  animation: fadeCheckout 0.35s ease forwards;
+}
+
+.metodos-cards {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.metodo-card {
+  flex: 1;
+  border: 1px solid #e5e5e5;
+  border-radius: 14px;
+  padding: 18px 10px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.metodo-card i {
+  font-size: 20px;
+  color: #111;
+}
+
+.metodo-card span {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111;
+}
+
+.metodo-card:hover, 
+.metodo-card.selecionado {
+  border-color: #111;
+  background-color: #fafafa;
+}
+
+.cartao-wrapper-flex {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 25px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 14px;
+  padding: 24px;
+  align-items: start;
+}
+
+.cartao-visual {
+  width: 100%;
+  height: 190px;
+  background: linear-gradient(135deg, #111111 0%, #333333 100%);
+  border-radius: 14px;
+  padding: 22px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  font-family: 'Courier New', Courier, monospace;
+  box-sizing: border-box;
+}
+
+.cartao-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chip-icone {
+  font-size: 24px;
+  color: #f6d221;
+}
+
+.bandeira-icone {
+  font-size: 28px;
+  transition: all 0.2s ease;
+}
+
+.cartao-numero {
+  font-size: 17px;
+  letter-spacing: 1.5px;
+  text-align: center;
+  margin: 12px 0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+}
+
+.cartao-linhas-baixas {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.cartao-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.cartao-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  color: #bbb;
+  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  margin-bottom: 2px;
+}
+
+.cartao-dado {
+  font-size: 13px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 170px;
+}
+
+.cartao-inputs-box {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.input-grupo-cartao {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-grupo-cartao label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+}
+
+.input-grupo-cartao input, 
+.input-grupo-cartao select {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  background: #fff;
+  color: #111;
+}
+
+.input-grupo-cartao input:focus, 
+.input-grupo-cartao select:focus {
+  border-color: #111;
+}
+
+.cartao-linha-dupla {
+  display: flex;
+  gap: 12px;
+}
+
+.cartao-linha-dupla .input-grupo-cartao {
+  flex: 1;
+}
+
+.vs-link-voltar-pix {
+  display: inline-block;
+  margin-top: 15px;
+  font-size: 13px;
+  color: #777;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.vs-link-voltar-pix:hover {
+  color: #111;
+}
+
+@media(max-width: 900px) {
+  .cartao-wrapper-flex {
+    grid-template-columns: 1fr;
+    padding: 18px;
+    gap: 20px;
+  }
+}
+
+@media(max-width: 600px) {
+  .cartao-visual {
+    height: 165px;
+    padding: 15px;
+  }
+  .cartao-numero {
+    font-size: 15px;
+    letter-spacing: 1px;
+    margin: 8px 0;
+  }
+  .cartao-dado {
+    font-size: 12px;
+    max-width: 140px;
+  }
 }

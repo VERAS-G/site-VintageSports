@@ -16,10 +16,12 @@ function criarCamisaFem(nome, preco, pasta, foto, time, pais, isPromo = false) {
 
 // Lista de produtos femininos
 const produtosFemininos = [
-  criarCamisaFem("Camisa Feminina Bayern 1989", 299.90, "ALEMANHA", "BAYERN MUNICH 1989 1990.jpg", "bayern","alemanha", true),
-  criarCamisaFem("Camisa Feminina Boca Juniors 1990", 199.90, "ARGENTINA", "Camisa Boca juniors 1 Retro 1990  1991.webp", "boca","argentina", true),
-  criarCamisaFem("Camisa Feminina Manchester Utd 90", 249.90, "INGLATERRA", "Camisa Manchester United Away Azul 1990-92 Masculina.webp", "manchester","inglaterra", true),
-  criarCamisaFem("Camisa Feminina Atlético Madrid 89", 249.90, "ESPANHA", "CAMISA ATLETICO DE MADRI 1989-1990.jpg", "atletico","espanha", true)
+  criarCamisaFem("Camisa Alemanha Feminina 2026", 299.99, "ALEMANHA", "alemanha fem 2026.webp", "seleção alemã feminina", "alemanha", true),
+  criarCamisaFem("Camisa Borussia Dortmund Feminina 2023-24", 249.99, "ALEMANHA", "borussia 23-24 fem.webp", "Borussia Dortmund feminino", "alemanha"),
+  criarCamisaFem("Camisa Argentina Feminina 2026", 299.99, "ARGENTINA", "argentina 2026 fem.webp", "seleção argentina feminina", "argentina", true),
+  criarCamisaFem("Camisa Feminina 2026 Brasil", 299.99, "BRASIL", "camisa fem brasil.webp", "seleção brasileira feminina", "brasil", true),
+  criarCamisaFem("Camisa Feminina Brasil 2 2026", 299.99, "BRASIL", "camisa fem brasil 2.webp", "seleção brasileira feminina", "brasil", true),
+
 ];
 
 /* ==========================================================================

@@ -1322,3 +1322,244 @@
 
       el.innerText = Number(value || 0).toFixed(2).replace(".", ",");
     }
+
+    /* ==========================================================================
+   INTERAÇÃO DE MEIO DE PAGAMENTO EM CARTÃO DINÂMICO (VINTAGESPORTS)
+   ========================================================================== */
+
+// 1. Gera o HTML do formulário de cartão dinamicamente para que o innerHTML nativo não o apague
+function mostrarOpcoesPagamento(event) {
+  if (event) event.preventDefault();
+  
+  // Oculta a área nativa do Pix
+  const pixBox = document.querySelector('.vs-pix-box-wrapper');
+  if (pixBox) pixBox.style.display = 'none';
+  
+  const containerOpcoes = document.getElementById('opcoes-pagamento-container');
+  if (!containerOpcoes) return;
+
+  // Injeta a estrutura do layout solicitado: cards de escolha + cartão físico + inputs
+  containerOpcoes.innerHTML = `
+    <h3 class="section-title" style="font-size: 15px; margin-top: 25px; margin-bottom: 12px;">Escolha o método de pagamento:</h3>
+    
+    <div class="metodos-cards">
+      <div class="metodo-card" onclick="selecionarMetodoCartao('credito')">
+        <i class="fa-solid fa-credit-card"></i>
+        <span>Cartão de Crédito</span>
+      </div>
+      <div class="metodo-card" onclick="selecionarMetodoCartao('debito')">
+        <i class="fa-solid fa-money-check"></i>
+        <span>Cartão de Débito</span>
+      </div>
+    </div>
+
+    <div id="formulario-cartao-wrapper" style="display: none;">
+      <div class="cartao-wrapper-flex">
+        
+        <!-- O Espelho Visual do Cartão Físico por cima -->
+        <div class="cartao-visual">
+          <div class="cartao-topo">
+            <i class="fa-solid fa-microchip chip-icone"></i>
+            <i class="fa-solid fa-credit-card bandeira-icone" id="cartao-bandeira"></i>
+          </div>
+          <div class="cartao-numero" id="preview-numero">•••• •••• •••• ••••</div>
+          <div class="cartao-linhas-baixas">
+            <div class="cartao-col">
+              <span class="cartao-label">Titular</span>
+              <span class="cartao-dado" id="preview-nome">NOME COMPLETO</span>
+            </div>
+            <div class="cartao-col">
+              <span class="cartao-label">Validade</span>
+              <span class="cartao-dado" id="preview-validade">MM/AA</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inputs do Formulário sincronizados -->
+        <div class="cartao-inputs-box">
+          <div class="input-grupo-cartao">
+            <label id="label-tipo-cartao">Número do Cartão</label>
+            <input type="text" id="cartao-num" placeholder="0000 0000 0000 0000" maxlength="19" oninput="atualizarCamposCartao()">
+          </div>
+          
+          <div class="input-grupo-cartao">
+            <label>Nome do Titular</label>
+            <input type="text" id="cartao-nome-titular" placeholder="Igual impresso no cartão" oninput="atualizarCamposCartao()">
+          </div>
+          
+          <div class="cartao-linha-dupla">
+            <div class="input-grupo-cartao">
+              <label>Validade</label>
+              <input type="text" id="cartao-val" placeholder="MM/AA" maxlength="5" oninput="atualizarCamposCartao()">
+            </div>
+            <div class="input-grupo-cartao">
+              <label>CVV</label>
+              <input type="text" id="cartao-cvv" placeholder="123" maxlength="4">
+            </div>
+          </div>
+          
+          <div class="input-grupo-cartao" id="grupo-parcelas">
+            <label>Parcelas</label>
+            <select id="cartao-parcelas"></select>
+          </div>
+
+          <button class="btn-primary" style="width: 100%; margin-top: 5px; height: 52px; border-radius: 999px;" onclick="validarFormularioCartao()">
+            Finalizar Pedido
+          </button>
+        </div>
+      </div>
+      
+      <span class="vs-link-voltar-pix" onclick="voltarParaPixOriginal()">
+        <i class="fa-solid fa-chevron-left"></i> Voltar para o Pix
+      </span>
+    </div>
+  `;
+
+  containerOpcoes.style.display = 'block';
+  containerOpcoes.scrollIntoView({ behavior: 'smooth' });
+}
+
+// 2. Trata a escolha visual entre Crédito e Débito
+function selecionarMetodoCartao(tipo) {
+  document.querySelectorAll('.metodo-card').forEach(card => card.classList.remove('selecionado'));
+  
+  if (window.event && window.event.currentTarget) {
+    window.event.currentTarget.classList.add('selecionado');
+  }
+
+  document.getElementById('formulario-cartao-wrapper').style.display = 'block';
+  limparMensagensErroCartao();
+
+  const labelTipo = document.getElementById('label-tipo-cartao');
+  const grupoParcelas = document.getElementById('grupo-parcelas');
+
+  if (tipo === 'credito') {
+    if (labelTipo) labelTipo.innerText = 'Número do Cartão de Crédito';
+    if (grupoParcelas) grupoParcelas.style.display = 'flex';
+    calcularParcelasDinamicamente();
+  } else {
+    if (labelTipo) labelTipo.innerText = 'Número do Cartão de Débito';
+    if (grupoParcelas) grupoParcelas.style.display = 'none';
+  }
+}
+
+// 3. Resgata o valor do resumo e quebra em parcelas sem juros na hora
+function calcularParcelasDinamicamente() {
+  const totalEl = document.getElementById('sucesso-total');
+  const selectParcelas = document.getElementById('cartao-parcelas');
+  if (!totalEl || !selectParcelas) return;
+
+  const totalTexto = totalEl.innerText;
+  const valorNumerico = parseFloat(totalTexto.replace(/\./g, '').replace(',', '.'));
+
+  if (isNaN(valorNumerico) || valorNumerico <= 0) return;
+
+  selectParcelas.innerHTML = '';
+
+  for (let i = 1; i <= 3; i++) {
+    const valorParcela = (valorNumerico / i).toFixed(2).replace('.', ',');
+    const option = document.createElement('option');
+    option.value = i;
+    option.innerText = i === 1 
+      ? `1x de R$ ${totalTexto} sem juros` 
+      : `${i}x de R$ ${valorParcela} sem juros`;
+    selectParcelas.appendChild(option);
+  }
+}
+
+// 4. Efeito de espelhamento e máscaras (0000 0000 0000 0000) e (MM/AA)
+function atualizarCamposCartao() {
+  const numInput = document.getElementById('cartao-num');
+  const nomeInput = document.getElementById('cartao-nome-titular');
+  const valInput = document.getElementById('cartao-val');
+
+  if (numInput) {
+    let numVal = numInput.value.replace(/\D/g, '');
+    numVal = numVal.replace(/(\d{4})(?=\d)/g, '$1 ');
+    numInput.value = numVal;
+    document.getElementById('preview-numero').innerText = numVal || '•••• •••• •••• ••••';
+
+    const bandeira = document.getElementById('cartao-bandeira');
+    if (bandeira) {
+      if (numVal.startsWith('4')) {
+        bandeira.className = 'fa-brands fa-cc-visa bandeira-icone';
+      } else if (numVal.startsWith('5')) {
+        bandeira.className = 'fa-brands fa-cc-mastercard bandeira-icone';
+      } else {
+        bandeira.className = 'fa-solid fa-credit-card bandeira-icone';
+      }
+    }
+  }
+
+  if (nomeInput) {
+    document.getElementById('preview-nome').innerText = nomeInput.value.toUpperCase() || 'NOME COMPLETO';
+  }
+
+  if (valInput) {
+    let valData = valInput.value.replace(/\D/g, '');
+    if (valData.length > 2) {
+      valData = valData.substring(0, 2) + '/' + valData.substring(2, 4);
+    }
+    valInput.value = valData;
+    document.getElementById('preview-validade').innerText = valData || 'MM/AA';
+  }
+}
+
+// 5. Botão para voltar à interface Pix limpa
+function voltarParaPixOriginal() {
+  document.getElementById('opcoes-pagamento-container').style.display = 'none';
+  document.getElementById('opcoes-pagamento-container').innerHTML = '';
+  
+  const pixBox = document.querySelector('.vs-pix-box-wrapper');
+  if (pixBox) pixBox.style.display = 'flex';
+}
+
+// 6. Limpeza de erros reativa baseada no seu padrão
+function limparMensagensErroCartao() {
+  const campos = ['cartao-num', 'cartao-nome-titular', 'cartao-val', 'cartao-cvv'];
+  campos.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.remove('input-error');
+      const erroExistente = el.parentNode.querySelector('.campo-erro');
+      if (erroExistente) erroExistente.remove();
+    }
+  });
+}
+
+// 7. Validação final que herda perfeitamente o comportamento e funções do seu Checkout
+function validarFormularioCartao() {
+  limparMensagensErroCartao();
+
+  const num = document.getElementById('cartao-num')?.value || '';
+  const titular = document.getElementById('cartao-nome-titular')?.value || '';
+  const val = document.getElementById('cartao-val')?.value || '';
+  const cvv = document.getElementById('cartao-cvv')?.value || '';
+  let formValido = true;
+
+  const lancarErro = (input, mensagem) => {
+    input.classList.add("input-error");
+    const erro = document.createElement("div");
+    erro.className = "campo-erro";
+    erro.innerText = mensagem;
+    input.insertAdjacentElement("afterend", erro);
+    formValido = false;
+  };
+
+  if (num.length < 19) lancarErro(document.getElementById('cartao-num'), "Número de cartão incompleto");
+  if (titular.trim().length < 4) lancarErro(document.getElementById('cartao-nome-titular'), "Digite o nome completo");
+  if (val.length < 5) lancarErro(document.getElementById('cartao-val'), "Validade inválida");
+  if (cvv.length < 3) lancarErro(document.getElementById('cartao-cvv'), "CVV inválido");
+
+  if (!formValido) {
+    if (typeof mostrarAlerta === 'function') mostrarAlerta('Verifique os dados informados no cartão.');
+    return;
+  }
+
+  // Aciona seu Toast da Nike configurado na Parte 2
+  if (typeof showToast === 'function') {
+    showToast('Pagamento com cartão enviado com sucesso!');
+  } else {
+    alert('Pagamento processado com sucesso na VintageSports!');
+  }
+}
