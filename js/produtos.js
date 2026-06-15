@@ -22,10 +22,10 @@ const produtos = [
   criarCamisa("Camisa Bayer Leverkusen 2000-01", 249.99, "ALEMANHA", "Camisa Retro Bayer Leverusen - 2000-01.webp", "Bayer Leverkusen", "Alemanha"),
 
   // ARABIA SAUDITA
-  criarCamisa("Camisa Arábia Saudita 2026", 299.99, "ARABIA SAUDITA", "2026 Saudi Arabia.webp", "seleção da Arábia Saudita", "Arábia Saudita", true),
-  criarCamisa("Camisa Al Hilal 2023-24", 249.99, "ARABIA SAUDITA", "2023-24 Edition Al-Hilal.webp", "Al Hilal", "Arábia Saudita"),
-  criarCamisa("Camisa Al Nassr 2023-24", 249.99, "ARABIA SAUDITA", "2023-24 Al-Nassr.webp", "Al Nassr", "Arábia Saudita"),
-  criarCamisa("Camisa Al Ittihad 20223-24", 249.99, "ARABIA SAUDITA", "23-24 Ittihad.webp", "Al Ittihad", "Arábia Saudita"),
+  criarCamisa("Camisa Arábia Saudita 2026", 299.99, "ARABIA SAUDITA", "2026 Saudi Arabia.webp", "seleção da Arábia Saudita", "arabia", true),
+  criarCamisa("Camisa Al Hilal 2023-24", 249.99, "ARABIA SAUDITA", "2023-24 Edition Al-Hilal.webp", "Al Hilal", "arabia"),
+  criarCamisa("Camisa Al Nassr 2023-24", 249.99, "ARABIA SAUDITA", "2023-24 Al-Nassr.webp", "Al Nassr", "arabia"),
+  criarCamisa("Camisa Al Ittihad 20223-24", 249.99, "ARABIA SAUDITA", "23-24 Ittihad.webp", "Al Ittihad", "arabia"),
   
   // ARGENTINA
   criarCamisa("Camisa Argentina 2026", 299.99, "ARGENTINA", "argentina 2026.webp", "seleção da Argentina", "Argentina", true),
@@ -52,7 +52,7 @@ const produtos = [
   criarCamisa("Camisa Toronto FC 2007-08", 129.99, "CANADA", "toronto 2007-08.webp", "Toronto FC", "Canadá"),
 
   // COREia DO SUL
-  criarCamisa("Camisa Coreia do Sul 2026", 299.99, "COREIA", "2026 South korea.webp", "seleção da Coreia do Sul", "Coreia do Sul", true),
+  criarCamisa("Camisa Coreia do Sul 2026", 299.99, "COREIA", "2026 South korea.webp", "seleção da Coreia do Sul", "Coreia", true),
 
   // CROACIA
   criarCamisa("Camisa Croácia 2026", 299.99, "CROACIA", "croacia 2026.webp", "seleção da Croácia", "Croácia", true),
@@ -84,7 +84,7 @@ const produtos = [
   criarCamisa("Camisa Manchester City 1972", 249.99, "INGLATERRA", "city 1972.webp", "Manchester City", "Inglaterra"),
 
   // JAPÃO
-  criarCamisa("Camisa Japão 2026", 299.99, "JAPAO", "2026 japan Home.webp", "seleção do Japão", "Japão", true),
+  criarCamisa("Camisa Japão 2026", 299.99, "JAPAO", "2026 japan Home.webp", "seleção do Japão", "japao", true),
 
   // MARROCOS
   criarCamisa("Camisa Marrocos 2026", 299.99, "MARROCOS", "2026 marocco Home.webp", "seleção de Marrocos", "Marrocos", true),
@@ -92,9 +92,9 @@ const produtos = [
   criarCamisa("Camisa Raja Casablanca 2013-14", 249.99, "MARROCOS", "casablanca.webp", "Raja Casablanca", "Marrocos"),
 
   // MÉXICO
-  criarCamisa("Camisa México 2026", 299.99, "MEXICO", "2026 mexico.webp", "seleção do México", "México", true),
-  criarCamisa("Camisa Club América 2024-25", 249.99, "MEXICO", "24-25 Club America.webp", "Club América", "México"),
-  criarCamisa("Camisa Chivas Guadalajara 2024-25", 249.99, "MEXICO", "24-25 Chivas Guadalajara.webp", "Chivas Guadalajara", "México"),
+  criarCamisa("Camisa México 2026", 299.99, "MEXICO", "2026 mexico.webp", "seleção do México", "mexico", true),
+  criarCamisa("Camisa Club América 2024-25", 249.99, "MEXICO", "24-25 Club America.webp", "Club América", "mexico"),
+  criarCamisa("Camisa Chivas Guadalajara 2024-25", 249.99, "MEXICO", "24-25 Chivas Guadalajara.webp", "Chivas Guadalajara", "mexico"),
 
   // PORTUGAL
   criarCamisa("Camisa Portugal 2026", 299.99, "PORTUGAL", "2026 portugal Home.webp", "seleção de Portugal", "Portugal", true),

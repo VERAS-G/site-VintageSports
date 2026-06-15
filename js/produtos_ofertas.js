@@ -13,19 +13,18 @@ function criarCamisaOferta(nome, preco, pasta, foto, time) {
 }
 
 const produtosOfertas = [
-  criarCamisaOferta("Camisa Bayern Munich 1989", 299.90, "ALEMANHA", "BAYERN MUNICH 1989 1990.jpg", "bayern"),
-  criarCamisaOferta("Camisa Boca Juniors 1990", 199.90, "ARGENTINA", "Camisa Boca Juniors 1 Retro 1990  1991.webp", "boca"),
-  criarCamisaOferta("Manchester United 1990-92", 249.90, "INGLATERRA", "Camisa Manchester United Away Azul 1990-92 Masculina.webp", "manchester"),
-  criarCamisaOferta("Atlético de Madrid 1989", 249.90, "ESPANHA", "CAMISA ATLETICO DE MADRI 1989-1990.jpg", "atletico"),
-  criarCamisaOferta("AL-Hilal 2010 - 2011", 200.00, "ARABIA SAUDITA", "Al-Hilal Home camisa de futebol 2010 - 2011.jpg", "al-hilal"),
-  criarCamisaOferta("Sydney FC 2012 - 2013", 170.90, "AUSTRALIA", "2012-13 Sydney FC.webp", "Sydney"),
-  criarCamisaOferta("Club Brugge 1998 - 1999", 190.99, "BELGICA", "1998-99 Club Brugge Vintage adidas.webp", "brugge"),
-  criarCamisaOferta("Sport Club Corinthians 1990", 239.90, "BRASIL", "Camisa Corinthians Brasileirao 1990.webp", "corinthians"),
-  criarCamisaOferta("Camisa Toronto FC 2012", 199.90, "CANADA", "camisa toronto fc 2012.jpg", "toronto"),
-  criarCamisaOferta("Jeonbuk Hyundai Motors 2014", 230.90, "COREIA DO SUL", "jeonbuk Hyundai Motors Home camisa de futebol 2014.jpg"),
-  criarCamisaOferta("Camisa GNK Dinamo Zagreb 1990", 200.90, "CROACIA", "GNK Dinamo Zagreb 1990 Retro.webp", "dinamo"),
-  criarCamisaOferta("Camisa Al-Ahly SC 1980s", 220.00, "EGITO", "Al Ahly SC 1980s.webp", "al ahly"),
-  criarCamisaOferta("Paris Saint-Germain 1989 - 1990", 289.99, "FRANCA", "Paris Saint-Germain 1989-1990 Home Jersey PSG.jpg"),
+  criarCamisaOferta("Camisa Alemanha 2026", 229.99, "ALEMANHA", "2026 Germany Home Jersey.webp", "seleção alemã", "Alemanha", true),
+  criarCamisaOferta("Camisa Arábia Saudita 2026", 219.99, "ARABIA SAUDITA", "2026 Saudi Arabia.webp", "seleção da Arábia Saudita", "Arábia Saudita", true),
+  criarCamisaOferta("Camisa Brugge 2000-02", 129.99, "BELGICA", "brugge 2000-02.webp", "Club Brugge", "Bélgica" ,true),
+  criarCamisaOferta("Camisa Sydney FC 2012-13", 149.99, "AUSTRALIA", "2012-13 Sydney FC Authentic Home.webp", "Sydney FC", "Austrália", true),
+  criarCamisaOferta("Camisa Toronto FC 2007-08", 89.99, "CANADA", "toronto 2007-08.webp", "Toronto FC", "Canadá", true),
+  criarCamisaOferta("Camisa Dinamo Zagreb 2006-07", 149.99, "CROACIA", "2006-07 dinamo.webp", "Dinamo Zagreb", "Croácia", true),
+  criarCamisaOferta("camisa Santos 1977", 89.99, "BRASIL", "camisa santos.webp", "santos", "Brasil", true),
+  criarCamisaOferta("Camisa Independiente 2023-24", 119.99, "ARGENTINA", "independiente 99-00.webp", "Independiente", "Argentina", true),
+  criarCamisaOferta("Camisa Al Hilal 2023-24", 149.99, "ARABIA SAUDITA", "2023-24 Edition Al-Hilal.webp", "Al Hilal", "Arábia Saudita", true),
+  criarCamisaOferta("Camisa Atletico Madrid 2011-12", 199.99, "ESPANHA", "atletico 11-12.webp", "Atletico Madrid", "Espanha", true),
+  criarCamisaOferta("Camisa River Plate 2023-24", 89.99, "ARGENTINA", "river 200-01.webp", "River Plate", "Argentina", true),
+  criarCamisaOferta("Camisa Paris Saint-Germain 2013-14", 199.99, "FRANCA", "psg 12-13.webp", "Paris Saint-Germain", "França", true),
 ];
 
 /* ============================
@@ -34,29 +33,12 @@ const produtosOfertas = [
 
 const produtosParticipantes = [
 
-  criarCamisaOferta(
-    "Camisa Bayern Munich 1989",
-    299.90,
-    "ALEMANHA",
-    "BAYERN MUNICH 1989 1990.jpg",
-    "bayern"
-  ),
-
-  criarCamisaOferta(
-    "Camisa Boca Juniors 1990",
-    199.90,
-    "ARGENTINA",
-    "Camisa Boca Juniors 1 Retro 1990  1991.webp",
-    "boca"
-  ),
-
-  criarCamisaOferta(
-    "Manchester United 1990-92",
-    249.90,
-    "INGLATERRA",
-    "Camisa Manchester United Away Azul 1990-92 Masculina.webp",
-    "manchester"
-  )
+  criarCamisaOferta("Camisa Alemanha Feminina 2026", 299.99, "ALEMANHA", "alemanha fem 2026.webp", "seleção alemã feminina", "alemanha", true),
+  criarCamisaOferta("Camisa Borussia Dortmund Feminina 2023-24", 249.99, "ALEMANHA", "borussia 23-24 fem.webp", "Borussia Dortmund feminino", "alemanha", true),
+  criarCamisaOferta("Camisa Argentina Feminina 2026", 299.99, "ARGENTINA", "argentina 2026 fem.webp", "seleção argentina feminina", "argentina", true),
+  criarCamisaOferta("Camisa Atletico Madrid 2011-12", 199.99, "ESPANHA", "atletico 11-12.webp", "Atletico Madrid", "Espanha", true),
+  criarCamisaOferta("Camisa River Plate 2023-24", 89.99, "ARGENTINA", "river 200-01.webp", "River Plate", "Argentina", true),
+  criarCamisaOferta("Camisa Paris Saint-Germain 2013-14", 199.99, "FRANCA", "psg 12-13.webp", "Paris Saint-Germain", "França", true),
 
 ];
 

@@ -451,8 +451,6 @@
 
   padding: 28px;
 
-  cursor: pointer;
-
   background-color: #111;
 
   background-size: cover;
@@ -652,14 +650,17 @@
 
 .card-1 { 
     background-image: url('/assets/img/card1.jpg'); 
+    cursor: default;
 }
 
 .card-2 { 
     background-image: url('/assets/img/card2.jpg'); 
+    cursor: default;
 }
 
 .card-3 { 
     background-image: url('/assets/img/card3.jpg'); 
+    cursor: default;
 }
 
 

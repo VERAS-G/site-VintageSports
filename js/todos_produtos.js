@@ -79,8 +79,8 @@ const produtos = [
   criarCamisa("Camisa Olympique de Marseille 1998-99", 249.99, "FRANCA", "marseille 98-99.webp", "Olympique de Marseille", "frança"),
 
   // HOLANDA
-  criarCamisa("Camisa Holanda 2026", 299.99, "HOLANDA", "holanda 2026.webp", "seleção da Holanda", "holanda", true),
-  criarCamisa("Camisa Ajax 2008-09", 249.99, "HOLANDA", "ajax 08-09.webp", "Ajax", "holanda"),
+  criarCamisa("Camisa Holanda 2026", 299.99, "HOLANDA", "holanda 2026.webp", "seleção da Holanda", "Holanda", true),
+  criarCamisa("Camisa Ajax 2008-09", 249.99, "HOLANDA", "ajax 08-09.webp", "Ajax", "Holanda"),
 
   // INGLATERRA
   criarCamisa("Camisa Inglaterra 2026", 299.99, "INGLATERRA", "2026 inglaterra.webp", "seleção da Inglaterra", "inglaterra", true),

@@ -383,6 +383,7 @@
   background: #f5f5f5;
   padding: 80px 20px;
   text-align: center;
+  height: 100vh;
 }
 
 .container {
@@ -393,6 +394,7 @@
 .quem-somos h2 {
   font-size: 36px;
   margin-bottom: 30px;
+  
 }
 
 .descricao {
@@ -453,110 +455,101 @@
   opacity: 1;
 }
 
-/* SEÇÃO */
 .contato {
-  background: #0a0a0a;
-  color: white;
-  padding: 100px 20px;
-  text-align: center;
+    background: #0a0a0a;
+    color: #fff;
+    padding: 80px 20px;
+    text-align: center;
+    min-height: 100vh;
 }
 
-/* TÍTULO */
 .titulo-contato {
-  font-size: 36px;
-  font-weight: 600;
-  margin-bottom: 10px;
+    font-size: 36px;
+    margin-bottom: 30px;
 }
 
 .subtitulo-contato {
-  color: #aaa;
-  margin-bottom: 50px;
+    font-size: 18px;
+    color: #aaa;
+    line-height: 1.6;
+    margin-bottom: 60px;
 }
 
-/* GRID */
-.contato-container {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  flex-wrap: wrap;
-}
+/* mesma largura dos cards da seção quem somos */
 
-/* CARD */
 .card-contato {
-  background: #111;
-  padding: 25px;
-  width: 250px;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(105, 105, 105, 0.1);
-  text-align: left;
-  position: relative;
-  overflow: hidden;
+    background: #111;
+    padding: 20px;
+    border-radius: 10px;
+    width: 250px;
+
+    box-shadow: 0 5px 15px rgba(255,255,255,.05);
+
+    position: relative;
+    overflow: hidden;
+
+    transition: .3s;
 }
 
-/* BORDA ANIMADA */
 .card-contato::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 12px;
-  padding: 1px;
-  background: linear-gradient(120deg, transparent, #f6d221, transparent);
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: 0.3s;
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        #f6d221,
+        transparent
+    );
+
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+
+    opacity: 0;
+    transition: .3s;
 }
 
-/* HOVER */
 .card-contato:hover {
-  transform: translateY(-8px);
+    transform: translateY(-5px);
 }
 
 .card-contato:hover::before {
-  opacity: 1;
+    opacity: 1;
 }
 
-/* TEXTOS */
 .card-contato h3 {
-  font-size: 1rem;
-  color: #aaa;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #fff;
 }
 
 .card-contato p {
-  font-size: 1.2rem;
-  font-weight: bold;
+    font-size: 14px;
+    color: #ccc;
 }
 
-/* LINK */
 .card-contato a {
-  color: white;
-  text-decoration: none;
+    color: #fff;
+    text-decoration: none;
 }
 
-/* STATUS */
 .status {
-  display: block;
-  margin-top: 15px;
-  font-size: 0.8rem;
-  color: #777;
-}
-
-/* EFEITO COPIADO */
-.card-contato.copiado {
-  background: #1a1a1a;
+    display: block;
+    margin-top: 15px;
+    font-size: 12px;
+    color: #777;
 }
 
 .card-contato.copiado .status {
-  color: #f6d221;
+    color: #f6d221;
 }
 
-#email{
-  font-size: 13px;
+#email {
+    font-size: 14px;
 }
